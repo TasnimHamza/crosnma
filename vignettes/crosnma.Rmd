@@ -1,0 +1,224 @@
+---
+title: "Generic NMA for Dichotomous Outcomes"
+author: "Tasnim Hamza"
+date: "`r Sys.Date()`"
+output: 
+  html_vignette:
+   toc: true
+   toc_depth: 3
+   number_sections: true
+bibliography: references.bib 
+vignette: >
+  %\VignetteIndexEntry{crosnma}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+```{r setup}
+library(crosnma)
+```
+# Data
+We simulate an indvidual participant data from trials comparing treatments of relapsing remitting multiple sclerosis. The dataset is  found in `prt.data`. The aggregate data is available in `std.data`.
+The network consists of 4 treatments which has been studied in 6 different studies.The studies are either randomised-controlled trials (RCT) or non-randomised studies (NRS). The data of the NRS study is available on the participant-level. The data of 3 RCT studies are provided on the participant-level and 2 RCTs on the study-level.
+
+```{r}
+head(prt.data)
+head(std.data)
+```
+
+# Check network connectivity
+The network should be checked for its connectivity before running the analysis. If the network is not connected, the model will still run but give the pre-specified prior parameters as estimates.
+
+## Network plot
+```{r}
+# to be added later
+```
+
+## Network characterstics
+```{r}
+# to be added
+```
+
+# The generic NMA models
+
+Two steps to run the NMA model. The first step is to create JAGS code and reformat the data that will be used in JAGS code using `crosnma.model()` . In the second step, the output of this function will be used in `crosnma.run()` to run the analysis through JAGS [@plummer_jags]. 
+
+## Combine RCT with NRS naively
+### Create JAGS model
+For the first arguments, the name of the variables need to be set. Then, the `reference` treatment is assigned to drug A. By choosing `trt.effect=random`, we assign a normal distribution to each relative treatment effect across studies. Finally, the different designs; RCT and NRS are combined naively.
+
+```{r}
+# jags model: code+data
+ mod1 <- crosnma.model(prt.data=prt.data,
+                   std.data=std.data,
+                   trt=c('trt','trt'),
+                   study=c('study','study'),
+                   outcome=c('outcome','outcome'),
+                   n='n',
+                   design=c('design','design'),
+                   trt.effect='random',
+                   reference='A',
+                   method.bias = 'naive'
+                    )
+```
+
+### Run JAGS model
+Next, we fit the NMA model using `crosnma.run()`, where we need to set the number of adaptations, iterations, thinning, burn-ins and chains. 
+```{r}
+# run jags
+jagsfit1 <- crosnma.run(model=mod1,
+              n.adapt = 20,
+              n.iter=50,
+              thin=1,
+              n.chains=3)
+```
+
+### Table of estimates
+```{r}
+knitr::kable(summary(jagsfit1))
+```
+
+### Plot of estimates
+```{r}
+#plot(jagsfit1)
+```
+
+## Combine RCT with NRS by using NRS as prior
+In this part, we run a generic NMR model using `sex` and `age` as covariates. We also adjust for NRS bias by use NRS data as a prior information for the RCT likelihood. 
+### Create JAGS model
+In addition to model 1 arguments,  four arguments are specified; the first one is to run meta-regression
+
+1. A list of covariate names in prt.data and std.data, respectively, `covariate=list(c('age','sex'),c('age','sex'))`.
+1.  We set ` method.bias='prior'`to use NRS as a prior.  
+1. This implies that a NMA need to be run with only NRS data which requires us to specify a list of the following arguments: the reference for the NRS data `reference.nrs='D'` and the MCMC settings, the number of adaptations, iterations, burn-ins, thinning and chains. The prior of the relative treatment effect for RCT is set a normal distribution that is either a minimally informative prior `d~dnorm(0, 1e-4)` or the NRS mean and variance for those which are observed in the NRS study.   
+```{r}
+# jags model: code+data
+mod2 <- crosnma.model(prt.data=prt.data,
+                   std.data=std.data,
+                   trt=c('trt','trt'),
+                   study=c('study','study'),
+                   outcome=c('outcome','outcome'),
+                   n='n',
+                   design=c('design','design'),
+                   reference='A',
+                   trt.effect='random',
+                   #----------  meta-regression ---------- 
+                   covariate = list(c('age','sex'),c('age','sex')),
+                   #---------- bias adjustment ---------- 
+                   method.bias='prior',
+                   run.nrs=list(reference.nrs='D',
+                                n.adapt = 10,
+                                n.iter=10,
+                                n.burnin = 5,
+                                thin=1,
+                                n.chains=1))
+```
+
+### Run JAGS model
+The MCMC is run under the same set up as in model 1
+```{r}
+# run jags
+jagsfit2 <- crosnma.run(model=mod2,
+              n.adapt = 20,
+              n.iter=50,
+              thin=1,
+              n.chains=3)
+```
+
+## Combine RCT with NRS by adjusting for each study bias 1
+In this part, we run again a generic NMR model using `sex` and `age` as covariates. But now, the final relative treatment effects are estimated from both NRS and RCT with adjustment to study bias following [@dias_2010]. 
+### Create JAGS model
+We provide the bias names `bias=c('bias','bias')` in `prt.data` and `std.data`, respectively. The bias effect is added to the treatment effect so `bias.type='add'`. The  bias effect is set to be equal across studies `bias.effect='common'`. It is optional to give a list of different priors. We set a uniform distribution to the common heterogeneity of the treatment effect across studies, `tau.trt='dunif(0,3)'`. We also set beta distribution (\eqn{Beta(a,b)}) as priors for the probability of bias. This is categorized intp high bias RCT `pi.high.rct='dbeta(5,1)'`, low bias RCT `pi.low.rct='dbeta(1,20)'`,high bias NRS `pi.high.nrs='dbeta(30,1)'` and low bias NRS `pi.low.nrs='dbeta(1,2)'`.  The ratio \eqn{a/b} controls the skewness of the beta distribution where when the ratio goes further beyond 1, the mean is located closer to 1 and vice versa. 
+```{r}
+# jags model: code+data
+mod3 <- crosnma.model(prt.data=prt.data,
+                   std.data=std.data,
+                   trt=c('trt','trt'),
+                   study=c('study','study'),
+                   outcome=c('outcome','outcome'),
+                   n='n',
+                   design=c('design','design'),
+                   reference='A',
+                   trt.effect='random',
+                   #----------  meta-regression ---------- 
+                   covariate = list(c('age','sex'),c('age','sex')),
+                   #---------- bias adjustment ---------- 
+                   method.bias='adjust1',
+                   bias=c('bias','bias'), 
+                   bias.type='add',
+                   bias.effect='common',
+                   #---------- assign a prior ---------- 
+                   prior=list(tau.trt='dunif(0,3)',
+                              pi.high.rct='dbeta(5,1)',
+                              pi.low.rct='dbeta(1,20)',
+                              pi.high.nrs='dbeta(30,1)',
+                              pi.low.nrs='dbeta(1,2)'
+                                  )
+                  )
+```
+
+### Run JAGS model
+
+```{r}
+# run jags
+jagsfit3 <- crosnma.run(model=mod3,
+              n.adapt = 20,
+              n.iter=50,
+              thin=1,
+              n.chains=3)
+```
+
+## Combine RCT with NRS by adjusting for each study bias 2
+### Create JAGS model
+The arguments for `method.bias='adjust2'` are simliar to the ones that were used above for `method.bias='adjust1'`. There are two differences between them. First, in this case, the relative treatment effects are modelled with a bimodal normal distribution instead of a univariate normal distribution as in  `'adjust1'` method. Second, in `'adjust2'`, we use a logistic model with a year as a covariate `bias.covariate = c('year','year')` to estimate the probability of bias. More detials can be found [@verde_2020]
+
+```{r}
+# jags model: code+data
+mod4 <- crosnma.model(prt.data=prt.data,
+                   std.data=std.data,
+                   trt=c('trt','trt'),
+                   study=c('study','study'),
+                   outcome=c('outcome','outcome'),
+                   n='n',
+                   design=c('design','design'),
+                   reference='A',
+                   trt.effect='random',
+                   #----------  meta-regression ----------
+                   covariate = list(c('age','sex'),c('age','sex')),
+                   #---------- bias adjustment ----------
+                   method.bias='adjust1',
+                   bias=c('bias','bias'),
+                   bias.type='add',
+                   bias.effect='common',
+                   bias.covariate = c('year','year'),#
+                   #---------- assign a prior ----------
+                   prior=list(tau.trt='dunif(0,3)',
+                              pi.high.rct='dbeta(5,1)',
+                              pi.low.rct='dbeta(1,20)',
+                              pi.high.nrs='dbeta(30,1)',
+                              pi.low.nrs='dbeta(1,2)'
+                   )
+)
+```
+
+### Run JAGS model
+
+```{r}
+# run jags
+jagsfit4 <- crosnma.run(model=mod4,
+              n.adapt = 20,
+              n.iter=50,
+              thin=1,
+              n.chains=3)
+```
+# References
+
+
