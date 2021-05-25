@@ -1,8 +1,6 @@
 # 1. check if it works only for IPD: YES
 devtools::load_all()
-devtools::install_github("TasnimHamza/gnma")
-library(gnma)
-
+devtools::install_github("TasnimHamza/crosnma")
 library(crosnma)
 # jags model: code+data
 mod1 <- crosnma.model(prt.data=prt.data,
@@ -78,6 +76,8 @@ print(jagsfit)
 model.file <- system.file(package="R2jags", "model", "schools.txt")
 
 
-
+data.frame(
+  Parameters=c(paste("relative treatment effects ()"))
+)
 
 
