@@ -72,9 +72,9 @@ Two steps to run the NMA/NMR model. The first step is to create JAGS model using
 In the rest of the document we illustrate the four different methods that can be used to combine the evidence from RCT and NRS. For each method, we set up the model, run the analysis and present the results. 
 
 ## Naive method
-
+This is the simplest method where the evidence from the two designs are combined naively without acknowledging the differences between them, see Section 2.2.1 in [@hamza_2021].
 ### Set up JAGS model
-We start by indicating the names of the datasets on participant- (`prt.data`) and study-level (`std.data`). Then, the name of the variables on each dataset need to be given on `prt.data` and `std.data` respectively. Next, the `reference` treatment need to be assigned (here to drug A). By choosing `trt.effect=random`, we assign a normal distribution to each relative treatment effect across studies, see Section 1. Finally, the different designs; RCT and NRS are combined naively; `method.bias = 'naive'`.
+We start by indicating the names of the datasets on participant- (`prt.data`) and study-level (`std.data`). Then, the name of the variables on each dataset need to be given respectively in `prt.data` and `std.data`.  Next, the `reference` treatment need to be assigned ( drug A). By choosing `trt.effect=random`, we assign a normal distribution to each relative treatment effect across studies, see the table in Section 1. Finally, the different designs; RCT and NRS are combined naively; `method.bias = 'naive'`.
 
 ```{r}
 # jags model: code+data
@@ -92,7 +92,7 @@ We start by indicating the names of the datasets on participant- (`prt.data`) an
 ```
 
 ### Run JAGS
-Next, we fit the NMA model using `crosnma.run()`, where we need to set the number of adaptations, iterations, thinning and chains. 
+Next, we fit the NMA model using `crosnma.run()`which requires the number of adaptations, iterations, thinning and chains to be set.
 ```{r}
 # run jags
 jagsfit1 <- crosnma.run(model=mod1,
@@ -104,8 +104,9 @@ jagsfit1 <- crosnma.run(model=mod1,
 
 ### Output
 #### Table of estimates
+We summarize the estimated parameters by the following table. 
 ```{r}
-knitr::kable(summary(jagsfit1))
+knitr::kable(summary(jagsfit1,expo=T))
 ```
 
 #### Plot of estimates
@@ -114,14 +115,16 @@ knitr::kable(summary(jagsfit1))
 ```
 
 ## Using NRS as a prior
-In this part, we run a generic NMR model using `sex` and `age` as covariates. Additionally, to combine both designs, we use NRS evidence as a prior information for the RCT likelihood. 
+In this part, we run a generic NMR model using `sex` and `age` as covariates.  To combine both designs, we use NRS evidence as a prior information for the RCT likelihood, see Section 2.2.2 in [@hamza_2021]. 
 
 ### Set up JAGS model
-In this case, four additional arguments are modified; the first one is to run network meta-regression and the rest are to control combining RCT and NRS.
+In this case, three additional arguments are needed; the first one is to run network meta-regression and the rest are to control combining RCT and NRS.
 
 1. We set a list of 2 covariates in prt.data and std.data, respectively, `covariate=list(c('age','sex'),c('age','sex'))`.
 1.  We indicate using NRS as a prior` method.bias='prior'`.  
-1. This means that a NMA is initially run with only NRS data. This requires us to set up the following arguments: the MCMC settings, the number of adaptations, iterations, burn-ins, thinning and chains. The prior of the RCT basic parameters is set to a normal distribution that is either a minimally informative prior `d~dnorm(0, 1e-4)` (for those we don't have NRS information) or the NRS mean and variance (for those which we observe the NRS evidence).  The mean can be shifted by `mean.shift` to reflect the potential bias from NRS or the variance can be inflated by `var.infl` to control the influence of NRS on the estimation from RCTs. 
+1. This means that a NMA is initially run with only NRS data. This requires the following MCMC settings: the number of adaptations, iterations, burn-ins, thinning and chains. 
+
+In this method, the prior of the RCT basic parameters is set to a normal distribution that is either a minimally informative prior `d~dnorm(0, 1e-4)` (for those we don't have NRS information) or the NRS mean and variance (for those which we observe the NRS evidence).  The mean can be shifted by `mean.shift` to reflect the potential bias from NRS or the variance can be inflated by `var.infl` to control the influence of NRS on the estimation from RCTs. 
 ```{r}
 # jags model: code+data
 mod2 <- crosnma.model(prt.data=prt.data,
@@ -169,7 +172,7 @@ knitr::kable(summary(jagsfit2))
 
 
 ## Adjusting for the study-specific bias - method 1
-In this part, we run again a generic NMR model using `sex` and `age` as covariates. But now, the overall relative treatment effects are estimated from both NRS and RCT with adjustment to study-specific bias following the method introduced by [@dias_2010]. 
+In this part, we run again a generic NMR model using `sex` and `age` as covariates. But now, the overall relative treatment effects are estimated from both NRS and RCT with adjustment to study-specific bias following the method introduced by [@dias_2010], see also Section 2.2.3 in [@hamza_2021].
 
 ### Set up JAGS model
 Additionally, we provide the name of the bias variable `bias=c('bias','bias')` in `prt.data` and `std.data`, respectively. The effect of bias is assumed to be additive to the treatment effect so `bias.type='add'`. The bias effect is set to be equal across studies `bias.effect='common'`. It is optional to give a list of the different priors to control the estimates of the corresponding parameters. Here, we set a uniform distribution to the common heterogeneity of the treatment effect across studies, `tau.trt='dunif(0,3)'`. We also set beta distribution (\eqn{Beta(a,b)}) as priors for the probability of bias on each study. We assumed these four categories: high bias RCT `pi.high.rct='dbeta(5,1)'`, low bias RCT `pi.low.rct='dbeta(1,20)'`,high bias NRS `pi.high.nrs='dbeta(30,1)'` and low bias NRS `pi.low.nrs='dbeta(1,2)'`.  The ratio \eqn{a/b} controls the skewness of the beta distribution.  When the ratio goes further beyond 1, the mean becomes located closer to 1 and the study needs 'major' bias adjustment and vice versa. 
@@ -227,7 +230,7 @@ knitr::kable(summary(jagsfit3))
 ## Adjusting for the study-specific bias - method 2
 
 ### Set up JAGS model
-The arguments for `method.bias='adjust2'` are similar to the ones that were used above for `method.bias='adjust1'`. However, there are two main differences between them. First, in `'adjust2'`, the relative treatment effects are modeled with a bi-modal normal distribution instead of a univariate normal distribution as in  `'adjust1'` method. Second, we can use a logistic model with a year as a covariate `bias.covariate = c('year','year')` to estimate the probability of bias in `'adjust2'`. In `'adjust1'`, instead we assume  a (\eqn{Beta(a,b)}) to estimate the probability of bias. More details about this method can be found [@verde_2020].
+The arguments for `method.bias='adjust2'` are similar to the ones that were used above for `method.bias='adjust1'`. However, there are two main differences between them. First, in `'adjust2'`, the relative treatment effects are modeled with a bi-modal normal distribution instead of a univariate normal distribution as in  `'adjust1'` method. Second, we can use a logistic model with a year as a covariate `bias.covariate = c('year','year')` to estimate the probability of bias in `'adjust2'`. In `'adjust1'`, instead we assume  a (\eqn{Beta(a,b)}) to estimate the probability of bias. More details about this method can be found in [@verde_2020] and in Section 2.2.2 in [@hamza_2021].
 
 ```{r}
 # jags model: code+data

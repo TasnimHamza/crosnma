@@ -5,7 +5,7 @@
 #'
 #' @param quantiles A numeric vector of probabilities with values in [0,1]. The default value is
 #'                  intervals = c(0.025, 0.5, 0.975).
-#'
+#'@param expo A logical indicating whether to expontiate the parameters of relative treatment effect and covariate effect
 #' @param ... \dots
 #'
 #' @export
@@ -19,7 +19,9 @@ summary.crosnma <- function(x, digits = 3,  quantiles = c(0.025, 0.5, 0.975), ex
   sum.fit.mat <- sum.fit$statistics[,c('Mean','SD')]
   # add quantiles
   sum.fit.mat <- cbind(sum.fit.mat, sum.fit$quantiles)
- if (expo) {sum.fit.mat <- exp(sum.fit.mat) }
+ if (expo) {
+   sum.fit.mat[row.names(sum.fit.mat)[!startsWith(rownames(sum.fit.mat),"tau")],]<- exp(sum.fit.mat[row.names(sum.fit.mat)[!startsWith(rownames(sum.fit.mat),"tau")],])
+   }
   # add Rhat
   Rhat <- round(rhat(x$samples)$psrf[,'Point est.'],3)
   sum.fit.mat <- cbind(sum.fit.mat,Rhat)
