@@ -17,8 +17,6 @@
 #' @export
 #' @seealso \code{\link{crosnma.model}},\code{\link{jags.model}}
 #' @examples
-
-
 crosnma.run <- function(model,
                      n.adapt = 1000,
                      n.burnin = floor(n.iter / 2),

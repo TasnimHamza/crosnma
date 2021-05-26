@@ -323,7 +323,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <div id="TOC">
 <ul>
-<li><a href="#table-of-assumptions"><span class="toc-section-number">1</span> Table of assumptions</a></li>
+<li><a href="#the-underlying-assumptions-of-parameters"><span class="toc-section-number">1</span> The underlying assumptions of parameters</a></li>
 <li><a href="#data"><span class="toc-section-number">2</span> Data</a></li>
 <li><a href="#explore-the-network"><span class="toc-section-number">3</span> Explore the network</a><ul>
 <li><a href="#check-network-connectivity"><span class="toc-section-number">3.1</span> Check network connectivity</a><ul>
@@ -335,33 +335,22 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <li><a href="#naive-method"><span class="toc-section-number">4.1</span> Naive method</a><ul>
 <li><a href="#set-up-jags-model"><span class="toc-section-number">4.1.1</span> Set up JAGS model</a></li>
 <li><a href="#run-jags"><span class="toc-section-number">4.1.2</span> Run JAGS</a></li>
-<li><a href="#output"><span class="toc-section-number">4.1.3</span> Output</a><ul>
-<li><a href="#table-of-estimates"><span class="toc-section-number">4.1.3.1</span> Table of estimates</a></li>
-<li><a href="#plot-of-estimates"><span class="toc-section-number">4.1.3.2</span> Plot of estimates</a></li>
-</ul></li>
+<li><a href="#output"><span class="toc-section-number">4.1.3</span> Output</a></li>
 </ul></li>
 <li><a href="#using-nrs-as-a-prior"><span class="toc-section-number">4.2</span> Using NRS as a prior</a><ul>
 <li><a href="#set-up-jags-model-1"><span class="toc-section-number">4.2.1</span> Set up JAGS model</a></li>
 <li><a href="#run-jags-1"><span class="toc-section-number">4.2.2</span> Run JAGS</a></li>
-<li><a href="#output-1"><span class="toc-section-number">4.2.3</span> Output</a><ul>
-<li><a href="#table-of-estimates-1"><span class="toc-section-number">4.2.3.1</span> Table of estimates</a></li>
-<li><a href="#plot-of-estimates-1"><span class="toc-section-number">4.2.3.2</span> Plot of estimates</a></li>
-</ul></li>
+<li><a href="#output-1"><span class="toc-section-number">4.2.3</span> Output</a></li>
 </ul></li>
 <li><a href="#adjusting-for-the-study-specific-bias---method-1"><span class="toc-section-number">4.3</span> Adjusting for the study-specific bias - method 1</a><ul>
-<li><a href="#run-jags-2"><span class="toc-section-number">4.3.1</span> Run JAGS</a></li>
-<li><a href="#output-2"><span class="toc-section-number">4.3.2</span> Output</a><ul>
-<li><a href="#table-of-estimates-2"><span class="toc-section-number">4.3.2.1</span> Table of estimates</a></li>
-<li><a href="#plot-of-estimates-2"><span class="toc-section-number">4.3.2.2</span> Plot of estimates</a></li>
-</ul></li>
+<li><a href="#set-up-jags-model-2"><span class="toc-section-number">4.3.1</span> Set up JAGS model</a></li>
+<li><a href="#run-jags-2"><span class="toc-section-number">4.3.2</span> Run JAGS</a></li>
+<li><a href="#output-2"><span class="toc-section-number">4.3.3</span> Output</a></li>
 </ul></li>
 <li><a href="#adjusting-for-the-study-specific-bias---method-2"><span class="toc-section-number">4.4</span> Adjusting for the study-specific bias - method 2</a><ul>
-<li><a href="#set-up-jags-model-2"><span class="toc-section-number">4.4.1</span> Set up JAGS model</a></li>
+<li><a href="#set-up-jags-model-3"><span class="toc-section-number">4.4.1</span> Set up JAGS model</a></li>
 <li><a href="#run-jags-3"><span class="toc-section-number">4.4.2</span> Run JAGS</a></li>
-<li><a href="#output-3"><span class="toc-section-number">4.4.3</span> Output</a><ul>
-<li><a href="#table-of-estimates-3"><span class="toc-section-number">4.4.3.1</span> Table of estimates</a></li>
-<li><a href="#plot-of-estimates-3"><span class="toc-section-number">4.4.3.2</span> Plot of estimates</a></li>
-</ul></li>
+<li><a href="#output-3"><span class="toc-section-number">4.4.3</span> Output</a></li>
 </ul></li>
 </ul></li>
 <li><a href="#references">References</a></li>
@@ -369,9 +358,9 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </div>
 
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(crosnma)</a></code></pre></div>
-<div id="table-of-assumptions" class="section level1">
-<h1><span class="header-section-number">1</span> Table of assumptions</h1>
-<p>We summarize the different assumptions that can be set for the parameters in the model by the following table. More details can be found in Section 2 in <span class="citation">(<span class="citeproc-not-found" data-reference-id="hamza2021"><strong>???</strong></span>)</span>.</p>
+<div id="the-underlying-assumptions-of-parameters" class="section level1">
+<h1><span class="header-section-number">1</span> The underlying assumptions of parameters</h1>
+<p>We summarize the different assumptions that can be set for the parameters in the model by the following table.</p>
 <table>
 <colgroup>
 <col width="51%"></col>
@@ -382,7 +371,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <tr class="header">
 <th align="left">Parameters</th>
 <th align="left">Assumptions</th>
-<th align="left">R-code</th>
+<th align="left">R-code in <code>crosnma.mode()</code></th>
 </tr>
 </thead>
 <tbody>
@@ -438,11 +427,12 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </tr>
 </tbody>
 </table>
-<p>Here, <span class="math inline">\(i\)</span> refers to participant, <span class="math inline">\(j\)</span> to study and <span class="math inline">\(k\)</span> to treatment. The term <span class="math inline">\(\tau_*\)</span> refers to the heteorgeniety with the subscript (<span class="math inline">\(_*\)</span>) to indicate the corresponding paramter. (Explain what is <span class="math inline">\(A\)</span> and <span class="math inline">\(b\)</span>)</p>
+<p>Here, the participant <span class="math inline">\(i\)</span> in study <span class="math inline">\(j\)</span> has been assigned to treatment <span class="math inline">\(k\)</span>. The index <span class="math inline">\(b\)</span> refers to the study-specific baseline treatment. The term <span class="math inline">\(\tau_*\)</span> refers to the heterogeneity between studies with a subscript (<span class="math inline">\(_*\)</span>) to indicate the corresponding parameter. More details can be found in Section 2 in <span class="citation">(Hamza T 2021)</span>.</p>
 </div>
 <div id="data" class="section level1">
 <h1><span class="header-section-number">2</span> Data</h1>
-<p>We simulate an individual participant data from trials comparing treatments of relapsing remitting multiple sclerosis. The dataset is found in <code>prt.data</code>. The aggregate data is available in <code>std.data</code>. The network consists of 4 treatments which has been studied in 6 different studies.The studies are either randomized-controlled trials (RCT) or non-randomized studies (NRS). The data of the NRS study is available on the participant-level. The data of 3 RCT studies are provided on the participant-level and 2 RCTs on the study-level.</p>
+<p>The <code>crosnma</code> package involves two datasets;individual participant data <code>prt.data</code> and study-level data <code>std.data</code>.</p>
+<p>The data result in a network that consists of 4 treatments and has been studied in 6 different studies.Five of them are randomized-controlled trials (RCT) and the remaining one is non-randomized studies (NRS). The data of the NRS study is available on the participant-level. While the data of the 3 RCTs are provided on the participant-level and 2 RCTs are available only on the study-level.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">head</span>(prt.data)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co">#&gt;   study outcome trt design age sex bias year</span></a>
 <a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt; 1     1       0   D    rct  20   1  low 2002</span></a>
@@ -462,7 +452,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h1><span class="header-section-number">3</span> Explore the network</h1>
 <div id="check-network-connectivity" class="section level2">
 <h2><span class="header-section-number">3.1</span> Check network connectivity</h2>
-<p>The network should be checked for its connectivity before running the analysis. If the network is not connected, the model will still run but give the pre-specified prior parameters as estimates.</p>
+<p>The network should be checked for its connectivity before running the analysis. This is a vital step as the model will run even if the network is not connected.The given estimates are wrong as they reflect our pre-specified prior information.</p>
 <div id="network-plot" class="section level3">
 <h3><span class="header-section-number">3.1.1</span> Network plot</h3>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># to be added later</span></a></code></pre></div>
@@ -475,12 +465,13 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </div>
 <div id="the-generic-nmanmr-models-to-combine-rct-and-nrs" class="section level1">
 <h1><span class="header-section-number">4</span> The generic NMA/NMR models to combine RCT and NRS</h1>
-<p>Two steps to run the NMA model. The first step is to create JAGS code and reformat the data that will be used in JAGS code using <code>crosnma.model()</code> . In the second step, the output of this function will be used in <code>crosnma.run()</code> to run the analysis through JAGS <span class="citation">(Plummer 2003)</span>.</p>
+<p>Two steps to run the NMA/NMR model. The first step is to create JAGS model using <code>crosnma.model()</code> which involves JAGS code and the reformatted data. In the second step, the output of that function will be used in <code>crosnma.run()</code> to run the analysis through JAGS <span class="citation">(Plummer 2003)</span>.</p>
+<p>In the rest of the document we illustrate the four different methods that can be used to combine the evidence from RCT and NRS. For each method, we set up the model, run the analysis and present the results.</p>
 <div id="naive-method" class="section level2">
 <h2><span class="header-section-number">4.1</span> Naive method</h2>
 <div id="set-up-jags-model" class="section level3">
 <h3><span class="header-section-number">4.1.1</span> Set up JAGS model</h3>
-<p>For the first arguments, the name of the variables need to be set. Then, the <code>reference</code> treatment is assigned to drug A. By choosing <code>trt.effect=random</code>, we assign a normal distribution to each relative treatment effect across studies. Finally, the different designs; RCT and NRS are combined naively.</p>
+<p>We start by indicating the names of the datasets on participant- (<code>prt.data</code>) and study-level (<code>std.data</code>). Then, the name of the variables on each dataset need to be given on <code>prt.data</code> and <code>std.data</code> respectively. Next, the <code>reference</code> treatment need to be assigned (here to drug A). By choosing <code>trt.effect=random</code>, we assign a normal distribution to each relative treatment effect across studies, see Section 1. Finally, the different designs; RCT and NRS are combined naively; <code>method.bias = 'naive'</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># jags model: code+data</span></a>
 <a class="sourceLine" id="cb5-2" data-line-number="2"> mod1 &lt;-<span class="st"> </span><span class="kw">crosnma.model</span>(<span class="dt">prt.data=</span>prt.data,</a>
 <a class="sourceLine" id="cb5-3" data-line-number="3">                   <span class="dt">std.data=</span>std.data,</a>
@@ -496,7 +487,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </div>
 <div id="run-jags" class="section level3">
 <h3><span class="header-section-number">4.1.2</span> Run JAGS</h3>
-<p>Next, we fit the NMA model using <code>crosnma.run()</code>, where we need to set the number of adaptations, iterations, thinning, burn-ins and chains.</p>
+<p>Next, we fit the NMA model using <code>crosnma.run()</code>, where we need to set the number of adaptations, iterations, thinning and chains.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># run jags</span></a>
 <a class="sourceLine" id="cb6-2" data-line-number="2">jagsfit1 &lt;-<span class="st"> </span><span class="kw">crosnma.run</span>(<span class="dt">model=</span>mod1,</a>
 <a class="sourceLine" id="cb6-3" data-line-number="3">              <span class="dt">n.adapt =</span> <span class="dv">20</span>,</a>
@@ -536,64 +527,64 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </tr>
 <tr class="even">
 <td align="left">d.B</td>
-<td align="right">0.9194337</td>
-<td align="right">1.893171</td>
-<td align="right">0.3026121</td>
-<td align="right">0.8823549</td>
-<td align="right">3.183186</td>
-<td align="right">1.032</td>
-<td align="right">100</td>
+<td align="right">0.7881645</td>
+<td align="right">1.841137</td>
+<td align="right">0.2563641</td>
+<td align="right">0.7953534</td>
+<td align="right">2.122275</td>
+<td align="right">1.019</td>
+<td align="right">82</td>
 </tr>
 <tr class="odd">
 <td align="left">d.C</td>
-<td align="right">1.3935235</td>
-<td align="right">1.855864</td>
-<td align="right">0.3610929</td>
-<td align="right">1.4527552</td>
-<td align="right">5.232474</td>
-<td align="right">0.994</td>
-<td align="right">118</td>
+<td align="right">1.2946253</td>
+<td align="right">1.945605</td>
+<td align="right">0.3352756</td>
+<td align="right">1.2369188</td>
+<td align="right">4.804011</td>
+<td align="right">1.019</td>
+<td align="right">123</td>
 </tr>
 <tr class="even">
 <td align="left">d.D</td>
-<td align="right">0.4438194</td>
-<td align="right">2.191904</td>
-<td align="right">0.0701702</td>
-<td align="right">0.4433965</td>
-<td align="right">1.857389</td>
-<td align="right">1.027</td>
-<td align="right">109</td>
+<td align="right">0.3842023</td>
+<td align="right">2.289313</td>
+<td align="right">0.0695335</td>
+<td align="right">0.3773529</td>
+<td align="right">1.896231</td>
+<td align="right">1.012</td>
+<td align="right">108</td>
 </tr>
 <tr class="odd">
 <td align="left">tau</td>
-<td align="right">2.7294066</td>
-<td align="right">1.372799</td>
-<td align="right">1.6564656</td>
-<td align="right">2.6649997</td>
-<td align="right">5.980209</td>
-<td align="right">1.023</td>
-<td align="right">63</td>
+<td align="right">3.1067027</td>
+<td align="right">1.549096</td>
+<td align="right">1.6915805</td>
+<td align="right">2.8015137</td>
+<td align="right">7.698675</td>
+<td align="right">1.010</td>
+<td align="right">48</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div id="plot-of-estimates" class="section level4">
 <h4><span class="header-section-number">4.1.3.2</span> Plot of estimates</h4>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co">#plot(jagsfit1)</span></a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co"># to be added</span></a></code></pre></div>
 </div>
 </div>
 </div>
 <div id="using-nrs-as-a-prior" class="section level2">
 <h2><span class="header-section-number">4.2</span> Using NRS as a prior</h2>
-<p>In this part, we run a generic NMR model using <code>sex</code> and <code>age</code> as covariates. We also adjust for NRS bias by use NRS data as a prior information for the RCT likelihood.</p>
+<p>In this part, we run a generic NMR model using <code>sex</code> and <code>age</code> as covariates. Additionally, to combine both designs, we use NRS evidence as a prior information for the RCT likelihood.</p>
 <div id="set-up-jags-model-1" class="section level3">
 <h3><span class="header-section-number">4.2.1</span> Set up JAGS model</h3>
-<p>In addition to model 1 arguments, four arguments are specified; the first one is to run meta-regression</p>
+<p>In this case, four additional arguments are modified; the first one is to run network meta-regression and the rest are to control combining RCT and NRS.</p>
 <ol style="list-style-type: decimal">
-<li>A list of covariate names in prt.data and std.data, respectively, <code>covariate=list(c('age','sex'),c('age','sex'))</code>.</li>
-<li>We set <code>method.bias='prior'</code>to use NRS as a prior.<br />
+<li>We set a list of 2 covariates in prt.data and std.data, respectively, <code>covariate=list(c('age','sex'),c('age','sex'))</code>.</li>
+<li>We indicate using NRS as a prior<code>method.bias='prior'</code>.<br />
 </li>
-<li>This implies that a NMA need to be run with only NRS data which requires us to specify a list of the following arguments: the reference for the NRS data <code>reference.nrs='D'</code> and the MCMC settings, the number of adaptations, iterations, burn-ins, thinning and chains. The prior of the relative treatment effect for RCT is set a normal distribution that is either a minimally informative prior <code>d~dnorm(0, 1e-4)</code> or the NRS mean and variance for those which are observed in the NRS study.</li>
+<li>This means that a NMA is initially run with only NRS data. This requires us to set up the following arguments: the MCMC settings, the number of adaptations, iterations, burn-ins, thinning and chains. The prior of the RCT basic parameters is set to a normal distribution that is either a minimally informative prior <code>d~dnorm(0, 1e-4)</code> (for those we don’t have NRS information) or the NRS mean and variance (for those which we observe the NRS evidence). The mean can be shifted by <code>mean.shift</code> to reflect the potential bias from NRS or the variance can be inflated by <code>var.infl</code> to control the influence of NRS on the estimation from RCTs.</li>
 </ol>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># jags model: code+data</span></a>
 <a class="sourceLine" id="cb9-2" data-line-number="2">mod2 &lt;-<span class="st"> </span><span class="kw">crosnma.model</span>(<span class="dt">prt.data=</span>prt.data,</a>
@@ -628,7 +619,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </div>
 <div id="run-jags-1" class="section level3">
 <h3><span class="header-section-number">4.2.2</span> Run JAGS</h3>
-<p>The MCMC is run under the same set up as in model 1</p>
+<p>The MCMC is run under the same set up as in the naive model (Section 4.1.2).</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co"># run jags</span></a>
 <a class="sourceLine" id="cb10-2" data-line-number="2">jagsfit2 &lt;-<span class="st"> </span><span class="kw">crosnma.run</span>(<span class="dt">model=</span>mod2,</a>
 <a class="sourceLine" id="cb10-3" data-line-number="3">              <span class="dt">n.adapt =</span> <span class="dv">20</span>,</a>
@@ -658,23 +649,23 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <tbody>
 <tr class="odd">
 <td align="left">b_1</td>
-<td align="right">0.9995902</td>
-<td align="right">1.077511</td>
-<td align="right">0.9239527</td>
-<td align="right">0.9986183</td>
-<td align="right">1.084897</td>
-<td align="right">1.267</td>
-<td align="right">1172</td>
+<td align="right">1.0213853</td>
+<td align="right">1.103858</td>
+<td align="right">0.9197991</td>
+<td align="right">1.0128094</td>
+<td align="right">1.258818</td>
+<td align="right">1.274</td>
+<td align="right">358</td>
 </tr>
 <tr class="even">
 <td align="left">b_2</td>
-<td align="right">1.2518158</td>
-<td align="right">1.707119</td>
-<td align="right">0.4341166</td>
-<td align="right">1.1586497</td>
-<td align="right">4.098184</td>
-<td align="right">1.379</td>
-<td align="right">122</td>
+<td align="right">0.9486225</td>
+<td align="right">1.743163</td>
+<td align="right">0.2825592</td>
+<td align="right">0.9736281</td>
+<td align="right">2.599137</td>
+<td align="right">1.486</td>
+<td align="right">80</td>
 </tr>
 <tr class="odd">
 <td align="left">d.A</td>
@@ -688,63 +679,63 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </tr>
 <tr class="even">
 <td align="left">d.B</td>
-<td align="right">0.8449500</td>
-<td align="right">2.720950</td>
-<td align="right">0.0886692</td>
-<td align="right">0.7965887</td>
-<td align="right">4.386777</td>
-<td align="right">1.128</td>
-<td align="right">76</td>
+<td align="right">0.5692617</td>
+<td align="right">2.980139</td>
+<td align="right">0.0963325</td>
+<td align="right">0.4595978</td>
+<td align="right">5.738170</td>
+<td align="right">1.668</td>
+<td align="right">131</td>
 </tr>
 <tr class="odd">
 <td align="left">d.C</td>
-<td align="right">0.5321174</td>
-<td align="right">2.871843</td>
-<td align="right">0.1112919</td>
-<td align="right">0.4486296</td>
-<td align="right">4.708993</td>
-<td align="right">1.849</td>
-<td align="right">70</td>
+<td align="right">0.6036906</td>
+<td align="right">2.507677</td>
+<td align="right">0.0915355</td>
+<td align="right">0.5897556</td>
+<td align="right">4.647502</td>
+<td align="right">1.251</td>
+<td align="right">108</td>
 </tr>
 <tr class="even">
 <td align="left">d.D</td>
-<td align="right">0.2379806</td>
-<td align="right">2.554852</td>
-<td align="right">0.0461261</td>
-<td align="right">0.2640384</td>
-<td align="right">1.340952</td>
-<td align="right">1.128</td>
-<td align="right">150</td>
+<td align="right">0.1574970</td>
+<td align="right">3.271591</td>
+<td align="right">0.0095968</td>
+<td align="right">0.1763960</td>
+<td align="right">1.637790</td>
+<td align="right">1.029</td>
+<td align="right">84</td>
 </tr>
 <tr class="odd">
 <td align="left">tau</td>
-<td align="right">2.4628510</td>
-<td align="right">1.797022</td>
-<td align="right">1.3103701</td>
-<td align="right">2.0916518</td>
-<td align="right">12.392660</td>
-<td align="right">1.001</td>
-<td align="right">49</td>
+<td align="right">2.7067430</td>
+<td align="right">1.665817</td>
+<td align="right">1.3982982</td>
+<td align="right">2.5655252</td>
+<td align="right">9.189064</td>
+<td align="right">1.401</td>
+<td align="right">53</td>
 </tr>
 <tr class="even">
 <td align="left">tau.b_1</td>
-<td align="right">1.0427266</td>
-<td align="right">1.066221</td>
-<td align="right">1.0083358</td>
-<td align="right">1.0226113</td>
-<td align="right">1.224371</td>
-<td align="right">1.402</td>
-<td align="right">38</td>
+<td align="right">1.0800007</td>
+<td align="right">1.150559</td>
+<td align="right">1.0018915</td>
+<td align="right">1.0214180</td>
+<td align="right">1.672252</td>
+<td align="right">1.571</td>
+<td align="right">36</td>
 </tr>
 <tr class="odd">
 <td align="left">tau.b_2</td>
-<td align="right">1.7803670</td>
-<td align="right">1.582320</td>
-<td align="right">1.0541810</td>
-<td align="right">1.6157463</td>
-<td align="right">5.728264</td>
-<td align="right">1.059</td>
-<td align="right">30</td>
+<td align="right">1.6269001</td>
+<td align="right">1.614020</td>
+<td align="right">1.0157672</td>
+<td align="right">1.4022046</td>
+<td align="right">6.176530</td>
+<td align="right">1.506</td>
+<td align="right">41</td>
 </tr>
 </tbody>
 </table>
@@ -757,7 +748,10 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </div>
 <div id="adjusting-for-the-study-specific-bias---method-1" class="section level2">
 <h2><span class="header-section-number">4.3</span> Adjusting for the study-specific bias - method 1</h2>
-<p>In this part, we run again a generic NMR model using <code>sex</code> and <code>age</code> as covariates. But now, the final relative treatment effects are estimated from both NRS and RCT with adjustment to study bias following <span class="citation">(Dias et al. 2010)</span>. ### Set up JAGS model We provide the bias names <code>bias=c('bias','bias')</code> in <code>prt.data</code> and <code>std.data</code>, respectively. The bias effect is added to the treatment effect so <code>bias.type='add'</code>. The bias effect is set to be equal across studies <code>bias.effect='common'</code>. It is optional to give a list of different priors. We set a uniform distribution to the common heterogeneity of the treatment effect across studies, <code>tau.trt='dunif(0,3)'</code>. We also set beta distribution () as priors for the probability of bias. This is categorized into high bias RCT <code>pi.high.rct='dbeta(5,1)'</code>, low bias RCT <code>pi.low.rct='dbeta(1,20)'</code>,high bias NRS <code>pi.high.nrs='dbeta(30,1)'</code> and low bias NRS <code>pi.low.nrs='dbeta(1,2)'</code>. The ratio  controls the skewness of the beta distribution where when the ratio goes further beyond 1, the mean is located closer to 1 and vice versa.</p>
+<p>In this part, we run again a generic NMR model using <code>sex</code> and <code>age</code> as covariates. But now, the overall relative treatment effects are estimated from both NRS and RCT with adjustment to study-specific bias following the method introduced by <span class="citation">(Dias et al. 2010)</span>.</p>
+<div id="set-up-jags-model-2" class="section level3">
+<h3><span class="header-section-number">4.3.1</span> Set up JAGS model</h3>
+<p>Additionally, we provide the name of the bias variable <code>bias=c('bias','bias')</code> in <code>prt.data</code> and <code>std.data</code>, respectively. The effect of bias is assumed to be additive to the treatment effect so <code>bias.type='add'</code>. The bias effect is set to be equal across studies <code>bias.effect='common'</code>. It is optional to give a list of the different priors to control the estimates of the corresponding parameters. Here, we set a uniform distribution to the common heterogeneity of the treatment effect across studies, <code>tau.trt='dunif(0,3)'</code>. We also set beta distribution () as priors for the probability of bias on each study. We assumed these four categories: high bias RCT <code>pi.high.rct='dbeta(5,1)'</code>, low bias RCT <code>pi.low.rct='dbeta(1,20)'</code>,high bias NRS <code>pi.high.nrs='dbeta(30,1)'</code> and low bias NRS <code>pi.low.nrs='dbeta(1,2)'</code>. The ratio  controls the skewness of the beta distribution. When the ratio goes further beyond 1, the mean becomes located closer to 1 and the study needs ‘major’ bias adjustment and vice versa.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># jags model: code+data</span></a>
 <a class="sourceLine" id="cb13-2" data-line-number="2">mod3 &lt;-<span class="st"> </span><span class="kw">crosnma.model</span>(<span class="dt">prt.data=</span>prt.data,</a>
 <a class="sourceLine" id="cb13-3" data-line-number="3">                   <span class="dt">std.data=</span>std.data,</a>
@@ -783,8 +777,9 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <a class="sourceLine" id="cb13-23" data-line-number="23">                              <span class="dt">pi.low.nrs=</span><span class="st">'dbeta(1,2)'</span></a>
 <a class="sourceLine" id="cb13-24" data-line-number="24">                                  )</a>
 <a class="sourceLine" id="cb13-25" data-line-number="25">                  )</a></code></pre></div>
+</div>
 <div id="run-jags-2" class="section level3">
-<h3><span class="header-section-number">4.3.1</span> Run JAGS</h3>
+<h3><span class="header-section-number">4.3.2</span> Run JAGS</h3>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="co"># run jags</span></a>
 <a class="sourceLine" id="cb14-2" data-line-number="2">jagsfit3 &lt;-<span class="st"> </span><span class="kw">crosnma.run</span>(<span class="dt">model=</span>mod3,</a>
 <a class="sourceLine" id="cb14-3" data-line-number="3">              <span class="dt">n.adapt =</span> <span class="dv">20</span>,</a>
@@ -794,9 +789,9 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <a class="sourceLine" id="cb14-7" data-line-number="7"><span class="co">#&gt; </span><span class="al">NOTE</span><span class="co">: Stopping adaptation</span></a></code></pre></div>
 </div>
 <div id="output-2" class="section level3">
-<h3><span class="header-section-number">4.3.2</span> Output</h3>
+<h3><span class="header-section-number">4.3.3</span> Output</h3>
 <div id="table-of-estimates-2" class="section level4">
-<h4><span class="header-section-number">4.3.2.1</span> Table of estimates</h4>
+<h4><span class="header-section-number">4.3.3.1</span> Table of estimates</h4>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">summary</span>(jagsfit3))</a></code></pre></div>
 <table>
 <thead>
@@ -814,23 +809,23 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <tbody>
 <tr class="odd">
 <td align="left">b_1</td>
-<td align="right">1.0070735</td>
-<td align="right">1.049955</td>
-<td align="right">0.8857599</td>
-<td align="right">1.0081686</td>
-<td align="right">1.1018025</td>
-<td align="right">1.104</td>
-<td align="right">357</td>
+<td align="right">1.0061475</td>
+<td align="right">1.055087</td>
+<td align="right">0.8777057</td>
+<td align="right">1.0045476</td>
+<td align="right">1.1562917</td>
+<td align="right">1.164</td>
+<td align="right">98</td>
 </tr>
 <tr class="even">
 <td align="left">b_2</td>
-<td align="right">1.1200549</td>
-<td align="right">1.400902</td>
-<td align="right">0.5898317</td>
-<td align="right">1.0797259</td>
-<td align="right">2.1880376</td>
-<td align="right">1.071</td>
-<td align="right">110</td>
+<td align="right">1.1281238</td>
+<td align="right">1.687998</td>
+<td align="right">0.4807845</td>
+<td align="right">1.0520157</td>
+<td align="right">4.4048320</td>
+<td align="right">1.121</td>
+<td align="right">95</td>
 </tr>
 <tr class="odd">
 <td align="left">d.A</td>
@@ -844,88 +839,88 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </tr>
 <tr class="even">
 <td align="left">d.B</td>
-<td align="right">0.4304191</td>
-<td align="right">1.489174</td>
-<td align="right">0.2265355</td>
-<td align="right">0.4239877</td>
-<td align="right">0.9904023</td>
-<td align="right">1.825</td>
-<td align="right">51</td>
+<td align="right">0.7038292</td>
+<td align="right">1.783224</td>
+<td align="right">0.2379448</td>
+<td align="right">0.7609837</td>
+<td align="right">1.9980528</td>
+<td align="right">2.273</td>
+<td align="right">82</td>
 </tr>
 <tr class="odd">
 <td align="left">d.C</td>
-<td align="right">0.4222848</td>
-<td align="right">1.442081</td>
-<td align="right">0.1878071</td>
-<td align="right">0.4705287</td>
-<td align="right">0.7844882</td>
-<td align="right">1.443</td>
-<td align="right">49</td>
+<td align="right">0.5746204</td>
+<td align="right">2.706190</td>
+<td align="right">0.1036656</td>
+<td align="right">0.8330462</td>
+<td align="right">2.9305727</td>
+<td align="right">4.464</td>
+<td align="right">39</td>
 </tr>
 <tr class="even">
 <td align="left">d.D</td>
-<td align="right">0.1436062</td>
-<td align="right">2.147322</td>
-<td align="right">0.0328204</td>
-<td align="right">0.1635754</td>
-<td align="right">0.3772731</td>
-<td align="right">2.880</td>
-<td align="right">37</td>
+<td align="right">0.1658340</td>
+<td align="right">1.870391</td>
+<td align="right">0.0442780</td>
+<td align="right">0.1870015</td>
+<td align="right">0.3703424</td>
+<td align="right">1.661</td>
+<td align="right">44</td>
 </tr>
 <tr class="odd">
 <td align="left">g</td>
-<td align="right">7.7491661</td>
-<td align="right">5.622648</td>
-<td align="right">1.6108897</td>
-<td align="right">2.8037803</td>
-<td align="right">210.3884902</td>
-<td align="right">8.141</td>
-<td align="right">8</td>
+<td align="right">0.0157619</td>
+<td align="right">2368.572927</td>
+<td align="right">0.0000000</td>
+<td align="right">1.2679814</td>
+<td align="right">3.2281940</td>
+<td align="right">3.148</td>
+<td align="right">12</td>
 </tr>
 <tr class="even">
 <td align="left">tau</td>
-<td align="right">1.3940603</td>
-<td align="right">1.363498</td>
-<td align="right">1.0329320</td>
-<td align="right">1.1996251</td>
-<td align="right">2.7439642</td>
-<td align="right">1.779</td>
-<td align="right">16</td>
+<td align="right">1.6096263</td>
+<td align="right">1.356820</td>
+<td align="right">1.0945332</td>
+<td align="right">1.5645401</td>
+<td align="right">3.2442221</td>
+<td align="right">1.133</td>
+<td align="right">18</td>
 </tr>
 <tr class="odd">
 <td align="left">tau.b_1</td>
-<td align="right">1.0497510</td>
-<td align="right">1.057147</td>
-<td align="right">1.0003339</td>
-<td align="right">1.0295925</td>
-<td align="right">1.1962135</td>
-<td align="right">1.190</td>
-<td align="right">25</td>
+<td align="right">1.0675547</td>
+<td align="right">1.084682</td>
+<td align="right">1.0117428</td>
+<td align="right">1.0399620</td>
+<td align="right">1.3357987</td>
+<td align="right">1.152</td>
+<td align="right">88</td>
 </tr>
 <tr class="even">
 <td align="left">tau.b_2</td>
-<td align="right">1.5405775</td>
-<td align="right">1.429032</td>
-<td align="right">1.0568410</td>
-<td align="right">1.3794264</td>
-<td align="right">3.8025021</td>
-<td align="right">1.177</td>
-<td align="right">75</td>
+<td align="right">1.8116043</td>
+<td align="right">1.554919</td>
+<td align="right">1.1143180</td>
+<td align="right">1.5872363</td>
+<td align="right">6.1883628</td>
+<td align="right">1.253</td>
+<td align="right">35</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div id="plot-of-estimates-2" class="section level4">
-<h4><span class="header-section-number">4.3.2.2</span> Plot of estimates</h4>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co">#plot(jagsfit1)</span></a></code></pre></div>
+<h4><span class="header-section-number">4.3.3.2</span> Plot of estimates</h4>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co"># to be added</span></a></code></pre></div>
 </div>
 </div>
 </div>
 <div id="adjusting-for-the-study-specific-bias---method-2" class="section level2">
 <h2><span class="header-section-number">4.4</span> Adjusting for the study-specific bias - method 2</h2>
-<div id="set-up-jags-model-2" class="section level3">
+<div id="set-up-jags-model-3" class="section level3">
 <h3><span class="header-section-number">4.4.1</span> Set up JAGS model</h3>
-<p>The arguments for <code>method.bias='adjust2'</code> are similar to the ones that were used above for <code>method.bias='adjust1'</code>. There are two differences between them. First, in this case, the relative treatment effects are modeled with a bi-modal normal distribution instead of a univariate normal distribution as in <code>'adjust1'</code> method. Second, in <code>'adjust2'</code>, we use a logistic model with a year as a covariate <code>bias.covariate = c('year','year')</code> to estimate the probability of bias. More details can be found <span class="citation">(Verde 2020)</span></p>
+<p>The arguments for <code>method.bias='adjust2'</code> are similar to the ones that were used above for <code>method.bias='adjust1'</code>. However, there are two main differences between them. First, in <code>'adjust2'</code>, the relative treatment effects are modeled with a bi-modal normal distribution instead of a univariate normal distribution as in <code>'adjust1'</code> method. Second, we can use a logistic model with a year as a covariate <code>bias.covariate = c('year','year')</code> to estimate the probability of bias in <code>'adjust2'</code>. In <code>'adjust1'</code>, instead we assume a () to estimate the probability of bias. More details about this method can be found <span class="citation">(Verde 2020)</span>.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="co"># jags model: code+data</span></a>
 <a class="sourceLine" id="cb17-2" data-line-number="2">mod4 &lt;-<span class="st"> </span><span class="kw">crosnma.model</span>(<span class="dt">prt.data=</span>prt.data,</a>
 <a class="sourceLine" id="cb17-3" data-line-number="3">                   <span class="dt">std.data=</span>std.data,</a>
@@ -984,23 +979,23 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <tbody>
 <tr class="odd">
 <td align="left">b_1</td>
-<td align="right">0.9864993</td>
-<td align="right">1.046133</td>
-<td align="right">0.8956382</td>
-<td align="right">0.9875995</td>
-<td align="right">1.1045711</td>
-<td align="right">1.275</td>
-<td align="right">312</td>
+<td align="right">0.9963733</td>
+<td align="right">1.032182</td>
+<td align="right">0.9480579</td>
+<td align="right">0.9923621</td>
+<td align="right">1.0962385</td>
+<td align="right">1.135</td>
+<td align="right">112</td>
 </tr>
 <tr class="even">
 <td align="left">b_2</td>
-<td align="right">1.4326183</td>
-<td align="right">1.569451</td>
-<td align="right">0.4705463</td>
-<td align="right">1.4584837</td>
-<td align="right">3.2886352</td>
-<td align="right">1.119</td>
-<td align="right">67</td>
+<td align="right">1.0742179</td>
+<td align="right">1.578524</td>
+<td align="right">0.3668352</td>
+<td align="right">1.0259118</td>
+<td align="right">2.3047315</td>
+<td align="right">1.187</td>
+<td align="right">63</td>
 </tr>
 <tr class="odd">
 <td align="left">d.A</td>
@@ -1014,80 +1009,80 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </tr>
 <tr class="even">
 <td align="left">d.B</td>
-<td align="right">1.1498539</td>
-<td align="right">2.833623</td>
-<td align="right">0.1813488</td>
-<td align="right">1.3921505</td>
-<td align="right">5.1167214</td>
-<td align="right">5.760</td>
-<td align="right">73</td>
+<td align="right">1.0415675</td>
+<td align="right">1.691618</td>
+<td align="right">0.3307245</td>
+<td align="right">1.0228028</td>
+<td align="right">2.7335068</td>
+<td align="right">1.566</td>
+<td align="right">55</td>
 </tr>
 <tr class="odd">
 <td align="left">d.C</td>
-<td align="right">2.6903893</td>
-<td align="right">1.992259</td>
-<td align="right">0.6658504</td>
-<td align="right">2.9962964</td>
-<td align="right">8.4212212</td>
-<td align="right">3.443</td>
-<td align="right">68</td>
+<td align="right">1.9356015</td>
+<td align="right">1.927778</td>
+<td align="right">0.5812255</td>
+<td align="right">1.7615335</td>
+<td align="right">6.2788641</td>
+<td align="right">2.026</td>
+<td align="right">37</td>
 </tr>
 <tr class="even">
 <td align="left">d.D</td>
-<td align="right">0.3571046</td>
-<td align="right">1.860940</td>
-<td align="right">0.0927982</td>
-<td align="right">0.3629276</td>
-<td align="right">1.3887279</td>
-<td align="right">1.116</td>
-<td align="right">26</td>
+<td align="right">0.2794383</td>
+<td align="right">2.033216</td>
+<td align="right">0.0671158</td>
+<td align="right">0.3073580</td>
+<td align="right">1.0387464</td>
+<td align="right">2.137</td>
+<td align="right">46</td>
 </tr>
 <tr class="odd">
 <td align="left">g</td>
-<td align="right">0.3704063</td>
-<td align="right">1.228021</td>
-<td align="right">0.2340870</td>
-<td align="right">0.3819448</td>
-<td align="right">0.5637166</td>
-<td align="right">1.551</td>
-<td align="right">10</td>
+<td align="right">0.4640320</td>
+<td align="right">1.389720</td>
+<td align="right">0.2471479</td>
+<td align="right">0.4543387</td>
+<td align="right">0.7903063</td>
+<td align="right">2.303</td>
+<td align="right">11</td>
 </tr>
 <tr class="even">
 <td align="left">tau</td>
-<td align="right">1.5416552</td>
-<td align="right">1.355058</td>
-<td align="right">1.0772309</td>
-<td align="right">1.4421332</td>
-<td align="right">2.8728398</td>
-<td align="right">1.325</td>
-<td align="right">24</td>
+<td align="right">1.6372982</td>
+<td align="right">1.305913</td>
+<td align="right">1.1096882</td>
+<td align="right">1.5467028</td>
+<td align="right">3.2424224</td>
+<td align="right">1.245</td>
+<td align="right">34</td>
 </tr>
 <tr class="odd">
 <td align="left">tau.b_1</td>
-<td align="right">1.0592516</td>
-<td align="right">1.132399</td>
-<td align="right">1.0012722</td>
-<td align="right">1.0307986</td>
-<td align="right">1.2789082</td>
-<td align="right">1.317</td>
-<td align="right">66</td>
+<td align="right">1.0368978</td>
+<td align="right">1.050074</td>
+<td align="right">1.0007880</td>
+<td align="right">1.0221185</td>
+<td align="right">1.2071684</td>
+<td align="right">1.270</td>
+<td align="right">25</td>
 </tr>
 <tr class="even">
 <td align="left">tau.b_2</td>
-<td align="right">1.8766594</td>
-<td align="right">1.665174</td>
-<td align="right">1.0607277</td>
-<td align="right">1.6255311</td>
-<td align="right">6.1000459</td>
-<td align="right">1.052</td>
-<td align="right">21</td>
+<td align="right">1.5663024</td>
+<td align="right">1.566173</td>
+<td align="right">1.0088391</td>
+<td align="right">1.3033813</td>
+<td align="right">4.7385436</td>
+<td align="right">1.374</td>
+<td align="right">26</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div id="plot-of-estimates-3" class="section level4">
 <h4><span class="header-section-number">4.4.3.2</span> Plot of estimates</h4>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="co">#plot(jagsfit1)</span></a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="co"># to be added</span></a></code></pre></div>
 </div>
 </div>
 </div>
@@ -1097,6 +1092,9 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="refs" class="references">
 <div id="ref-dias_2010">
 <p>Dias, Sofia, N. J. Welton, V. C. C. Marinho, G. Salanti, J.P.T Higgins, and A. E. Ades. 2010. “Estimation and Adjustment of Bias in Randomized Evidence by Using Mixed Treatment Comparison Meta-Analysis.” <em>Journal of the Royal Statistical Society</em> 173: 613–29.</p>
+</div>
+<div id="ref-hamza_2021">
+<p>Hamza T, Kuhle J, Pellegrini F. 2021. “Flexible Generic Framework for Evidence Synthesis in Health Technology Assessment.” <em>Unpublished</em>.</p>
 </div>
 <div id="ref-plummer_jags">
 <p>Plummer, Martyn. 2003. “JAGS: A Program for Analysis of Bayesian Graphical Models Using Gibbs Sampling.”</p>

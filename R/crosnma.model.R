@@ -12,7 +12,7 @@
 #' Create JAGS model and data to run generic NMA and NMR for dichotomous outcomes
 #' @description Create JAGS model and data; jags code is created from the internal function \code{crosnma.code}.
 #'
-#' @param prt.data An object of class data.frame containing the indvidual participant dataset where one participant per row.
+#' @param prt.data An object of class data.frame containing the individual participant dataset where one participant per row.
 #' The data frame need to have the following columns: trt, study, outcome, design. The columns don't have to take certain names.
 #' @param std.data An object of class data.frame containing the study-level dataset where one arm per row.
 #' The data frame need to have the following columns: trt, study, outcome, n and design. The columns don't have to take certain names.
@@ -25,7 +25,7 @@
 #' @param trt.effect A character for the relationship within the study-specific treatment effects, (\eqn{d_{k}}). Options are 'random' or 'common', see details.
 #' @param covariate An optional list indicating the name of the covariates in prt.data and std.data to conduct network meta regression
 #' The default option is covariate=NULL where no covariate adjustment is applied.
-#' The covariates can be either numeric or dichotomous variables. The user can provide up to 3 covaraites. The covariate need to be provided for both prt.data and std.data, respectively.
+#' The covariates can be either numeric or dichotomous variables. The user can provide up to 3 covaraites. The covariate needs to be provided for both prt.data and std.data, respectively.
 #' @param reg0.effect An optional character indicating the relationship across studies for prognostic effects expressed by the regression coefficient, (\eqn{\beta_{1,j}}), in a study \eqn{j}.
 #' Options are 'independent' or 'random', see details. We recommend using the default 'independent'. This is required when the covariate is not NULL.
 #' @param regb.effect An optional character indicating the relationship across studies between-study regression coefficient,(\eqn{\beta^B_{2,jk}}), which quantify the treatment-mean covariate interaction.
@@ -85,7 +85,7 @@
 #'   # Create a jags model  #
 #'  #=========================#
 #'  # We conduct network meta-analysis assuming a random effect model.
-#'  # The data comes from randomised-controlled trials and non-ranodmised studies. They will be combined naively.
+#'  # The data comes from randomised-controlled trials and non-randomised studies. They will be combined naively.
 #'  # The data has 2 different formats: individual participant data, prt.data, and study-level data, std.data.
 #' mod <- crosnma.model(prt.data=prt.data,
 #'                   std.data=std.data,

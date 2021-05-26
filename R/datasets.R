@@ -1,7 +1,7 @@
 #' A simulated individual participant data.
 #'
 #' A dataset containing 2950 participants who are treated in 4 different treatments: A, B, C and D.
-#' The dataset includes 4 different studies. The outcome is binary. There are 8 attributes on indvidual level.
+#' The dataset includes 4 different studies. The outcome is binary. There are 8 attributes on individual level.
 #'
 #' @format A data frame with 2950 rows and 8 variables:
 #' \describe{

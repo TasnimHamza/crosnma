@@ -43,7 +43,7 @@ jagsfit1 <- crosnma.run(model=mod1,
 knitr::kable(summary(jagsfit1))
 
 ## -----------------------------------------------------------------------------
-#plot(jagsfit1)
+# to be added
 
 ## -----------------------------------------------------------------------------
 # jags model: code+data
@@ -120,7 +120,7 @@ jagsfit3 <- crosnma.run(model=mod3,
 knitr::kable(summary(jagsfit3))
 
 ## -----------------------------------------------------------------------------
-#plot(jagsfit1)
+# to be added
 
 ## -----------------------------------------------------------------------------
 # jags model: code+data
@@ -162,5 +162,5 @@ jagsfit4 <- crosnma.run(model=mod4,
 knitr::kable(summary(jagsfit4))
 
 ## -----------------------------------------------------------------------------
-#plot(jagsfit1)
+# to be added
 
