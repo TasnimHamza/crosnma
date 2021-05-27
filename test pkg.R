@@ -4,7 +4,7 @@ devtools::install_github("TasnimHamza/crosnma")
 library(crosnma)
 # jags model: code+data
 mod1 <- crosnma.model(prt.data=prt.data,
-                   std.data=NULL,
+                   std.data=std.data,
                    trt=c('trt','trt'),
                    study=c('study','study'),
                    outcome=c('outcome','outcome'),
@@ -12,7 +12,13 @@ mod1 <- crosnma.model(prt.data=prt.data,
                    n='n',
                    covariate = list(c('age'),'age'),#list(c('AGE','SEX','EDSSBL'),c('age','sex','edss')),
                    reference='A',
-                   method.bias = 'naive'
+                   method.bias = 'prior',
+                   run.nrs=list(
+                                n.adapt = 20,
+                                n.iter=50,
+                                n.burnin = 3,
+                                thin=1,
+                                n.chains=2)
 )
 
 

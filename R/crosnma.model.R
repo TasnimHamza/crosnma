@@ -8,6 +8,7 @@
 #++ add the inconsistency check
 #++ add check when adjust1 is chosen, bias.type should be specified
 ### make all optional NULL
+### add to @return all objects
 ### BUGSnet, the user can control d's distribution
 #' Create JAGS model and data to run generic NMA and NMR for dichotomous outcomes
 #' @description Create JAGS model and data; jags code is created from the internal function \code{crosnma.code}.
@@ -53,8 +54,7 @@
 #' There are 4 possible bias probabilities: RCT with low/high bias (pi.low.rct, pi.high.rct), NRS with low/high bias (pi.low.nrs, pi.high.nrs).
 #' Each prior should be given a beta distribution with the two parameters (see details to help you choose them)  as this for example 'dbeta(3,1)'.
 #' @param run.nrs An optional list when the method to include NRS is set at 'prior'.
-#' The list consists of the follwoing: the reference treatment in the NMA formed by NRS (\code{reference.nrs}) and
-#' (\code{var.infl}) controls the inflation of the varaince of NRS estimates and its values range between 0 (least confidence in NRS) and 1 (full confidence in NRS).
+#' The list consists of the follwoing: (\code{var.infl}) controls the inflation of the varaince of NRS estimates and its values range between 0 (least confidence in NRS) and 1 (full confidence in NRS).
 #' (\code{mean.shift}) is the bias shift to be added/subtracted from the estimated NRS parameters. Either (\code{var.infl}) or (\code{mean.shift}) can be provided but not both.
 #' and other arguments to control the MCMC chains: the number of adaptions n.adapt, number of iterations n.iter, number of burn in n.burnin,
 #' number of thinning thin and number of chains n.chains, see \code{\link{jags.model}} arguments from rjags package.
@@ -128,7 +128,7 @@ crosnma.model <- function(prt.data,
                        reg0.effect='independent',
                        regb.effect='random',
                        regw.effect='random',
-                       split.regcoef=F,
+                       split.regcoef=T,
                        #---------- bias adjustment ----------
                        method.bias = NULL,
                        bias=NULL, #optional, required for adjust1. It can be either: low, high,
@@ -136,7 +136,7 @@ crosnma.model <- function(prt.data,
                        bias.covariate=NULL,
                        bias.effect='common',
                        # ---------- prior ----------
-                       prior=list(tau.trt='dunif(0,3)',
+                       prior=list(tau.trt=NULL,
                                   tau.reg0=NULL,
                                   tau.regb=NULL,
                                   tau.regw=NULL,
@@ -147,8 +147,7 @@ crosnma.model <- function(prt.data,
                                   pi.low.nrs=NULL
                        ),
                        # ---------- when method.bias='prior' ----------
-                       run.nrs=list(reference.nrs=NULL,
-                                    var.infl=NULL,
+                       run.nrs=list(var.infl=NULL,
                                     mean.shift=NULL,
                                     n.adapt = NULL,
                                     n.iter=NULL,
@@ -695,20 +694,21 @@ crosnma.model <- function(prt.data,
 
   if(method.bias=='prior'){
     # data NRS
-
-    if(!(run.nrs[["reference.nrs"]] %in% c(data1.nrs$trt,data2.nrs$trt))) stop("Reference treatment of NRS data is not available in the list of treatments.")
+    if(!(reference %in% data1.nrs$trt)&!(reference %in% data2.nrs$trt)) stop("Reference treatment should be present in the list of treatments in NRS.")
+#
+#     if(!(run.nrs[["reference.nrs"]] %in% c(data1.nrs$trt,data2.nrs$trt))) stop("Reference treatment of NRS data is not available in the list of treatments.")
 
     trt.df.nrs <- data.frame(trt=unique(c(data1.nrs$trt,as.character(data2.nrs$trt))))
 
     trt.key.nrs <- trt.df.nrs$trt %>% unique %>% sort %>% tibble(trt.ini=.) %>%
-      filter(trt.ini!=run.nrs[["reference.nrs"]]) %>% add_row(trt.ini=run.nrs[["reference.nrs"]], .before=1) %>%
+      filter(trt.ini!=reference) %>% add_row(trt.ini=reference, .before=1) %>%
       mutate(trt.jags = 1:dim(.)[1])
 
 
     #====================================
     # 1. IPD-NRS
 
-    if(!(run.nrs[["reference.nrs"]] %in% data1.nrs$trt)) stop("Reference treatment is not present in the list of treatments.")
+    if(!(reference %in% data1.nrs$trt)) stop("Reference treatment is not present in the list of treatments.")
 
     #Trt mapping
     data1.nrs %<>% mutate(trt.jags=mapvalues(trt,

@@ -27,7 +27,7 @@ library(crosnma)
 # The underlying assumptions of parameters
 We summarize the different assumptions that can be set for the parameters in the model by the following table. 
 
-| Parameters 	| Assumptions| R-code in `crosnma.mode()`|  	
+| Parameters 	| Assumptions| R-code in `crosnma.model()`|  	
 |:-------------------|:-----------|:------|
 |relative treatment effect ($\delta_{jk}$)| Random-effect model: $\delta_{jk} \sim N(d_{Ak}-d_{Ab}, \tau_\delta^2)$| `trt.effect='random'` |
 |   	|Common-effect model: $\delta_{jk}=d_{Ak}-d_{Ab}$| `trt.effect='common'`|
@@ -54,7 +54,7 @@ head(std.data)
 
 # Explore the network
 ## Check network connectivity
-The network should be checked for its connectivity before running the analysis. This is a vital step as the model will run even if the network is not connected.The given estimates are wrong as they reflect our pre-specified prior information.
+The network should be checked for its connectivity before running the analysis. This is a vital step as the model will run even if the network is not connected. In this case, it provides the wrong estimates which are our pre-specified prior information.
 
 ### Network plot
 ```{r}
@@ -71,7 +71,7 @@ Two steps to run the NMA/NMR model. The first step is to create JAGS model using
 
 In the rest of the document we illustrate the four different methods that can be used to combine the evidence from RCT and NRS. For each method, we set up the model, run the analysis and present the results. 
 
-## Naive method
+## Naïve method
 This is the simplest method where the evidence from the two designs are combined naively without acknowledging the differences between them, see Section 2.2.1 in [@hamza_2021].
 ### Set up JAGS model
 We start by indicating the names of the datasets on participant- (`prt.data`) and study-level (`std.data`). Then, the name of the variables on each dataset need to be given respectively in `prt.data` and `std.data`.  Next, the `reference` treatment need to be assigned ( drug A). By choosing `trt.effect=random`, we assign a normal distribution to each relative treatment effect across studies, see the table in Section 1. Finally, the different designs; RCT and NRS are combined naively; `method.bias = 'naive'`.
@@ -140,8 +140,7 @@ mod2 <- crosnma.model(prt.data=prt.data,
                    covariate = list(c('age','sex'),c('age','sex')),
                    #---------- bias adjustment ---------- 
                    method.bias='prior',
-                   run.nrs=list(reference.nrs='D',
-                                n.adapt = 10,
+                   run.nrs=list(n.adapt = 10,
                                 n.iter=10,
                                 n.burnin = 5,
                                 thin=1,
@@ -175,7 +174,7 @@ knitr::kable(summary(jagsfit2))
 In this part, we run again a generic NMR model using `sex` and `age` as covariates. But now, the overall relative treatment effects are estimated from both NRS and RCT with adjustment to study-specific bias following the method introduced by [@dias_2010], see also Section 2.2.3 in [@hamza_2021].
 
 ### Set up JAGS model
-Additionally, we provide the name of the bias variable `bias=c('bias','bias')` in `prt.data` and `std.data`, respectively. The effect of bias is assumed to be additive to the treatment effect so `bias.type='add'`. The bias effect is set to be equal across studies `bias.effect='common'`. It is optional to give a list of the different priors to control the estimates of the corresponding parameters. Here, we set a uniform distribution to the common heterogeneity of the treatment effect across studies, `tau.trt='dunif(0,3)'`. We also set beta distribution (\eqn{Beta(a,b)}) as priors for the probability of bias on each study. We assumed these four categories: high bias RCT `pi.high.rct='dbeta(5,1)'`, low bias RCT `pi.low.rct='dbeta(1,20)'`,high bias NRS `pi.high.nrs='dbeta(30,1)'` and low bias NRS `pi.low.nrs='dbeta(1,2)'`.  The ratio \eqn{a/b} controls the skewness of the beta distribution.  When the ratio goes further beyond 1, the mean becomes located closer to 1 and the study needs 'major' bias adjustment and vice versa. 
+Additionally, we provide the name of the bias variable `bias=c('bias','bias')` in `prt.data` and `std.data`, respectively. The effect of bias is assumed to be additive to the treatment effect so `bias.type='add'`. The bias effect is set to be equal across studies `bias.effect='common'`. It is optional to give a list of the different priors to control the estimates of the corresponding parameters. Here, we set a uniform distribution to the common heterogeneity of the treatment effect across studies, `tau.trt='dunif(0,3)'`. We also set beta distribution (${Beta(a,b)}$) as priors for the probability of bias on each study. We assumed these four categories: high bias RCT `pi.high.rct='dbeta(5,1)'`, low bias RCT `pi.low.rct='dbeta(1,20)'`,high bias NRS `pi.high.nrs='dbeta(30,1)'` and low bias NRS `pi.low.nrs='dbeta(1,2)'`.  The ratio ${a/b}$ controls the skewness of the beta distribution.  When the ratio goes further beyond 1, the mean becomes located closer to 1 and the study needs 'major' bias adjustment and vice versa. 
 ```{r}
 # jags model: code+data
 mod3 <- crosnma.model(prt.data=prt.data,
@@ -230,7 +229,7 @@ knitr::kable(summary(jagsfit3))
 ## Adjusting for the study-specific bias - method 2
 
 ### Set up JAGS model
-The arguments for `method.bias='adjust2'` are similar to the ones that were used above for `method.bias='adjust1'`. However, there are two main differences between them. First, in `'adjust2'`, the relative treatment effects are modeled with a bi-modal normal distribution instead of a univariate normal distribution as in  `'adjust1'` method. Second, we can use a logistic model with a year as a covariate `bias.covariate = c('year','year')` to estimate the probability of bias in `'adjust2'`. In `'adjust1'`, instead we assume  a (\eqn{Beta(a,b)}) to estimate the probability of bias. More details about this method can be found in [@verde_2020] and in Section 2.2.2 in [@hamza_2021].
+The arguments for `method.bias='adjust2'` are similar to the ones that were used above for `method.bias='adjust1'`. However, there are two main differences between them. First, in `'adjust2'`, the relative treatment effects are modeled with a bi-modal normal distribution instead of a univariate normal distribution as in  `'adjust1'` method. Second, we can use a logistic model with a year as a covariate `bias.covariate = c('year','year')` to estimate the probability of bias in `'adjust2'`. In `'adjust1'`, instead we assume  a (${Beta(a,b)}$) to estimate the probability of bias. More details about this method can be found in [@verde_2020] and in Section 2.2.2 in [@hamza_2021].
 
 ```{r}
 # jags model: code+data

@@ -12,7 +12,7 @@
 
 <meta name="author" content="Tasnim Hamza" />
 
-<meta name="date" content="2021-05-26" />
+<meta name="date" content="2021-05-27" />
 
 <title>Generic NMA for Dichotomous Outcomes</title>
 
@@ -318,7 +318,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Generic NMA for Dichotomous Outcomes</h1>
 <h4 class="author">Tasnim Hamza</h4>
-<h4 class="date">2021-05-26</h4>
+<h4 class="date">2021-05-27</h4>
 
 
 <div id="TOC">
@@ -515,7 +515,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <tr class="odd">
 <td align="left">d.A</td>
 <td align="right">1.0000000</td>
-<td align="right">1.000000</td>
+<td align="right">1.0000000</td>
 <td align="right">1.0000000</td>
 <td align="right">1.0000000</td>
 <td align="right">1.000000</td>
@@ -524,43 +524,43 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </tr>
 <tr class="even">
 <td align="left">d.B</td>
-<td align="right">0.8377732</td>
-<td align="right">1.978604</td>
-<td align="right">0.2098459</td>
-<td align="right">0.8357388</td>
-<td align="right">3.310298</td>
-<td align="right">1.009</td>
-<td align="right">97</td>
+<td align="right">0.8487970</td>
+<td align="right">1.7312531</td>
+<td align="right">0.3431327</td>
+<td align="right">0.8555713</td>
+<td align="right">2.580788</td>
+<td align="right">1.029</td>
+<td align="right">242</td>
 </tr>
 <tr class="odd">
 <td align="left">d.C</td>
-<td align="right">1.4660810</td>
-<td align="right">1.992178</td>
-<td align="right">0.3521723</td>
-<td align="right">1.3559442</td>
-<td align="right">6.721542</td>
-<td align="right">0.996</td>
-<td align="right">108</td>
+<td align="right">1.5188017</td>
+<td align="right">1.7751210</td>
+<td align="right">0.5392490</td>
+<td align="right">1.5735507</td>
+<td align="right">4.552186</td>
+<td align="right">1.063</td>
+<td align="right">128</td>
 </tr>
 <tr class="even">
 <td align="left">d.D</td>
-<td align="right">0.4065973</td>
-<td align="right">2.193750</td>
-<td align="right">0.0891068</td>
-<td align="right">0.4188908</td>
-<td align="right">2.011252</td>
-<td align="right">1.024</td>
-<td align="right">150</td>
+<td align="right">0.3859860</td>
+<td align="right">1.9984219</td>
+<td align="right">0.0846299</td>
+<td align="right">0.3983700</td>
+<td align="right">1.378176</td>
+<td align="right">1.052</td>
+<td align="right">283</td>
 </tr>
 <tr class="odd">
 <td align="left">tau</td>
-<td align="right">2.9163173</td>
-<td align="right">1.561999</td>
-<td align="right">1.6668917</td>
-<td align="right">2.7018044</td>
-<td align="right">9.498406</td>
-<td align="right">1.004</td>
-<td align="right">44</td>
+<td align="right">0.9587723</td>
+<td align="right">0.3216904</td>
+<td align="right">0.4916106</td>
+<td align="right">0.9042804</td>
+<td align="right">1.620172</td>
+<td align="right">0.997</td>
+<td align="right">79</td>
 </tr>
 </tbody>
 </table>
@@ -598,22 +598,21 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <a class="sourceLine" id="cb9-12" data-line-number="12">                   <span class="dt">covariate =</span> <span class="kw">list</span>(<span class="kw">c</span>(<span class="st">'age'</span>,<span class="st">'sex'</span>),<span class="kw">c</span>(<span class="st">'age'</span>,<span class="st">'sex'</span>)),</a>
 <a class="sourceLine" id="cb9-13" data-line-number="13">                   <span class="co">#---------- bias adjustment ---------- </span></a>
 <a class="sourceLine" id="cb9-14" data-line-number="14">                   <span class="dt">method.bias=</span><span class="st">'prior'</span>,</a>
-<a class="sourceLine" id="cb9-15" data-line-number="15">                   <span class="dt">run.nrs=</span><span class="kw">list</span>(<span class="dt">reference.nrs=</span><span class="st">'D'</span>,</a>
-<a class="sourceLine" id="cb9-16" data-line-number="16">                                <span class="dt">n.adapt =</span> <span class="dv">10</span>,</a>
-<a class="sourceLine" id="cb9-17" data-line-number="17">                                <span class="dt">n.iter=</span><span class="dv">10</span>,</a>
-<a class="sourceLine" id="cb9-18" data-line-number="18">                                <span class="dt">n.burnin =</span> <span class="dv">5</span>,</a>
-<a class="sourceLine" id="cb9-19" data-line-number="19">                                <span class="dt">thin=</span><span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb9-20" data-line-number="20">                                <span class="dt">n.chains=</span><span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb9-21" data-line-number="21"><span class="co">#&gt; The data is analyzed assuming the studies has the same design</span></a>
-<a class="sourceLine" id="cb9-22" data-line-number="22"><span class="co">#&gt; Compiling model graph</span></a>
-<a class="sourceLine" id="cb9-23" data-line-number="23"><span class="co">#&gt;    Resolving undeclared variables</span></a>
-<a class="sourceLine" id="cb9-24" data-line-number="24"><span class="co">#&gt;    Allocating nodes</span></a>
-<a class="sourceLine" id="cb9-25" data-line-number="25"><span class="co">#&gt; Graph information:</span></a>
-<a class="sourceLine" id="cb9-26" data-line-number="26"><span class="co">#&gt;    Observed stochastic nodes: 0</span></a>
-<a class="sourceLine" id="cb9-27" data-line-number="27"><span class="co">#&gt;    Unobserved stochastic nodes: 258</span></a>
-<a class="sourceLine" id="cb9-28" data-line-number="28"><span class="co">#&gt;    Total graph size: 1078</span></a>
-<a class="sourceLine" id="cb9-29" data-line-number="29"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb9-30" data-line-number="30"><span class="co">#&gt; Initializing model</span></a></code></pre></div>
+<a class="sourceLine" id="cb9-15" data-line-number="15">                   <span class="dt">run.nrs=</span><span class="kw">list</span>(<span class="dt">n.adapt =</span> <span class="dv">10</span>,</a>
+<a class="sourceLine" id="cb9-16" data-line-number="16">                                <span class="dt">n.iter=</span><span class="dv">10</span>,</a>
+<a class="sourceLine" id="cb9-17" data-line-number="17">                                <span class="dt">n.burnin =</span> <span class="dv">5</span>,</a>
+<a class="sourceLine" id="cb9-18" data-line-number="18">                                <span class="dt">thin=</span><span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb9-19" data-line-number="19">                                <span class="dt">n.chains=</span><span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb9-20" data-line-number="20"><span class="co">#&gt; The data is analyzed assuming the studies has the same design</span></a>
+<a class="sourceLine" id="cb9-21" data-line-number="21"><span class="co">#&gt; Compiling model graph</span></a>
+<a class="sourceLine" id="cb9-22" data-line-number="22"><span class="co">#&gt;    Resolving undeclared variables</span></a>
+<a class="sourceLine" id="cb9-23" data-line-number="23"><span class="co">#&gt;    Allocating nodes</span></a>
+<a class="sourceLine" id="cb9-24" data-line-number="24"><span class="co">#&gt; Graph information:</span></a>
+<a class="sourceLine" id="cb9-25" data-line-number="25"><span class="co">#&gt;    Observed stochastic nodes: 0</span></a>
+<a class="sourceLine" id="cb9-26" data-line-number="26"><span class="co">#&gt;    Unobserved stochastic nodes: 258</span></a>
+<a class="sourceLine" id="cb9-27" data-line-number="27"><span class="co">#&gt;    Total graph size: 1078</span></a>
+<a class="sourceLine" id="cb9-28" data-line-number="28"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-29" data-line-number="29"><span class="co">#&gt; Initializing model</span></a></code></pre></div>
 </div>
 <div id="run-jags-1" class="section level3">
 <h3><span class="header-section-number">4.2.2</span> Run JAGS</h3>
@@ -647,93 +646,93 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <tbody>
 <tr class="odd">
 <td align="left">b_1</td>
-<td align="right">0.9905029</td>
-<td align="right">1.064222</td>
-<td align="right">0.8566721</td>
-<td align="right">0.9925317</td>
-<td align="right">1.077691</td>
-<td align="right">1.112</td>
-<td align="right">122</td>
+<td align="right">1.0071406</td>
+<td align="right">1.0609669</td>
+<td align="right">0.9104313</td>
+<td align="right">1.0084633</td>
+<td align="right">1.1668401</td>
+<td align="right">1.238</td>
+<td align="right">144</td>
 </tr>
 <tr class="even">
 <td align="left">b_2</td>
-<td align="right">1.0226647</td>
-<td align="right">1.587368</td>
-<td align="right">0.4493992</td>
-<td align="right">1.0317590</td>
-<td align="right">2.131911</td>
-<td align="right">1.321</td>
-<td align="right">71</td>
+<td align="right">1.5373350</td>
+<td align="right">1.7541493</td>
+<td align="right">0.5077776</td>
+<td align="right">1.5426811</td>
+<td align="right">4.3097821</td>
+<td align="right">1.121</td>
+<td align="right">84</td>
 </tr>
 <tr class="odd">
 <td align="left">d.A</td>
 <td align="right">1.0000000</td>
-<td align="right">1.000000</td>
 <td align="right">1.0000000</td>
 <td align="right">1.0000000</td>
-<td align="right">1.000000</td>
+<td align="right">1.0000000</td>
+<td align="right">1.0000000</td>
 <td align="right">NaN</td>
 <td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="left">d.B</td>
-<td align="right">1.3495760</td>
-<td align="right">2.522951</td>
-<td align="right">0.3039922</td>
-<td align="right">1.2710364</td>
-<td align="right">11.847563</td>
-<td align="right">1.129</td>
-<td align="right">128</td>
+<td align="right">0.3768619</td>
+<td align="right">1.9818972</td>
+<td align="right">0.1298528</td>
+<td align="right">0.3740878</td>
+<td align="right">1.2793792</td>
+<td align="right">1.525</td>
+<td align="right">62</td>
 </tr>
 <tr class="odd">
 <td align="left">d.C</td>
-<td align="right">1.4900393</td>
-<td align="right">2.328705</td>
-<td align="right">0.4001929</td>
-<td align="right">1.5309651</td>
-<td align="right">6.051153</td>
-<td align="right">1.190</td>
-<td align="right">40</td>
+<td align="right">0.7362046</td>
+<td align="right">2.9288456</td>
+<td align="right">0.0958287</td>
+<td align="right">0.7808507</td>
+<td align="right">5.1417315</td>
+<td align="right">2.783</td>
+<td align="right">42</td>
 </tr>
 <tr class="even">
 <td align="left">d.D</td>
-<td align="right">0.1856461</td>
-<td align="right">2.874333</td>
-<td align="right">0.0228597</td>
-<td align="right">0.1992477</td>
-<td align="right">1.868958</td>
-<td align="right">1.280</td>
-<td align="right">107</td>
+<td align="right">0.2199839</td>
+<td align="right">2.1621910</td>
+<td align="right">0.0376103</td>
+<td align="right">0.2360496</td>
+<td align="right">0.8890368</td>
+<td align="right">1.171</td>
+<td align="right">70</td>
 </tr>
 <tr class="odd">
 <td align="left">tau</td>
-<td align="right">2.0392618</td>
-<td align="right">1.831177</td>
-<td align="right">1.1576411</td>
-<td align="right">1.6341965</td>
-<td align="right">14.158117</td>
-<td align="right">1.197</td>
-<td align="right">41</td>
+<td align="right">0.5592906</td>
+<td align="right">0.4202037</td>
+<td align="right">0.0778172</td>
+<td align="right">0.4235063</td>
+<td align="right">1.8981443</td>
+<td align="right">1.317</td>
+<td align="right">36</td>
 </tr>
 <tr class="even">
 <td align="left">tau.b_1</td>
-<td align="right">1.0807703</td>
-<td align="right">1.109899</td>
-<td align="right">1.0099151</td>
-<td align="right">1.0418896</td>
-<td align="right">1.500297</td>
-<td align="right">1.124</td>
-<td align="right">37</td>
+<td align="right">0.0561389</td>
+<td align="right">0.0866402</td>
+<td align="right">0.0026468</td>
+<td align="right">0.0224440</td>
+<td align="right">0.3237351</td>
+<td align="right">1.200</td>
+<td align="right">26</td>
 </tr>
 <tr class="odd">
 <td align="left">tau.b_2</td>
-<td align="right">1.7565887</td>
-<td align="right">1.505675</td>
-<td align="right">1.1244571</td>
-<td align="right">1.5332486</td>
-<td align="right">4.500323</td>
-<td align="right">1.053</td>
-<td align="right">23</td>
+<td align="right">0.7328719</td>
+<td align="right">0.4354457</td>
+<td align="right">0.1623164</td>
+<td align="right">0.6043032</td>
+<td align="right">1.7884636</td>
+<td align="right">1.067</td>
+<td align="right">44</td>
 </tr>
 </tbody>
 </table>
@@ -749,7 +748,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>In this part, we run again a generic NMR model using <code>sex</code> and <code>age</code> as covariates. But now, the overall relative treatment effects are estimated from both NRS and RCT with adjustment to study-specific bias following the method introduced by <span class="citation">(Dias et al. 2010)</span>, see also Section 2.2.3 in <span class="citation">(Hamza T 2021)</span>.</p>
 <div id="set-up-jags-model-1" class="section level3">
 <h3><span class="header-section-number">4.3.1</span> Set up JAGS model</h3>
-<p>Additionally, we provide the name of the bias variable <code>bias=c('bias','bias')</code> in <code>prt.data</code> and <code>std.data</code>, respectively. The effect of bias is assumed to be additive to the treatment effect so <code>bias.type='add'</code>. The bias effect is set to be equal across studies <code>bias.effect='common'</code>. It is optional to give a list of the different priors to control the estimates of the corresponding parameters. Here, we set a uniform distribution to the common heterogeneity of the treatment effect across studies, <code>tau.trt='dunif(0,3)'</code>. We also set beta distribution () as priors for the probability of bias on each study. We assumed these four categories: high bias RCT <code>pi.high.rct='dbeta(5,1)'</code>, low bias RCT <code>pi.low.rct='dbeta(1,20)'</code>,high bias NRS <code>pi.high.nrs='dbeta(30,1)'</code> and low bias NRS <code>pi.low.nrs='dbeta(1,2)'</code>. The ratio  controls the skewness of the beta distribution. When the ratio goes further beyond 1, the mean becomes located closer to 1 and the study needs ‘major’ bias adjustment and vice versa.</p>
+<p>Additionally, we provide the name of the bias variable <code>bias=c('bias','bias')</code> in <code>prt.data</code> and <code>std.data</code>, respectively. The effect of bias is assumed to be additive to the treatment effect so <code>bias.type='add'</code>. The bias effect is set to be equal across studies <code>bias.effect='common'</code>. It is optional to give a list of the different priors to control the estimates of the corresponding parameters. Here, we set a uniform distribution to the common heterogeneity of the treatment effect across studies, <code>tau.trt='dunif(0,3)'</code>. We also set beta distribution (<span class="math inline">\({Beta(a,b)}\)</span>) as priors for the probability of bias on each study. We assumed these four categories: high bias RCT <code>pi.high.rct='dbeta(5,1)'</code>, low bias RCT <code>pi.low.rct='dbeta(1,20)'</code>,high bias NRS <code>pi.high.nrs='dbeta(30,1)'</code> and low bias NRS <code>pi.low.nrs='dbeta(1,2)'</code>. The ratio <span class="math inline">\({a/b}\)</span> controls the skewness of the beta distribution. When the ratio goes further beyond 1, the mean becomes located closer to 1 and the study needs ‘major’ bias adjustment and vice versa.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># jags model: code+data</span></a>
 <a class="sourceLine" id="cb13-2" data-line-number="2">mod3 &lt;-<span class="st"> </span><span class="kw">crosnma.model</span>(<span class="dt">prt.data=</span>prt.data,</a>
 <a class="sourceLine" id="cb13-3" data-line-number="3">                   <span class="dt">std.data=</span>std.data,</a>
@@ -807,28 +806,28 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <tbody>
 <tr class="odd">
 <td align="left">b_1</td>
-<td align="right">1.0208644</td>
-<td align="right">1.129620</td>
-<td align="right">0.8569149</td>
-<td align="right">1.0099319</td>
-<td align="right">1.2794478</td>
-<td align="right">1.303</td>
-<td align="right">85</td>
+<td align="right">0.9995800</td>
+<td align="right">1.0334275</td>
+<td align="right">0.9420138</td>
+<td align="right">0.9993473</td>
+<td align="right">1.0574172</td>
+<td align="right">1.116</td>
+<td align="right">160</td>
 </tr>
 <tr class="even">
 <td align="left">b_2</td>
-<td align="right">1.0761611</td>
-<td align="right">1.711746</td>
-<td align="right">0.4510350</td>
-<td align="right">1.0278302</td>
-<td align="right">3.2762608</td>
-<td align="right">1.211</td>
-<td align="right">59</td>
+<td align="right">1.0423481</td>
+<td align="right">1.5605709</td>
+<td align="right">0.5193963</td>
+<td align="right">0.9911979</td>
+<td align="right">2.9537586</td>
+<td align="right">1.137</td>
+<td align="right">200</td>
 </tr>
 <tr class="odd">
 <td align="left">d.A</td>
 <td align="right">1.0000000</td>
-<td align="right">1.000000</td>
+<td align="right">1.0000000</td>
 <td align="right">1.0000000</td>
 <td align="right">1.0000000</td>
 <td align="right">1.0000000</td>
@@ -837,73 +836,73 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </tr>
 <tr class="even">
 <td align="left">d.B</td>
-<td align="right">0.4214372</td>
-<td align="right">1.738186</td>
-<td align="right">0.1533980</td>
-<td align="right">0.4214153</td>
-<td align="right">1.4272149</td>
-<td align="right">1.109</td>
-<td align="right">60</td>
+<td align="right">0.9621063</td>
+<td align="right">1.3793251</td>
+<td align="right">0.4901960</td>
+<td align="right">0.9746362</td>
+<td align="right">1.4363200</td>
+<td align="right">2.044</td>
+<td align="right">72</td>
 </tr>
 <tr class="odd">
 <td align="left">d.C</td>
-<td align="right">0.6417049</td>
-<td align="right">1.824744</td>
-<td align="right">0.2218255</td>
-<td align="right">0.6264214</td>
-<td align="right">2.9579335</td>
-<td align="right">1.412</td>
-<td align="right">41</td>
+<td align="right">0.7050469</td>
+<td align="right">1.9889482</td>
+<td align="right">0.2154025</td>
+<td align="right">0.6624592</td>
+<td align="right">1.6967525</td>
+<td align="right">2.295</td>
+<td align="right">22</td>
 </tr>
 <tr class="even">
 <td align="left">d.D</td>
-<td align="right">0.1838631</td>
-<td align="right">1.724043</td>
-<td align="right">0.0554952</td>
-<td align="right">0.1780455</td>
-<td align="right">0.4416779</td>
-<td align="right">1.337</td>
-<td align="right">50</td>
+<td align="right">0.2635613</td>
+<td align="right">1.6017450</td>
+<td align="right">0.1066747</td>
+<td align="right">0.3020699</td>
+<td align="right">0.6226387</td>
+<td align="right">1.389</td>
+<td align="right">27</td>
 </tr>
 <tr class="odd">
 <td align="left">g</td>
-<td align="right">1.1866998</td>
-<td align="right">3.205196</td>
-<td align="right">0.1647044</td>
-<td align="right">2.1127081</td>
-<td align="right">3.9904212</td>
-<td align="right">8.179</td>
-<td align="right">9</td>
+<td align="right">1.5346494</td>
+<td align="right">1.9755342</td>
+<td align="right">0.4314360</td>
+<td align="right">1.4592987</td>
+<td align="right">4.2399837</td>
+<td align="right">5.050</td>
+<td align="right">27</td>
 </tr>
 <tr class="even">
 <td align="left">tau</td>
-<td align="right">1.8334708</td>
-<td align="right">1.409457</td>
-<td align="right">1.1683166</td>
-<td align="right">1.7040952</td>
-<td align="right">3.8243151</td>
-<td align="right">1.275</td>
-<td align="right">25</td>
+<td align="right">0.3016634</td>
+<td align="right">0.3134655</td>
+<td align="right">0.0077145</td>
+<td align="right">0.2197343</td>
+<td align="right">1.0320720</td>
+<td align="right">1.743</td>
+<td align="right">15</td>
 </tr>
 <tr class="odd">
 <td align="left">tau.b_1</td>
-<td align="right">1.0673523</td>
-<td align="right">1.170489</td>
-<td align="right">1.0001385</td>
-<td align="right">1.0051963</td>
-<td align="right">1.7656928</td>
-<td align="right">1.582</td>
-<td align="right">21</td>
+<td align="right">0.0409596</td>
+<td align="right">0.0412672</td>
+<td align="right">0.0076798</td>
+<td align="right">0.0295097</td>
+<td align="right">0.1225170</td>
+<td align="right">1.168</td>
+<td align="right">48</td>
 </tr>
 <tr class="even">
 <td align="left">tau.b_2</td>
-<td align="right">1.7542100</td>
-<td align="right">1.586644</td>
-<td align="right">1.0740875</td>
-<td align="right">1.4887472</td>
-<td align="right">5.4003733</td>
-<td align="right">1.228</td>
-<td align="right">35</td>
+<td align="right">0.4954472</td>
+<td align="right">0.5361418</td>
+<td align="right">0.0257306</td>
+<td align="right">0.2397853</td>
+<td align="right">1.8592875</td>
+<td align="right">1.521</td>
+<td align="right">14</td>
 </tr>
 </tbody>
 </table>
@@ -918,7 +917,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h2><span class="header-section-number">4.4</span> Adjusting for the study-specific bias - method 2</h2>
 <div id="set-up-jags-model-2" class="section level3">
 <h3><span class="header-section-number">4.4.1</span> Set up JAGS model</h3>
-<p>The arguments for <code>method.bias='adjust2'</code> are similar to the ones that were used above for <code>method.bias='adjust1'</code>. However, there are two main differences between them. First, in <code>'adjust2'</code>, the relative treatment effects are modeled with a bi-modal normal distribution instead of a univariate normal distribution as in <code>'adjust1'</code> method. Second, we can use a logistic model with a year as a covariate <code>bias.covariate = c('year','year')</code> to estimate the probability of bias in <code>'adjust2'</code>. In <code>'adjust1'</code>, instead we assume a () to estimate the probability of bias. More details about this method can be found in <span class="citation">(Verde 2020)</span> and in Section 2.2.2 in <span class="citation">(Hamza T 2021)</span>.</p>
+<p>The arguments for <code>method.bias='adjust2'</code> are similar to the ones that were used above for <code>method.bias='adjust1'</code>. However, there are two main differences between them. First, in <code>'adjust2'</code>, the relative treatment effects are modeled with a bi-modal normal distribution instead of a univariate normal distribution as in <code>'adjust1'</code> method. Second, we can use a logistic model with a year as a covariate <code>bias.covariate = c('year','year')</code> to estimate the probability of bias in <code>'adjust2'</code>. In <code>'adjust1'</code>, instead we assume a (<span class="math inline">\({Beta(a,b)}\)</span>) to estimate the probability of bias. More details about this method can be found in <span class="citation">(Verde 2020)</span> and in Section 2.2.2 in <span class="citation">(Hamza T 2021)</span>.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="co"># jags model: code+data</span></a>
 <a class="sourceLine" id="cb17-2" data-line-number="2">mod4 &lt;-<span class="st"> </span><span class="kw">crosnma.model</span>(<span class="dt">prt.data=</span>prt.data,</a>
 <a class="sourceLine" id="cb17-3" data-line-number="3">                   <span class="dt">std.data=</span>std.data,</a>
@@ -977,28 +976,28 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <tbody>
 <tr class="odd">
 <td align="left">b_1</td>
-<td align="right">0.9915606</td>
-<td align="right">1.016983</td>
-<td align="right">0.9593943</td>
-<td align="right">0.9944740</td>
-<td align="right">1.0248637</td>
-<td align="right">1.371</td>
-<td align="right">310</td>
+<td align="right">1.0178644</td>
+<td align="right">1.0358530</td>
+<td align="right">0.9454345</td>
+<td align="right">1.0195265</td>
+<td align="right">1.0832498</td>
+<td align="right">1.170</td>
+<td align="right">101</td>
 </tr>
 <tr class="even">
 <td align="left">b_2</td>
-<td align="right">0.9207809</td>
-<td align="right">1.610647</td>
-<td align="right">0.3284419</td>
-<td align="right">0.9191465</td>
-<td align="right">2.1586018</td>
-<td align="right">1.246</td>
-<td align="right">108</td>
+<td align="right">0.9708693</td>
+<td align="right">1.6069153</td>
+<td align="right">0.4601185</td>
+<td align="right">0.8901357</td>
+<td align="right">2.4128744</td>
+<td align="right">1.161</td>
+<td align="right">80</td>
 </tr>
 <tr class="odd">
 <td align="left">d.A</td>
 <td align="right">1.0000000</td>
-<td align="right">1.000000</td>
+<td align="right">1.0000000</td>
 <td align="right">1.0000000</td>
 <td align="right">1.0000000</td>
 <td align="right">1.0000000</td>
@@ -1007,73 +1006,73 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </tr>
 <tr class="even">
 <td align="left">d.B</td>
-<td align="right">1.0787343</td>
-<td align="right">1.743436</td>
-<td align="right">0.2804434</td>
-<td align="right">1.1319259</td>
-<td align="right">2.8810701</td>
-<td align="right">1.338</td>
-<td align="right">47</td>
+<td align="right">0.4459487</td>
+<td align="right">2.2038329</td>
+<td align="right">0.0899844</td>
+<td align="right">0.4999827</td>
+<td align="right">1.9472727</td>
+<td align="right">2.111</td>
+<td align="right">110</td>
 </tr>
 <tr class="odd">
 <td align="left">d.C</td>
-<td align="right">1.6895916</td>
-<td align="right">1.760806</td>
-<td align="right">0.5047976</td>
-<td align="right">1.7368678</td>
-<td align="right">4.8333311</td>
-<td align="right">1.737</td>
-<td align="right">37</td>
+<td align="right">0.3420096</td>
+<td align="right">1.9013041</td>
+<td align="right">0.1348523</td>
+<td align="right">0.2922840</td>
+<td align="right">1.7446575</td>
+<td align="right">1.366</td>
+<td align="right">58</td>
 </tr>
 <tr class="even">
 <td align="left">d.D</td>
-<td align="right">0.4279401</td>
-<td align="right">1.880846</td>
-<td align="right">0.1148778</td>
-<td align="right">0.4330449</td>
-<td align="right">1.4441056</td>
-<td align="right">1.390</td>
-<td align="right">88</td>
+<td align="right">0.1741852</td>
+<td align="right">2.0162568</td>
+<td align="right">0.0521857</td>
+<td align="right">0.1611483</td>
+<td align="right">0.8238216</td>
+<td align="right">1.676</td>
+<td align="right">77</td>
 </tr>
 <tr class="odd">
 <td align="left">g</td>
-<td align="right">0.4089988</td>
-<td align="right">1.174856</td>
-<td align="right">0.2840434</td>
-<td align="right">0.4105677</td>
-<td align="right">0.5358565</td>
-<td align="right">1.157</td>
-<td align="right">12</td>
+<td align="right">0.9467395</td>
+<td align="right">2.4148367</td>
+<td align="right">0.3666965</td>
+<td align="right">0.6261529</td>
+<td align="right">4.2211357</td>
+<td align="right">7.452</td>
+<td align="right">7</td>
 </tr>
 <tr class="even">
 <td align="left">tau</td>
-<td align="right">1.8221092</td>
-<td align="right">1.443981</td>
-<td align="right">1.1732898</td>
-<td align="right">1.7198313</td>
-<td align="right">4.6637031</td>
-<td align="right">1.540</td>
-<td align="right">27</td>
+<td align="right">0.7256436</td>
+<td align="right">0.3989115</td>
+<td align="right">0.2043403</td>
+<td align="right">0.6343729</td>
+<td align="right">1.9267156</td>
+<td align="right">1.158</td>
+<td align="right">24</td>
 </tr>
 <tr class="odd">
 <td align="left">tau.b_1</td>
-<td align="right">1.0200128</td>
-<td align="right">1.027350</td>
-<td align="right">1.0005075</td>
-<td align="right">1.0105273</td>
-<td align="right">1.1006529</td>
-<td align="right">1.322</td>
-<td align="right">50</td>
+<td align="right">0.0463653</td>
+<td align="right">0.0487637</td>
+<td align="right">0.0002551</td>
+<td align="right">0.0292863</td>
+<td align="right">0.1745233</td>
+<td align="right">1.665</td>
+<td align="right">34</td>
 </tr>
 <tr class="even">
 <td align="left">tau.b_2</td>
-<td align="right">1.7787134</td>
-<td align="right">1.618160</td>
-<td align="right">1.0724928</td>
-<td align="right">1.5382954</td>
-<td align="right">6.1875681</td>
-<td align="right">1.411</td>
-<td align="right">29</td>
+<td align="right">0.5382303</td>
+<td align="right">0.4314555</td>
+<td align="right">0.0608281</td>
+<td align="right">0.4013850</td>
+<td align="right">1.7218380</td>
+<td align="right">1.036</td>
+<td align="right">31</td>
 </tr>
 </tbody>
 </table>
