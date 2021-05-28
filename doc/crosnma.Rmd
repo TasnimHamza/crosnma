@@ -27,7 +27,7 @@ library(crosnma)
 # The underlying assumptions of parameters
 We summarize the different assumptions that can be set for the parameters in the model by the following table. 
 
-| Parameters 	| Assumptions| R-code in `crosnma.mode()`|  	
+| Parameters 	| Assumptions| R-code in `crosnma.model()`|  	
 |:-------------------|:-----------|:------|
 |relative treatment effect ($\delta_{jk}$)| Random-effect model: $\delta_{jk} \sim N(d_{Ak}-d_{Ab}, \tau_\delta^2)$| `trt.effect='random'` |
 |   	|Common-effect model: $\delta_{jk}=d_{Ak}-d_{Ab}$| `trt.effect='common'`|
@@ -54,7 +54,7 @@ head(std.data)
 
 # Explore the network
 ## Check network connectivity
-The network should be checked for its connectivity before running the analysis. This is a vital step as the model will run even if the network is not connected.The given estimates are wrong as they reflect our pre-specified prior information.
+The network should be checked for its connectivity before running the analysis. This is a vital step as the model will run even if the network is not connected. In this case, it provides the wrong estimates which are our pre-specified prior information.
 
 ### Network plot
 ```{r}
@@ -71,7 +71,7 @@ Two steps to run the NMA/NMR model. The first step is to create JAGS model using
 
 In the rest of the document we illustrate the four different methods that can be used to combine the evidence from RCT and NRS. For each method, we set up the model, run the analysis and present the results. 
 
-## Naive method
+## Naïve method
 This is the simplest method where the evidence from the two designs are combined naively without acknowledging the differences between them, see Section 2.2.1 in [@hamza_2021].
 ### Set up JAGS model
 We start by indicating the names of the datasets on participant- (`prt.data`) and study-level (`std.data`). Then, the name of the variables on each dataset need to be given respectively in `prt.data` and `std.data`.  Next, the `reference` treatment need to be assigned ( drug A). By choosing `trt.effect=random`, we assign a normal distribution to each relative treatment effect across studies, see the table in Section 1. Finally, the different designs; RCT and NRS are combined naively; `method.bias = 'naive'`.

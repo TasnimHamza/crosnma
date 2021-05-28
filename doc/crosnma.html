@@ -332,7 +332,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <li><a href="#network-characteristics"><span class="toc-section-number">3.2</span> Network characteristics</a></li>
 </ul></li>
 <li><a href="#the-generic-nmanmr-models-to-combine-rct-and-nrs"><span class="toc-section-number">4</span> The generic NMA/NMR models to combine RCT and NRS</a><ul>
-<li><a href="#naive-method"><span class="toc-section-number">4.1</span> Naive method</a><ul>
+<li><a href="#naïve-method"><span class="toc-section-number">4.1</span> Naïve method</a><ul>
 <li><a href="#run-jags"><span class="toc-section-number">4.1.1</span> Run JAGS</a></li>
 <li><a href="#output"><span class="toc-section-number">4.1.2</span> Output</a></li>
 </ul></li>
@@ -370,7 +370,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <tr class="header">
 <th align="left">Parameters</th>
 <th align="left">Assumptions</th>
-<th align="left">R-code in <code>crosnma.mode()</code></th>
+<th align="left">R-code in <code>crosnma.model()</code></th>
 </tr>
 </thead>
 <tbody>
@@ -451,7 +451,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h1><span class="header-section-number">3</span> Explore the network</h1>
 <div id="check-network-connectivity" class="section level2">
 <h2><span class="header-section-number">3.1</span> Check network connectivity</h2>
-<p>The network should be checked for its connectivity before running the analysis. This is a vital step as the model will run even if the network is not connected.The given estimates are wrong as they reflect our pre-specified prior information.</p>
+<p>The network should be checked for its connectivity before running the analysis. This is a vital step as the model will run even if the network is not connected. In this case, it provides the wrong estimates which are our pre-specified prior information.</p>
 <div id="network-plot" class="section level3">
 <h3><span class="header-section-number">3.1.1</span> Network plot</h3>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># to be added later</span></a></code></pre></div>
@@ -466,8 +466,8 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h1><span class="header-section-number">4</span> The generic NMA/NMR models to combine RCT and NRS</h1>
 <p>Two steps to run the NMA/NMR model. The first step is to create JAGS model using <code>crosnma.model()</code> which involves JAGS code and the reformatted data. In the second step, the output of that function will be used in <code>crosnma.run()</code> to run the analysis through JAGS <span class="citation">(Plummer 2003)</span>.</p>
 <p>In the rest of the document we illustrate the four different methods that can be used to combine the evidence from RCT and NRS. For each method, we set up the model, run the analysis and present the results.</p>
-<div id="naive-method" class="section level2">
-<h2><span class="header-section-number">4.1</span> Naive method</h2>
+<div id="naïve-method" class="section level2">
+<h2><span class="header-section-number">4.1</span> Naïve method</h2>
 <p>This is the simplest method where the evidence from the two designs are combined naively without acknowledging the differences between them, see Section 2.2.1 in <span class="citation">(Hamza T 2021)</span>. ### Set up JAGS model We start by indicating the names of the datasets on participant- (<code>prt.data</code>) and study-level (<code>std.data</code>). Then, the name of the variables on each dataset need to be given respectively in <code>prt.data</code> and <code>std.data</code>. Next, the <code>reference</code> treatment need to be assigned ( drug A). By choosing <code>trt.effect=random</code>, we assign a normal distribution to each relative treatment effect across studies, see the table in Section 1. Finally, the different designs; RCT and NRS are combined naively; <code>method.bias = 'naive'</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># jags model: code+data</span></a>
 <a class="sourceLine" id="cb5-2" data-line-number="2"> mod1 &lt;-<span class="st"> </span><span class="kw">crosnma.model</span>(<span class="dt">prt.data=</span>prt.data,</a>
@@ -524,43 +524,43 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </tr>
 <tr class="even">
 <td align="left">d.B</td>
-<td align="right">0.8487970</td>
-<td align="right">1.7312531</td>
-<td align="right">0.3431327</td>
-<td align="right">0.8555713</td>
-<td align="right">2.580788</td>
-<td align="right">1.029</td>
-<td align="right">242</td>
+<td align="right">0.7660933</td>
+<td align="right">2.0912934</td>
+<td align="right">0.1442688</td>
+<td align="right">0.7790758</td>
+<td align="right">2.746716</td>
+<td align="right">1.056</td>
+<td align="right">181</td>
 </tr>
 <tr class="odd">
 <td align="left">d.C</td>
-<td align="right">1.5188017</td>
-<td align="right">1.7751210</td>
-<td align="right">0.5392490</td>
-<td align="right">1.5735507</td>
-<td align="right">4.552186</td>
-<td align="right">1.063</td>
-<td align="right">128</td>
+<td align="right">1.2613741</td>
+<td align="right">1.6909115</td>
+<td align="right">0.4999406</td>
+<td align="right">1.2767733</td>
+<td align="right">3.257367</td>
+<td align="right">1.025</td>
+<td align="right">90</td>
 </tr>
 <tr class="even">
 <td align="left">d.D</td>
-<td align="right">0.3859860</td>
-<td align="right">1.9984219</td>
-<td align="right">0.0846299</td>
-<td align="right">0.3983700</td>
-<td align="right">1.378176</td>
-<td align="right">1.052</td>
-<td align="right">283</td>
+<td align="right">0.3786560</td>
+<td align="right">2.2684350</td>
+<td align="right">0.0790939</td>
+<td align="right">0.3762461</td>
+<td align="right">1.371341</td>
+<td align="right">1.057</td>
+<td align="right">111</td>
 </tr>
 <tr class="odd">
 <td align="left">tau</td>
-<td align="right">0.9587723</td>
-<td align="right">0.3216904</td>
-<td align="right">0.4916106</td>
-<td align="right">0.9042804</td>
-<td align="right">1.620172</td>
-<td align="right">0.997</td>
-<td align="right">79</td>
+<td align="right">1.0997029</td>
+<td align="right">0.4010385</td>
+<td align="right">0.4736762</td>
+<td align="right">1.0187622</td>
+<td align="right">1.914141</td>
+<td align="right">1.003</td>
+<td align="right">87</td>
 </tr>
 </tbody>
 </table>
@@ -645,24 +645,44 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">b_1</td>
-<td align="right">1.0071406</td>
-<td align="right">1.0609669</td>
-<td align="right">0.9104313</td>
-<td align="right">1.0084633</td>
-<td align="right">1.1668401</td>
-<td align="right">1.238</td>
-<td align="right">144</td>
+<td align="left">bb_1</td>
+<td align="right">0.9016481</td>
+<td align="right">1.2867687</td>
+<td align="right">0.4696589</td>
+<td align="right">0.9173140</td>
+<td align="right">1.541968e+00</td>
+<td align="right">1.106</td>
+<td align="right">339</td>
 </tr>
 <tr class="even">
-<td align="left">b_2</td>
-<td align="right">1.5373350</td>
-<td align="right">1.7541493</td>
-<td align="right">0.5077776</td>
-<td align="right">1.5426811</td>
-<td align="right">4.3097821</td>
-<td align="right">1.121</td>
-<td align="right">84</td>
+<td align="left">bb_2</td>
+<td align="right">3.9607920</td>
+<td align="right">5.0287767</td>
+<td align="right">0.1292875</td>
+<td align="right">4.9152644</td>
+<td align="right">5.620223e+01</td>
+<td align="right">2.875</td>
+<td align="right">54</td>
+</tr>
+<tr class="odd">
+<td align="left">bw_1</td>
+<td align="right">1.0181254</td>
+<td align="right">1.0533922</td>
+<td align="right">0.9204370</td>
+<td align="right">1.0174707</td>
+<td align="right">1.134539e+00</td>
+<td align="right">1.176</td>
+<td align="right">368</td>
+</tr>
+<tr class="even">
+<td align="left">bw_2</td>
+<td align="right">1.0329319</td>
+<td align="right">1.7312798</td>
+<td align="right">0.2766922</td>
+<td align="right">1.0705096</td>
+<td align="right">2.856369e+00</td>
+<td align="right">1.044</td>
+<td align="right">91</td>
 </tr>
 <tr class="odd">
 <td align="left">d.A</td>
@@ -670,69 +690,89 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <td align="right">1.0000000</td>
 <td align="right">1.0000000</td>
 <td align="right">1.0000000</td>
-<td align="right">1.0000000</td>
+<td align="right">1.000000e+00</td>
 <td align="right">NaN</td>
 <td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="left">d.B</td>
-<td align="right">0.3768619</td>
-<td align="right">1.9818972</td>
-<td align="right">0.1298528</td>
-<td align="right">0.3740878</td>
-<td align="right">1.2793792</td>
-<td align="right">1.525</td>
-<td align="right">62</td>
+<td align="right">0.5123743</td>
+<td align="right">3.1087193</td>
+<td align="right">0.0776463</td>
+<td align="right">0.4075511</td>
+<td align="right">8.826978e+00</td>
+<td align="right">1.365</td>
+<td align="right">57</td>
 </tr>
 <tr class="odd">
 <td align="left">d.C</td>
-<td align="right">0.7362046</td>
-<td align="right">2.9288456</td>
-<td align="right">0.0958287</td>
-<td align="right">0.7808507</td>
-<td align="right">5.1417315</td>
-<td align="right">2.783</td>
-<td align="right">42</td>
+<td align="right">0.3741860</td>
+<td align="right">6.4123985</td>
+<td align="right">0.0110720</td>
+<td align="right">0.3288730</td>
+<td align="right">6.804191e+00</td>
+<td align="right">3.419</td>
+<td align="right">30</td>
 </tr>
 <tr class="even">
 <td align="left">d.D</td>
-<td align="right">0.2199839</td>
-<td align="right">2.1621910</td>
-<td align="right">0.0376103</td>
-<td align="right">0.2360496</td>
-<td align="right">0.8890368</td>
-<td align="right">1.171</td>
-<td align="right">70</td>
+<td align="right">1800.2196199</td>
+<td align="right">22.7706734</td>
+<td align="right">22.2538762</td>
+<td align="right">3956.3711184</td>
+<td align="right">2.988381e+05</td>
+<td align="right">4.717</td>
+<td align="right">197</td>
 </tr>
 <tr class="odd">
 <td align="left">tau</td>
-<td align="right">0.5592906</td>
-<td align="right">0.4202037</td>
-<td align="right">0.0778172</td>
-<td align="right">0.4235063</td>
-<td align="right">1.8981443</td>
-<td align="right">1.317</td>
-<td align="right">36</td>
+<td align="right">0.7583288</td>
+<td align="right">0.6489053</td>
+<td align="right">0.0418716</td>
+<td align="right">0.4952664</td>
+<td align="right">1.972849e+00</td>
+<td align="right">2.836</td>
+<td align="right">35</td>
 </tr>
 <tr class="even">
-<td align="left">tau.b_1</td>
-<td align="right">0.0561389</td>
-<td align="right">0.0866402</td>
-<td align="right">0.0026468</td>
-<td align="right">0.0224440</td>
-<td align="right">0.3237351</td>
-<td align="right">1.200</td>
-<td align="right">26</td>
+<td align="left">tau.bb_1</td>
+<td align="right">0.3387626</td>
+<td align="right">0.2873020</td>
+<td align="right">0.0462946</td>
+<td align="right">0.2481217</td>
+<td align="right">1.123487e+00</td>
+<td align="right">1.667</td>
+<td align="right">44</td>
 </tr>
 <tr class="odd">
-<td align="left">tau.b_2</td>
-<td align="right">0.7328719</td>
-<td align="right">0.4354457</td>
-<td align="right">0.1623164</td>
-<td align="right">0.6043032</td>
-<td align="right">1.7884636</td>
-<td align="right">1.067</td>
-<td align="right">44</td>
+<td align="left">tau.bb_2</td>
+<td align="right">1.2277686</td>
+<td align="right">0.6169811</td>
+<td align="right">0.0948364</td>
+<td align="right">1.3717466</td>
+<td align="right">1.973936e+00</td>
+<td align="right">1.748</td>
+<td align="right">52</td>
+</tr>
+<tr class="even">
+<td align="left">tau.bw_1</td>
+<td align="right">0.0740338</td>
+<td align="right">0.0744475</td>
+<td align="right">0.0099523</td>
+<td align="right">0.0457841</td>
+<td align="right">2.538168e-01</td>
+<td align="right">1.216</td>
+<td align="right">29</td>
+</tr>
+<tr class="odd">
+<td align="left">tau.bw_2</td>
+<td align="right">0.7116020</td>
+<td align="right">0.4825571</td>
+<td align="right">0.0871584</td>
+<td align="right">0.5635232</td>
+<td align="right">1.803601e+00</td>
+<td align="right">1.148</td>
+<td align="right">45</td>
 </tr>
 </tbody>
 </table>
@@ -805,24 +845,44 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">b_1</td>
-<td align="right">0.9995800</td>
-<td align="right">1.0334275</td>
-<td align="right">0.9420138</td>
-<td align="right">0.9993473</td>
-<td align="right">1.0574172</td>
-<td align="right">1.116</td>
-<td align="right">160</td>
+<td align="left">bb_1</td>
+<td align="right">0.9859842</td>
+<td align="right">1.0452350</td>
+<td align="right">0.9169434</td>
+<td align="right">0.9929420</td>
+<td align="right">1.0665764</td>
+<td align="right">1.294</td>
+<td align="right">253</td>
 </tr>
 <tr class="even">
-<td align="left">b_2</td>
-<td align="right">1.0423481</td>
-<td align="right">1.5605709</td>
-<td align="right">0.5193963</td>
-<td align="right">0.9911979</td>
-<td align="right">2.9537586</td>
-<td align="right">1.137</td>
-<td align="right">200</td>
+<td align="left">bb_2</td>
+<td align="right">4.1145119</td>
+<td align="right">6.7718955</td>
+<td align="right">0.3778125</td>
+<td align="right">1.7481252</td>
+<td align="right">135.6757116</td>
+<td align="right">4.748</td>
+<td align="right">119</td>
+</tr>
+<tr class="odd">
+<td align="left">bw_1</td>
+<td align="right">1.0148644</td>
+<td align="right">1.1204819</td>
+<td align="right">0.8733565</td>
+<td align="right">1.0104133</td>
+<td align="right">1.1671413</td>
+<td align="right">1.240</td>
+<td align="right">180</td>
+</tr>
+<tr class="even">
+<td align="left">bw_2</td>
+<td align="right">1.0511799</td>
+<td align="right">1.5790840</td>
+<td align="right">0.3899062</td>
+<td align="right">1.0746129</td>
+<td align="right">2.4011246</td>
+<td align="right">1.156</td>
+<td align="right">77</td>
 </tr>
 <tr class="odd">
 <td align="left">d.A</td>
@@ -836,73 +896,93 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </tr>
 <tr class="even">
 <td align="left">d.B</td>
-<td align="right">0.9621063</td>
-<td align="right">1.3793251</td>
-<td align="right">0.4901960</td>
-<td align="right">0.9746362</td>
-<td align="right">1.4363200</td>
-<td align="right">2.044</td>
-<td align="right">72</td>
+<td align="right">0.4554537</td>
+<td align="right">1.6240397</td>
+<td align="right">0.1663804</td>
+<td align="right">0.4528718</td>
+<td align="right">1.0388923</td>
+<td align="right">1.595</td>
+<td align="right">20</td>
 </tr>
 <tr class="odd">
 <td align="left">d.C</td>
-<td align="right">0.7050469</td>
-<td align="right">1.9889482</td>
-<td align="right">0.2154025</td>
-<td align="right">0.6624592</td>
-<td align="right">1.6967525</td>
-<td align="right">2.295</td>
-<td align="right">22</td>
+<td align="right">1.1715125</td>
+<td align="right">1.3957178</td>
+<td align="right">0.5623751</td>
+<td align="right">1.1932543</td>
+<td align="right">2.0757904</td>
+<td align="right">1.230</td>
+<td align="right">35</td>
 </tr>
 <tr class="even">
 <td align="left">d.D</td>
-<td align="right">0.2635613</td>
-<td align="right">1.6017450</td>
-<td align="right">0.1066747</td>
-<td align="right">0.3020699</td>
-<td align="right">0.6226387</td>
-<td align="right">1.389</td>
+<td align="right">0.2965209</td>
+<td align="right">1.5512905</td>
+<td align="right">0.1321986</td>
+<td align="right">0.2976002</td>
+<td align="right">0.7328870</td>
+<td align="right">1.323</td>
 <td align="right">27</td>
 </tr>
 <tr class="odd">
 <td align="left">g</td>
-<td align="right">1.5346494</td>
-<td align="right">1.9755342</td>
-<td align="right">0.4314360</td>
-<td align="right">1.4592987</td>
-<td align="right">4.2399837</td>
-<td align="right">5.050</td>
-<td align="right">27</td>
+<td align="right">1.2750353</td>
+<td align="right">3.3490955</td>
+<td align="right">0.4283003</td>
+<td align="right">0.6557365</td>
+<td align="right">13.4236690</td>
+<td align="right">6.456</td>
+<td align="right">28</td>
 </tr>
 <tr class="even">
 <td align="left">tau</td>
-<td align="right">0.3016634</td>
-<td align="right">0.3134655</td>
-<td align="right">0.0077145</td>
-<td align="right">0.2197343</td>
-<td align="right">1.0320720</td>
-<td align="right">1.743</td>
-<td align="right">15</td>
+<td align="right">0.3661543</td>
+<td align="right">0.2627462</td>
+<td align="right">0.0303035</td>
+<td align="right">0.3119543</td>
+<td align="right">0.8811287</td>
+<td align="right">2.397</td>
+<td align="right">36</td>
 </tr>
 <tr class="odd">
-<td align="left">tau.b_1</td>
-<td align="right">0.0409596</td>
-<td align="right">0.0412672</td>
-<td align="right">0.0076798</td>
-<td align="right">0.0295097</td>
-<td align="right">0.1225170</td>
-<td align="right">1.168</td>
-<td align="right">48</td>
+<td align="left">tau.bb_1</td>
+<td align="right">0.0517736</td>
+<td align="right">0.0821721</td>
+<td align="right">0.0018213</td>
+<td align="right">0.0232382</td>
+<td align="right">0.2947839</td>
+<td align="right">1.092</td>
+<td align="right">35</td>
 </tr>
 <tr class="even">
-<td align="left">tau.b_2</td>
-<td align="right">0.4954472</td>
-<td align="right">0.5361418</td>
-<td align="right">0.0257306</td>
-<td align="right">0.2397853</td>
-<td align="right">1.8592875</td>
-<td align="right">1.521</td>
-<td align="right">14</td>
+<td align="left">tau.bb_2</td>
+<td align="right">0.9674361</td>
+<td align="right">0.4950251</td>
+<td align="right">0.0906888</td>
+<td align="right">0.9774772</td>
+<td align="right">1.9366258</td>
+<td align="right">1.279</td>
+<td align="right">43</td>
+</tr>
+<tr class="odd">
+<td align="left">tau.bw_1</td>
+<td align="right">0.0950523</td>
+<td align="right">0.1518729</td>
+<td align="right">0.0094231</td>
+<td align="right">0.0480814</td>
+<td align="right">0.5998419</td>
+<td align="right">1.319</td>
+<td align="right">24</td>
+</tr>
+<tr class="even">
+<td align="left">tau.bw_2</td>
+<td align="right">0.4936428</td>
+<td align="right">0.4407181</td>
+<td align="right">0.0442081</td>
+<td align="right">0.3126319</td>
+<td align="right">1.6180240</td>
+<td align="right">0.995</td>
+<td align="right">31</td>
 </tr>
 </tbody>
 </table>
@@ -975,24 +1055,44 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">b_1</td>
-<td align="right">1.0178644</td>
-<td align="right">1.0358530</td>
-<td align="right">0.9454345</td>
-<td align="right">1.0195265</td>
-<td align="right">1.0832498</td>
-<td align="right">1.170</td>
-<td align="right">101</td>
+<td align="left">bb_1</td>
+<td align="right">1.0156739</td>
+<td align="right">1.1935557</td>
+<td align="right">0.8365105</td>
+<td align="right">1.0065876</td>
+<td align="right">1.4515953</td>
+<td align="right">1.156</td>
+<td align="right">363</td>
 </tr>
 <tr class="even">
-<td align="left">b_2</td>
-<td align="right">0.9708693</td>
-<td align="right">1.6069153</td>
-<td align="right">0.4601185</td>
-<td align="right">0.8901357</td>
-<td align="right">2.4128744</td>
-<td align="right">1.161</td>
-<td align="right">80</td>
+<td align="left">bb_2</td>
+<td align="right">0.5590725</td>
+<td align="right">6.0984253</td>
+<td align="right">0.0271953</td>
+<td align="right">0.5300672</td>
+<td align="right">10.7469032</td>
+<td align="right">3.381</td>
+<td align="right">46</td>
+</tr>
+<tr class="odd">
+<td align="left">bw_1</td>
+<td align="right">0.9861803</td>
+<td align="right">1.0911059</td>
+<td align="right">0.7444257</td>
+<td align="right">0.9970857</td>
+<td align="right">1.0696249</td>
+<td align="right">1.317</td>
+<td align="right">93</td>
+</tr>
+<tr class="even">
+<td align="left">bw_2</td>
+<td align="right">0.8773337</td>
+<td align="right">1.5880964</td>
+<td align="right">0.2860954</td>
+<td align="right">0.8937074</td>
+<td align="right">1.8385200</td>
+<td align="right">1.111</td>
+<td align="right">125</td>
 </tr>
 <tr class="odd">
 <td align="left">d.A</td>
@@ -1006,73 +1106,93 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </tr>
 <tr class="even">
 <td align="left">d.B</td>
-<td align="right">0.4459487</td>
-<td align="right">2.2038329</td>
-<td align="right">0.0899844</td>
-<td align="right">0.4999827</td>
-<td align="right">1.9472727</td>
-<td align="right">2.111</td>
-<td align="right">110</td>
+<td align="right">0.7188102</td>
+<td align="right">1.6105990</td>
+<td align="right">0.3028484</td>
+<td align="right">0.7524813</td>
+<td align="right">1.4674446</td>
+<td align="right">1.248</td>
+<td align="right">95</td>
 </tr>
 <tr class="odd">
 <td align="left">d.C</td>
-<td align="right">0.3420096</td>
-<td align="right">1.9013041</td>
-<td align="right">0.1348523</td>
-<td align="right">0.2922840</td>
-<td align="right">1.7446575</td>
-<td align="right">1.366</td>
-<td align="right">58</td>
+<td align="right">0.4103102</td>
+<td align="right">2.5347519</td>
+<td align="right">0.1000955</td>
+<td align="right">0.3380475</td>
+<td align="right">2.5768026</td>
+<td align="right">1.306</td>
+<td align="right">11</td>
 </tr>
 <tr class="even">
 <td align="left">d.D</td>
-<td align="right">0.1741852</td>
-<td align="right">2.0162568</td>
-<td align="right">0.0521857</td>
-<td align="right">0.1611483</td>
-<td align="right">0.8238216</td>
-<td align="right">1.676</td>
-<td align="right">77</td>
+<td align="right">0.9539228</td>
+<td align="right">2.4385159</td>
+<td align="right">0.2155015</td>
+<td align="right">0.9415439</td>
+<td align="right">5.2671625</td>
+<td align="right">2.191</td>
+<td align="right">67</td>
 </tr>
 <tr class="odd">
 <td align="left">g</td>
-<td align="right">0.9467395</td>
-<td align="right">2.4148367</td>
-<td align="right">0.3666965</td>
-<td align="right">0.6261529</td>
-<td align="right">4.2211357</td>
-<td align="right">7.452</td>
-<td align="right">7</td>
+<td align="right">0.6508733</td>
+<td align="right">1.6015894</td>
+<td align="right">0.3588962</td>
+<td align="right">0.5279249</td>
+<td align="right">1.7265714</td>
+<td align="right">3.582</td>
+<td align="right">9</td>
 </tr>
 <tr class="even">
 <td align="left">tau</td>
-<td align="right">0.7256436</td>
-<td align="right">0.3989115</td>
-<td align="right">0.2043403</td>
-<td align="right">0.6343729</td>
-<td align="right">1.9267156</td>
-<td align="right">1.158</td>
-<td align="right">24</td>
+<td align="right">0.6110564</td>
+<td align="right">0.3594882</td>
+<td align="right">0.1520653</td>
+<td align="right">0.5765261</td>
+<td align="right">1.6785978</td>
+<td align="right">1.485</td>
+<td align="right">31</td>
 </tr>
 <tr class="odd">
-<td align="left">tau.b_1</td>
-<td align="right">0.0463653</td>
-<td align="right">0.0487637</td>
-<td align="right">0.0002551</td>
-<td align="right">0.0292863</td>
-<td align="right">0.1745233</td>
-<td align="right">1.665</td>
-<td align="right">34</td>
+<td align="left">tau.bb_1</td>
+<td align="right">0.1580621</td>
+<td align="right">0.2907971</td>
+<td align="right">0.0120924</td>
+<td align="right">0.0581543</td>
+<td align="right">1.1804005</td>
+<td align="right">1.100</td>
+<td align="right">21</td>
 </tr>
 <tr class="even">
-<td align="left">tau.b_2</td>
-<td align="right">0.5382303</td>
-<td align="right">0.4314555</td>
-<td align="right">0.0608281</td>
-<td align="right">0.4013850</td>
-<td align="right">1.7218380</td>
-<td align="right">1.036</td>
-<td align="right">31</td>
+<td align="left">tau.bb_2</td>
+<td align="right">0.9709451</td>
+<td align="right">0.5771453</td>
+<td align="right">0.1072237</td>
+<td align="right">0.9821234</td>
+<td align="right">1.9286411</td>
+<td align="right">1.115</td>
+<td align="right">32</td>
+</tr>
+<tr class="odd">
+<td align="left">tau.bw_1</td>
+<td align="right">0.0692472</td>
+<td align="right">0.1104231</td>
+<td align="right">0.0070983</td>
+<td align="right">0.0329486</td>
+<td align="right">0.4426213</td>
+<td align="right">1.446</td>
+<td align="right">60</td>
+</tr>
+<tr class="even">
+<td align="left">tau.bw_2</td>
+<td align="right">0.5367658</td>
+<td align="right">0.4529305</td>
+<td align="right">0.0500516</td>
+<td align="right">0.3840541</td>
+<td align="right">1.7281121</td>
+<td align="right">1.142</td>
+<td align="right">26</td>
 </tr>
 </tbody>
 </table>

@@ -1,11 +1,8 @@
 ---
-title: "Cross-design and cross-data format synthesis using Network Meta-Analysis (crosnma)"
+title: "Generic NMA for Dichotomous Outcomes"
 author: "Tasnim Hamza"
 date: "`r Sys.Date()`"
-output: 
-  html_vignette:
-   toc: true
-   number_sections: true
+output: pdf_document 
 bibliography: references.bib 
 vignette: >
   %\VignetteIndexEntry{crosnma}
@@ -13,19 +10,10 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-```
-
 
 ```{r setup}
 library(crosnma)
 ```
-# Introduction 
-# 
 # The underlying assumptions of parameters
 We summarize the different assumptions that can be set for the parameters in the model by the following table. 
 
