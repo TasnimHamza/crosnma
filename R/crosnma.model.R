@@ -1,3 +1,6 @@
+#!!! modify: the prior method work only when the all elements in run.nrs are set, put defaults
+# delete from all reference.nrs
+# add default to bias.type, bias.effect
 #+++  check: the same number of covariates should be in IPD and AD
 #+++  check: prior of tau are only allowed when 'random' is chosen as an effect
 # check checkings
