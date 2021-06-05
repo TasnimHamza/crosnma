@@ -1,5 +1,5 @@
 ---
-title: "Generic NMA for Dichotomous Outcomes"
+title: "Cross-design and cross-data format synthesis using Network Meta-Analysis (crosnma)"
 author: "Tasnim Hamza"
 date: "`r Sys.Date()`"
 output: 
@@ -24,6 +24,24 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(crosnma)
 ```
+# Introduction 
+Network meta-analysis (NMA) is a common tool to compare multiple interventions simultaneously. This requires synthesize the available evidence that might come as different study design or data format. As different study designs, the evidence can be obtained from non-randomized studies (NRS) or randomized controlled trials (RCT). RCT evidence quality is considered the highest and at a lower risk of bias, however, the restricted settings when RCTs are conducted limit the generalizability of their results. Therefore, combining RCT and NRS evidence in NMA may help overcome some of the limitations. Such evidence can be accessible in different data formats as individual participant data (IPD) or aggregate data (AD). We establish a cross-design and cross-data format tool (`crosnma`) to utilize all available and relevant evidence.
+
+We describe the R package `crosnma` in a worked example about relapsing remitting multiple sclerosis (RRMS). The primary outcome is the occurrence of relapses in two years (binary, yes/no). In the analysis, the outcome will be expressed as odds ratio (OR). The aim is to compare the efficacy of four treatments. Data is available from 6 different studies in different formats and different designs. The studies are either available as study-level data `std.data` (2 studies) or as individual participant data `prt.data` (four studies). Three of the `prt.data` are RCTs and one comes from an observational study (NRS). The two `std.data` are RCTs.
+
+The `prt.data` contains 2950 rows, each refers to a participant in the study. We display the first few rows of the data set:
+
+```{r}
+head(prt.data)
+```
+For each participant, we have information for the occurrence of the relapses (0:no, 1:yes) `outcome`, the treatment label `trt`, the age (in years) `age` and  sex (0: Female, 1: Male) `sex` of the participant. The other following columns are set on study-level (it is repeated for each participant of the study): the study id `study`, the design of the study ( needs to be either rct or nrs) `design`, the risk of bias on each study (set as a low, high or unclear) `bias` and the year of publication `year`.
+
+We display the full data on study-level:
+```{r}
+head(std.data)
+```
+For all studies, we provide the following information on each arm level: the total number of participants `n` and those wit relapses `outcome`, the treatment label `trt`. At study-level, we have the study id `study`, the design of the study `design`, the mean age `age`, the percentage of males `sex`, the risk of bias on the study `bias` and the year of publication `year`.
+# Methods
 # The underlying assumptions of parameters
 We summarize the different assumptions that can be set for the parameters in the model by the following table. 
 
@@ -42,15 +60,7 @@ We summarize the different assumptions that can be set for the parameters in the
 
 Here, the participant $i$ in study $j$ has been assigned to treatment $k$. The index $b$ refers to the study-specific baseline treatment. The term $\tau_*$ refers to the heterogeneity between studies with a subscript ($_*$) to indicate the corresponding parameter. More details can be found in Section 2 in [@hamza_2021].
 
-# Data
-The `crosnma` package involves  two datasets;individual participant data `prt.data` and study-level data `std.data`.
 
-The data result in a network that consists of 4 treatments and has been studied in 6 different studies.Five of them are randomized-controlled trials (RCT) and the remaining one is non-randomized studies (NRS). The data of the NRS study is available on the participant-level. While the data of the 3 RCTs are provided on the participant-level and 2 RCTs are available only on the study-level.
-
-```{r}
-head(prt.data)
-head(std.data)
-```
 
 # Explore the network
 ## Check network connectivity

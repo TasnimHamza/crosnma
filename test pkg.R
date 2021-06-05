@@ -1,5 +1,4 @@
 # 1. check if it works only for IPD: YES
-devtools::load_all()
 devtools::install_github("TasnimHamza/crosnma")
 library(crosnma)
 # jags model: code+data

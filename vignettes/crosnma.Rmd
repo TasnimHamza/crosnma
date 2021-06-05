@@ -25,38 +25,45 @@ knitr::opts_chunk$set(
 library(crosnma)
 ```
 # Introduction 
-# 
-# The underlying assumptions of parameters
-We summarize the different assumptions that can be set for the parameters in the model by the following table. 
+Network meta-analysis (NMA) is a common tool to compare multiple interventions simultaneously. This requires synthesize the available evidence that might come as different study design or data format. As different study designs, the evidence can be obtained from non-randomized studies (NRS) or randomized controlled trials (RCT). RCT evidence quality is considered the highest and at a lower risk of bias, however, the restricted settings when RCTs are conducted limit the generalizability of their results. Therefore, combining RCT and NRS evidence in NMA may help overcome some of the limitations. Such evidence can be accessible in different data formats as individual participant data (IPD) or aggregate data (AD). We establish a cross-design and cross-data format tool (`crosnma`) to utilize all available and relevant evidence.
 
-| Parameters 	| Assumptions| R-code in `crosnma.model()`|  	
-|:-------------------|:-----------|:------|
-|relative treatment effect ($\delta_{jk}$)| Random-effect model: $\delta_{jk} \sim N(d_{Ak}-d_{Ab}, \tau_\delta^2)$| `trt.effect='random'` |
-|   	|Common-effect model: $\delta_{jk}=d_{Ak}-d_{Ab}$| `trt.effect='common'`|
-|Covariate effect $\beta_{0, j}$ | Independent effect model: $\beta_{0, j} \sim N(0, 10^2)$| `reg0.effect='independent'` |
-|   	|Random-effect model: $\beta_{0,j} \sim N(B_0, \tau_{\beta_0})$| `reg0.effect='random'`|
-|Within-study covariate-treatment interaction ($\beta_{1, jk}^W$)| Random-effect model: $\beta_{1, jk}^W \sim N(B_{1, Ak}^W-B_{1, Ab}^W, \tau_{\beta_1^W})$| `regw.effect='random'` |
-|   	|Common-effect model: $\beta_{1,jk}^W = B_{1, Ak}^W-B_{1, Ab}^W$| `regw.effect='common'`|
-|Between-study covariate-treatment interaction ($\beta_{1, jk}^B$)| Random-effect model: $\beta_{1,jk}^B \sim N(B_{1, Ak}^B-B_{1, Ab}^B, \tau_{\beta_1^B})$| `regb.effect='random'` |
-|   	|Common-effect model: $\beta_{1,jk}^B = B_{1, Ak}^B-B_{1, Ab}^B$| `regb.effect='common'`|
-|Bias effect ($\gamma_{j}$)| Random-effect model: $\gamma_{j} \sim N(\Gamma, \tau_{\gamma})$| `bias.effect='random'` |
-|   	|Common-effect model: $\gamma_{j} = \Gamma$| `bias.effect='common'`|
+We describe the R package `crosnma` in a worked example about relapsing remitting multiple sclerosis (RRMS). The primary outcome is the occurrence of relapses in two years (binary, yes/no). In the analysis, the outcome will be expressed as odds ratio (OR). The aim is to compare the efficacy of four treatments. Data is available from 6 different studies in different formats and different designs. The studies are either available as study-level data `std.data` (2 studies) or as individual participant data `prt.data` (four studies). Three of the `prt.data` are RCTs and one comes from an observational study (NRS). The two `std.data` are RCTs.
 
-Here, the participant $i$ in study $j$ has been assigned to treatment $k$. The index $b$ refers to the study-specific baseline treatment. The term $\tau_*$ refers to the heterogeneity between studies with a subscript ($_*$) to indicate the corresponding parameter. More details can be found in Section 2 in [@hamza_2021].
-
-# Data
-The `crosnma` package involves  two datasets;individual participant data `prt.data` and study-level data `std.data`.
-
-The data result in a network that consists of 4 treatments and has been studied in 6 different studies.Five of them are randomized-controlled trials (RCT) and the remaining one is non-randomized studies (NRS). The data of the NRS study is available on the participant-level. While the data of the 3 RCTs are provided on the participant-level and 2 RCTs are available only on the study-level.
+The `prt.data` contains 2950 rows, each refers to a participant in the study. We display the first few rows of the data set:
 
 ```{r}
 head(prt.data)
+```
+For each participant, we have information for the occurrence of the relapses (0:no, 1:yes) `outcome`, the treatment label `trt`, the age (in years) `age` and  sex (0: Female, 1: Male) `sex` of the participant. The other following columns are set on study-level (it is repeated for each participant of the study): the study id `study`, the design of the study ( needs to be either rct or nrs) `design`, the risk of bias on each study (set as a low, high or unclear) `bias` and the year of publication `year`.
+
+We display the full data on study-level:
+```{r}
 head(std.data)
 ```
+For all studies, we provide the following information on each arm level: the total number of participants `n` and those wit relapses `outcome`, the treatment label `trt`. At study-level, we have the study id `study`, the design of the study `design`, the mean age `age`, the percentage of males `sex`, the risk of bias on the study `bias` and the year of publication `year`.
+
+# Methods
+Here, the participant $i$ in study $j$ has been assigned to treatment $k$. The index $b$ refers to the study-specific baseline treatment. The term $\tau_*$ refers to the heterogeneity between studies with a subscript ($_*$) to indicate the corresponding parameter. More details can be found in Section 2 in [@hamza_2021].
+
+# The underlying assumptions of parameters
+We summarize the different assumptions that can be set for the parameters in the model by the following table. 
+
+| Parameter 	| Assumptions| Argument in `crosnma.model()`|  	
+|:-------------------|:-----------|:------|
+|relative treatment effect ($\delta_{jk}$)| Random-effects model: $\delta_{jk} \sim N(d_{Ak}-d_{Ab}, \tau_\delta^2)$| `trt.effect='random'` |
+|   	|Common-effect: $\delta_{jk}=d_{Ak}-d_{Ab}$| `trt.effect='common'`|
+|Covariate effect $\beta_{0, j}$ | Independent effects: $\beta_{0, j} \sim N(0, 10^2)$| `reg0.effect='independent'` |
+|   	|Random-effects: $\beta_{0,j} \sim N(B_0, \tau_{\beta_0})$| `reg0.effect='random'`|
+|Within-study covariate-treatment interaction ($\beta_{1, jk}^W$)| Random-effects: $\beta_{1, jk}^W \sim N(B_{1, Ak}^W-B_{1, Ab}^W, \tau_{\beta_1^W})$| `regw.effect='random'` |
+|   	|Common-effect: $\beta_{1,jk}^W = B_{1, Ak}^W-B_{1, Ab}^W$| `regw.effect='common'`|
+|Between-study covariate-treatment interaction ($\beta_{1, jk}^B$)| Random-effects: $\beta_{1,jk}^B \sim N(B_{1, Ak}^B-B_{1, Ab}^B, \tau_{\beta_1^B})$| `regb.effect='random'` |
+|   	|Common-effect: $\beta_{1,jk}^B = B_{1, Ak}^B-B_{1, Ab}^B$| `regb.effect='common'`|
+|Bias effect ($\gamma_{j}$)| Random-effects: $\gamma_{j} \sim N(\Gamma, \tau_{\gamma})$| `bias.effect='random'` |
+|   	|Common-effect: $\gamma_{j} = \Gamma$| `bias.effect='common'`|
 
 # Explore the network
 ## Check network connectivity
-The network should be checked for its connectivity before running the analysis. This is a vital step as the model will run even if the network is not connected. In this case, it provides the wrong estimates which are our pre-specified prior information.
+The network should be checked for its connectivity before running the analysis. This is a vital step as the model will run even if the network is not connected.
 
 ### Network plot
 ```{r}
@@ -68,12 +75,12 @@ The network should be checked for its connectivity before running the analysis. 
 # to be added
 ```
 
-# The generic NMA/NMR models to combine RCT and NRS
-Two steps to run the NMA/NMR model. The first step is to create JAGS model using `crosnma.model()` which involves JAGS code and the reformatted data. In the second step, the output of that function will be used in `crosnma.run()` to run the analysis through JAGS [@plummer_jags]. 
+# The cross NMA/NMR models to combine RCT and NRS
+There are two steps to run the NMA/NMR model. The first step is to create JAGS model using `crosnma.model()` which involves JAGS code and the reformatted data. In the second step, the output of that function will be used in `crosnma.run()` to run the analysis through JAGS [@plummer_jags]. 
 
 In the rest of the document we illustrate the four different methods that can be used to combine the evidence from RCT and NRS. For each method, we set up the model, run the analysis and present the results. 
 
-## Naïve method
+## Naïve synthesis
 This is the simplest method where the evidence from the two designs are combined naively without acknowledging the differences between them, see Section 2.2.1 in [@hamza_2021].
 ### Set up JAGS model
 We start by indicating the names of the datasets on participant- (`prt.data`) and study-level (`std.data`). Then, the name of the variables on each dataset need to be given respectively in `prt.data` and `std.data`.  Next, the `reference` treatment need to be assigned ( drug A). By choosing `trt.effect=random`, we assign a normal distribution to each relative treatment effect across studies, see the table in Section 1. Finally, the different designs; RCT and NRS are combined naively; `method.bias = 'naive'`.
@@ -108,7 +115,7 @@ jagsfit1 <- crosnma.run(model=mod1,
 #### Table of estimates
 We summarize the estimated parameters by the following table. 
 ```{r}
-knitr::kable(summary(jagsfit1,expo=T))
+knitr::kable(summary(jagsfit1,expo=T,))
 ```
 
 #### Plot of estimates

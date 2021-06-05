@@ -33,5 +33,5 @@ summary.crosnma <- function(x, digits = 3,  quantiles = c(0.025, 0.5, 0.975), ex
 
   # attach treatment names to d's
   row.names(sum.fit.mat)[startsWith(rownames(sum.fit.mat),"d")] <- paste("d",c(x$trt.key$trt.ini),sep=".")
-  return(sum.fit.mat)
+  return(round(sum.fit.mat,digits=digits))
 }
