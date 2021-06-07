@@ -23,6 +23,6 @@ prt.data
 }
 \description{
 A dataset containing 2950 participants who are treated in 4 different treatments: A, B, C and D.
-The dataset includes 4 different studies. The outcome is binary. There are 8 attributes on indvidual level.
+The dataset includes 4 different studies. The outcome is binary. There are 8 attributes on individual level.
 }
 \keyword{datasets}

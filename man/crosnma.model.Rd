@@ -18,21 +18,21 @@ crosnma.model(
   reg0.effect = "independent",
   regb.effect = "random",
   regw.effect = "random",
-  split.regcoef = F,
+  split.regcoef = T,
   method.bias = NULL,
   bias = NULL,
   bias.type = NULL,
   bias.covariate = NULL,
   bias.effect = "common",
-  prior = list(tau.trt = "dunif(0,3)", tau.reg0 = NULL, tau.regb = NULL, tau.regw =
-    NULL, tau.gamma = NULL, pi.high.rct = NULL, pi.low.rct = NULL, pi.high.nrs = NULL,
+  prior = list(tau.trt = NULL, tau.reg0 = NULL, tau.regb = NULL, tau.regw = NULL,
+    tau.gamma = NULL, pi.high.rct = NULL, pi.low.rct = NULL, pi.high.nrs = NULL,
     pi.low.nrs = NULL),
-  run.nrs = list(reference.nrs = NULL, var.infl = NULL, mean.shift = NULL, n.adapt =
-    NULL, n.iter = NULL, n.burnin = NULL, thin = NULL, n.chains = NULL)
+  run.nrs = list(var.infl = NULL, mean.shift = NULL, n.adapt = NULL, n.iter = NULL,
+    n.burnin = NULL, thin = NULL, n.chains = NULL)
 )
 }
 \arguments{
-\item{prt.data}{An object of class data.frame containing the indvidual participant dataset where one participant per row.
+\item{prt.data}{An object of class data.frame containing the individual participant dataset where one participant per row.
 The data frame need to have the following columns: trt, study, outcome, design. The columns don't have to take certain names.}
 
 \item{std.data}{An object of class data.frame containing the study-level dataset where one arm per row.
@@ -54,7 +54,7 @@ The data frame need to have the following columns: trt, study, outcome, n and de
 
 \item{covariate}{An optional list indicating the name of the covariates in prt.data and std.data to conduct network meta regression
 The default option is covariate=NULL where no covariate adjustment is applied.
-The covariates can be either numeric or dichotomous variables. The user can provide up to 3 covaraites. The covariate need to be provided for both prt.data and std.data, respectively.}
+The covariates can be either numeric or dichotomous variables. The user can provide up to 3 covaraites. The covariate needs to be provided for both prt.data and std.data, respectively.}
 
 \item{reg0.effect}{An optional character indicating the relationship across studies for prognostic effects expressed by the regression coefficient, (\eqn{\beta_{1,j}}), in a study \eqn{j}.
 Options are 'independent' or 'random', see details. We recommend using the default 'independent'. This is required when the covariate is not NULL.}
@@ -93,8 +93,7 @@ There are 4 possible bias probabilities: RCT with low/high bias (pi.low.rct, pi.
 Each prior should be given a beta distribution with the two parameters (see details to help you choose them)  as this for example 'dbeta(3,1)'.}
 
 \item{run.nrs}{An optional list when the method to include NRS is set at 'prior'.
-The list consists of the follwoing: the reference treatment in the NMA formed by NRS (\code{reference.nrs}) and
-(\code{var.infl}) controls the inflation of the varaince of NRS estimates and its values range between 0 (least confidence in NRS) and 1 (full confidence in NRS).
+The list consists of the follwoing: (\code{var.infl}) controls the inflation of the varaince of NRS estimates and its values range between 0 (least confidence in NRS) and 1 (full confidence in NRS).
 (\code{mean.shift}) is the bias shift to be added/subtracted from the estimated NRS parameters. Either (\code{var.infl}) or (\code{mean.shift}) can be provided but not both.
 and other arguments to control the MCMC chains: the number of adaptions n.adapt, number of iterations n.iter, number of burn in n.burnin,
 number of thinning thin and number of chains n.chains, see \code{\link{jags.model}} arguments from rjags package.}

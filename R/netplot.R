@@ -1,3 +1,4 @@
+#'@export
 netplot <- function(prt.data=prt.data,
                     std.data=std.data){
 prt.data.ad0 <- sapply(1:length(unique(prt.data$study)), function(i){

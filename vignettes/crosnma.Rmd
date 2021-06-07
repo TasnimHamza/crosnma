@@ -200,9 +200,7 @@ The network should be checked for its connectivity before running the analysis. 
 
 ## Network characteristics
 ```{r}
-kable(ns.tab(prt.data,std.data)
-      )
-
+knitr::kable(ns.tab(prt.data,std.data))
 ```
 
 # The R implementation
