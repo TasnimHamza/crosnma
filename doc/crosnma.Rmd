@@ -318,7 +318,7 @@ knitr::kable(summary(jagsfit2))
 *Plot of estimates*
 
 ```{r}
-#plot(jagsfit1)
+coda::traceplot(jagsfit2$samples)
 ```
 
 

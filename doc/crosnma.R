@@ -80,7 +80,7 @@ jagsfit2 <- crosnma.run(model=mod2,
 knitr::kable(summary(jagsfit2))
 
 ## -----------------------------------------------------------------------------
-#plot(jagsfit1)
+coda::traceplot(jagsfit2$samples)
 
 ## -----------------------------------------------------------------------------
 # jags model: code+data

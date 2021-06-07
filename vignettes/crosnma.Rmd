@@ -254,10 +254,10 @@ We summarize the estimated parameters by the following table.
 knitr::kable(summary(jagsfit1,expo=T,))
 ```
 
-*Plot of estimates*
+*Trace plot of estimates*
 
 ```{r}
-# to be added
+coda::traceplot(jagsfit1$samples)
 ```
 
 ## Using NRS as a prior
@@ -315,10 +315,10 @@ jagsfit2 <- crosnma.run(model=mod2,
 knitr::kable(summary(jagsfit2))
 ```
 
-*Plot of estimates*
+*Trace plot of estimates*
 
 ```{r}
-#plot(jagsfit1)
+coda::traceplot(jagsfit2$samples)
 ```
 
 
@@ -376,10 +376,10 @@ jagsfit3 <- crosnma.run(model=mod3,
 knitr::kable(summary(jagsfit3))
 ```
 
-*Plot of estimates*
+*Trace plot of estimates*
 
 ```{r}
-# to be added
+coda::traceplot(jagsfit3$samples)
 ```
 
 
@@ -438,10 +438,10 @@ jagsfit4 <- crosnma.run(model=mod4,
 knitr::kable(summary(jagsfit4))
 ```
 
-*Plot of estimates*
+*Trace plot of estimates*
 
 ```{r}
-# to be added
+coda::traceplot(jagsfit4$samples)
 ```
 
 
