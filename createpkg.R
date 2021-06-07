@@ -1,4 +1,4 @@
-#
+
 devtools::document()  # adopt the changes in the pkg
 
 # create all Vignette related files

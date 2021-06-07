@@ -78,6 +78,7 @@
 #' @import rjags
 #' @import tidyr
 #' @import coda
+#' @import netmeta
 #' @seealso \code{\link{crosnma.run}}, \code{\link{jags.model}}
 #' @example
 #' # An example from simulated data on participant level and study level
