@@ -14,7 +14,7 @@ head(prt.data)
 head(std.data)
 
 ## -----------------------------------------------------------------------------
-# to be added later
+netplot(prt.data,std.data)
 
 ## -----------------------------------------------------------------------------
 knitr::kable(ns.tab(prt.data,std.data))

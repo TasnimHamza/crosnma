@@ -644,10 +644,155 @@ r_{jk} \sim Binomial(p_{jk},n_{jk})
 <h2><span class="header-section-number">3.1</span> Check network connectivity</h2>
 <p>The network should be checked for its connectivity before running the analysis. This is a vital step as the model will run even if the network is not connected.</p>
 <p><strong>Network plot</strong></p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># to be added later</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">netplot</span>(prt.data,std.data)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb4-17" data-line-number="17"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-18" data-line-number="18"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-19" data-line-number="19"></a>
+<a class="sourceLine" id="cb4-20" data-line-number="20"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-21" data-line-number="21"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-22" data-line-number="22"></a>
+<a class="sourceLine" id="cb4-23" data-line-number="23"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-24" data-line-number="24"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-25" data-line-number="25"></a>
+<a class="sourceLine" id="cb4-26" data-line-number="26"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-27" data-line-number="27"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-28" data-line-number="28"></a>
+<a class="sourceLine" id="cb4-29" data-line-number="29"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-30" data-line-number="30"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-31" data-line-number="31"></a>
+<a class="sourceLine" id="cb4-32" data-line-number="32"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-33" data-line-number="33"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-34" data-line-number="34"></a>
+<a class="sourceLine" id="cb4-35" data-line-number="35"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-36" data-line-number="36"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-37" data-line-number="37"></a>
+<a class="sourceLine" id="cb4-38" data-line-number="38"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-39" data-line-number="39"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-40" data-line-number="40"></a>
+<a class="sourceLine" id="cb4-41" data-line-number="41"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-42" data-line-number="42"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-43" data-line-number="43"></a>
+<a class="sourceLine" id="cb4-44" data-line-number="44"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-45" data-line-number="45"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-46" data-line-number="46"></a>
+<a class="sourceLine" id="cb4-47" data-line-number="47"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-48" data-line-number="48"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-49" data-line-number="49"></a>
+<a class="sourceLine" id="cb4-50" data-line-number="50"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-51" data-line-number="51"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-52" data-line-number="52"></a>
+<a class="sourceLine" id="cb4-53" data-line-number="53"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-54" data-line-number="54"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-55" data-line-number="55"></a>
+<a class="sourceLine" id="cb4-56" data-line-number="56"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-57" data-line-number="57"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-58" data-line-number="58"></a>
+<a class="sourceLine" id="cb4-59" data-line-number="59"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-60" data-line-number="60"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-61" data-line-number="61"></a>
+<a class="sourceLine" id="cb4-62" data-line-number="62"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-63" data-line-number="63"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-64" data-line-number="64"></a>
+<a class="sourceLine" id="cb4-65" data-line-number="65"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-66" data-line-number="66"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-67" data-line-number="67"></a>
+<a class="sourceLine" id="cb4-68" data-line-number="68"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-69" data-line-number="69"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-70" data-line-number="70"></a>
+<a class="sourceLine" id="cb4-71" data-line-number="71"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-72" data-line-number="72"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-73" data-line-number="73"></a>
+<a class="sourceLine" id="cb4-74" data-line-number="74"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-75" data-line-number="75"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-76" data-line-number="76"></a>
+<a class="sourceLine" id="cb4-77" data-line-number="77"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-78" data-line-number="78"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-79" data-line-number="79"></a>
+<a class="sourceLine" id="cb4-80" data-line-number="80"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-81" data-line-number="81"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-82" data-line-number="82"></a>
+<a class="sourceLine" id="cb4-83" data-line-number="83"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-84" data-line-number="84"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-85" data-line-number="85"></a>
+<a class="sourceLine" id="cb4-86" data-line-number="86"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-87" data-line-number="87"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-88" data-line-number="88"></a>
+<a class="sourceLine" id="cb4-89" data-line-number="89"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-90" data-line-number="90"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-91" data-line-number="91"></a>
+<a class="sourceLine" id="cb4-92" data-line-number="92"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-93" data-line-number="93"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-94" data-line-number="94"></a>
+<a class="sourceLine" id="cb4-95" data-line-number="95"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-96" data-line-number="96"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-97" data-line-number="97"></a>
+<a class="sourceLine" id="cb4-98" data-line-number="98"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-99" data-line-number="99"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-100" data-line-number="100"></a>
+<a class="sourceLine" id="cb4-101" data-line-number="101"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-102" data-line-number="102"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-103" data-line-number="103"></a>
+<a class="sourceLine" id="cb4-104" data-line-number="104"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-105" data-line-number="105"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-106" data-line-number="106"></a>
+<a class="sourceLine" id="cb4-107" data-line-number="107"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-108" data-line-number="108"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-109" data-line-number="109"></a>
+<a class="sourceLine" id="cb4-110" data-line-number="110"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-111" data-line-number="111"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-112" data-line-number="112"></a>
+<a class="sourceLine" id="cb4-113" data-line-number="113"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-114" data-line-number="114"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-115" data-line-number="115"></a>
+<a class="sourceLine" id="cb4-116" data-line-number="116"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-117" data-line-number="117"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-118" data-line-number="118"></a>
+<a class="sourceLine" id="cb4-119" data-line-number="119"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-120" data-line-number="120"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-121" data-line-number="121"></a>
+<a class="sourceLine" id="cb4-122" data-line-number="122"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-123" data-line-number="123"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-124" data-line-number="124"></a>
+<a class="sourceLine" id="cb4-125" data-line-number="125"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-126" data-line-number="126"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-127" data-line-number="127"></a>
+<a class="sourceLine" id="cb4-128" data-line-number="128"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-129" data-line-number="129"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-130" data-line-number="130"></a>
+<a class="sourceLine" id="cb4-131" data-line-number="131"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-132" data-line-number="132"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-133" data-line-number="133"></a>
+<a class="sourceLine" id="cb4-134" data-line-number="134"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-135" data-line-number="135"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-136" data-line-number="136"></a>
+<a class="sourceLine" id="cb4-137" data-line-number="137"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-138" data-line-number="138"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-139" data-line-number="139"></a>
+<a class="sourceLine" id="cb4-140" data-line-number="140"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-141" data-line-number="141"><span class="co">#&gt; generated</span></a>
+<a class="sourceLine" id="cb4-142" data-line-number="142"></a>
+<a class="sourceLine" id="cb4-143" data-line-number="143"><span class="co">#&gt; Warning in `[&lt;-.factor`(`*tmp*`, i, value = &quot;1&quot;): invalid factor level, NA</span></a>
+<a class="sourceLine" id="cb4-144" data-line-number="144"><span class="co">#&gt; generated</span></a></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
 </div>
 <div id="network-characteristics" class="section level2">
 <h2><span class="header-section-number">3.2</span> Network characteristics</h2>
+<p>In the following table, we summarize the number of studies from each design and each data format:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">ns.tab</span>(prt.data,std.data))</a></code></pre></div>
 <table>
 <thead>
@@ -732,42 +877,42 @@ r_{jk} \sim Binomial(p_{jk},n_{jk})
 <tr class="even">
 <td align="left">d.B</td>
 <td align="right">0.874</td>
-<td align="right">1.896</td>
-<td align="right">0.244</td>
-<td align="right">0.890</td>
-<td align="right">2.846</td>
-<td align="right">1.012</td>
-<td align="right">127</td>
+<td align="right">1.971</td>
+<td align="right">0.200</td>
+<td align="right">0.892</td>
+<td align="right">3.069</td>
+<td align="right">1.216</td>
+<td align="right">87</td>
 </tr>
 <tr class="odd">
 <td align="left">d.C</td>
-<td align="right">1.486</td>
-<td align="right">1.651</td>
-<td align="right">0.554</td>
-<td align="right">1.482</td>
-<td align="right">3.892</td>
-<td align="right">1.079</td>
-<td align="right">131</td>
+<td align="right">1.529</td>
+<td align="right">1.762</td>
+<td align="right">0.496</td>
+<td align="right">1.452</td>
+<td align="right">4.712</td>
+<td align="right">1.142</td>
+<td align="right">123</td>
 </tr>
 <tr class="even">
 <td align="left">d.D</td>
-<td align="right">0.417</td>
-<td align="right">2.002</td>
-<td align="right">0.114</td>
-<td align="right">0.424</td>
-<td align="right">1.824</td>
-<td align="right">0.996</td>
-<td align="right">124</td>
+<td align="right">0.440</td>
+<td align="right">2.006</td>
+<td align="right">0.116</td>
+<td align="right">0.441</td>
+<td align="right">2.093</td>
+<td align="right">1.226</td>
+<td align="right">121</td>
 </tr>
 <tr class="odd">
 <td align="left">tau</td>
-<td align="right">0.965</td>
-<td align="right">0.362</td>
-<td align="right">0.426</td>
-<td align="right">0.883</td>
-<td align="right">1.742</td>
-<td align="right">0.993</td>
-<td align="right">30</td>
+<td align="right">0.950</td>
+<td align="right">0.301</td>
+<td align="right">0.489</td>
+<td align="right">0.923</td>
+<td align="right">1.732</td>
+<td align="right">1.048</td>
+<td align="right">78</td>
 </tr>
 </tbody>
 </table>
@@ -843,43 +988,43 @@ r_{jk} \sim Binomial(p_{jk},n_{jk})
 <tbody>
 <tr class="odd">
 <td align="left">bb_1</td>
-<td align="right">1.001</td>
-<td align="right">1.148</td>
-<td align="right">0.781</td>
-<td align="right">1.004</td>
-<td align="right">1.302</td>
-<td align="right">1.122</td>
-<td align="right">203</td>
+<td align="right">0.984</td>
+<td align="right">1.304</td>
+<td align="right">0.546</td>
+<td align="right">0.989</td>
+<td align="right">2.001</td>
+<td align="right">1.023</td>
+<td align="right">176</td>
 </tr>
 <tr class="even">
 <td align="left">bb_2</td>
-<td align="right">3.613</td>
-<td align="right">5.700</td>
-<td align="right">0.256</td>
-<td align="right">2.830</td>
-<td align="right">58.760</td>
-<td align="right">5.451</td>
-<td align="right">74</td>
+<td align="right">0.748</td>
+<td align="right">3.934</td>
+<td align="right">0.051</td>
+<td align="right">0.749</td>
+<td align="right">10.148</td>
+<td align="right">2.364</td>
+<td align="right">110</td>
 </tr>
 <tr class="odd">
 <td align="left">bw_1</td>
 <td align="right">1.024</td>
-<td align="right">1.077</td>
-<td align="right">0.945</td>
-<td align="right">1.023</td>
-<td align="right">1.143</td>
-<td align="right">1.225</td>
-<td align="right">157</td>
+<td align="right">1.300</td>
+<td align="right">0.809</td>
+<td align="right">1.030</td>
+<td align="right">1.215</td>
+<td align="right">1.277</td>
+<td align="right">329</td>
 </tr>
 <tr class="even">
 <td align="left">bw_2</td>
-<td align="right">0.959</td>
-<td align="right">1.692</td>
-<td align="right">0.324</td>
-<td align="right">0.992</td>
-<td align="right">2.447</td>
-<td align="right">1.019</td>
-<td align="right">53</td>
+<td align="right">1.076</td>
+<td align="right">1.544</td>
+<td align="right">0.499</td>
+<td align="right">1.029</td>
+<td align="right">2.848</td>
+<td align="right">1.105</td>
+<td align="right">50</td>
 </tr>
 <tr class="odd">
 <td align="left">d.A</td>
@@ -893,83 +1038,83 @@ r_{jk} \sim Binomial(p_{jk},n_{jk})
 </tr>
 <tr class="even">
 <td align="left">d.B</td>
-<td align="right">0.282</td>
-<td align="right">2.950</td>
-<td align="right">0.032</td>
-<td align="right">0.318</td>
-<td align="right">1.767</td>
-<td align="right">1.852</td>
-<td align="right">135</td>
+<td align="right">6.742</td>
+<td align="right">2.013</td>
+<td align="right">1.922</td>
+<td align="right">6.564</td>
+<td align="right">29.882</td>
+<td align="right">1.162</td>
+<td align="right">101</td>
 </tr>
 <tr class="odd">
 <td align="left">d.C</td>
-<td align="right">0.027</td>
-<td align="right">5.203</td>
-<td align="right">0.001</td>
-<td align="right">0.030</td>
-<td align="right">0.202</td>
-<td align="right">4.068</td>
-<td align="right">47</td>
+<td align="right">0.908</td>
+<td align="right">6.832</td>
+<td align="right">0.033</td>
+<td align="right">2.034</td>
+<td align="right">9.836</td>
+<td align="right">5.264</td>
+<td align="right">110</td>
 </tr>
 <tr class="even">
 <td align="left">d.D</td>
-<td align="right">0.854</td>
-<td align="right">4.024</td>
-<td align="right">0.058</td>
-<td align="right">1.006</td>
-<td align="right">12.595</td>
-<td align="right">1.808</td>
-<td align="right">68</td>
+<td align="right">0.081</td>
+<td align="right">9.480</td>
+<td align="right">0.003</td>
+<td align="right">0.046</td>
+<td align="right">5.963</td>
+<td align="right">4.247</td>
+<td align="right">140</td>
 </tr>
 <tr class="odd">
 <td align="left">tau</td>
-<td align="right">0.831</td>
-<td align="right">0.556</td>
-<td align="right">0.057</td>
-<td align="right">0.765</td>
-<td align="right">1.815</td>
-<td align="right">1.841</td>
-<td align="right">52</td>
+<td align="right">0.890</td>
+<td align="right">0.497</td>
+<td align="right">0.137</td>
+<td align="right">0.871</td>
+<td align="right">1.884</td>
+<td align="right">1.539</td>
+<td align="right">32</td>
 </tr>
 <tr class="even">
 <td align="left">tau.bb_1</td>
-<td align="right">0.163</td>
-<td align="right">0.134</td>
-<td align="right">0.035</td>
-<td align="right">0.111</td>
-<td align="right">0.454</td>
-<td align="right">1.064</td>
-<td align="right">57</td>
+<td align="right">0.326</td>
+<td align="right">0.316</td>
+<td align="right">0.051</td>
+<td align="right">0.227</td>
+<td align="right">1.088</td>
+<td align="right">1.081</td>
+<td align="right">30</td>
 </tr>
 <tr class="odd">
 <td align="left">tau.bb_2</td>
-<td align="right">0.673</td>
-<td align="right">0.470</td>
-<td align="right">0.060</td>
-<td align="right">0.541</td>
-<td align="right">1.675</td>
-<td align="right">1.072</td>
-<td align="right">37</td>
+<td align="right">1.250</td>
+<td align="right">0.471</td>
+<td align="right">0.326</td>
+<td align="right">1.292</td>
+<td align="right">1.978</td>
+<td align="right">1.176</td>
+<td align="right">68</td>
 </tr>
 <tr class="even">
 <td align="left">tau.bw_1</td>
-<td align="right">0.053</td>
-<td align="right">0.086</td>
-<td align="right">0.000</td>
-<td align="right">0.018</td>
-<td align="right">0.397</td>
-<td align="right">1.417</td>
-<td align="right">21</td>
+<td align="right">0.125</td>
+<td align="right">0.285</td>
+<td align="right">0.006</td>
+<td align="right">0.039</td>
+<td align="right">1.221</td>
+<td align="right">1.485</td>
+<td align="right">30</td>
 </tr>
 <tr class="odd">
 <td align="left">tau.bw_2</td>
-<td align="right">0.738</td>
-<td align="right">0.471</td>
-<td align="right">0.136</td>
-<td align="right">0.674</td>
-<td align="right">1.789</td>
-<td align="right">0.999</td>
-<td align="right">50</td>
+<td align="right">0.498</td>
+<td align="right">0.393</td>
+<td align="right">0.044</td>
+<td align="right">0.390</td>
+<td align="right">1.438</td>
+<td align="right">1.164</td>
+<td align="right">29</td>
 </tr>
 </tbody>
 </table>
@@ -1033,43 +1178,43 @@ r_{jk} \sim Binomial(p_{jk},n_{jk})
 <tbody>
 <tr class="odd">
 <td align="left">bb_1</td>
-<td align="right">1.000</td>
-<td align="right">1.032</td>
-<td align="right">0.936</td>
-<td align="right">1.008</td>
-<td align="right">1.045</td>
-<td align="right">1.222</td>
-<td align="right">80</td>
+<td align="right">0.996</td>
+<td align="right">1.059</td>
+<td align="right">0.895</td>
+<td align="right">0.993</td>
+<td align="right">1.127</td>
+<td align="right">1.092</td>
+<td align="right">312</td>
 </tr>
 <tr class="even">
 <td align="left">bb_2</td>
-<td align="right">0.733</td>
-<td align="right">3.358</td>
-<td align="right">0.059</td>
-<td align="right">0.856</td>
-<td align="right">4.273</td>
-<td align="right">2.351</td>
-<td align="right">85</td>
+<td align="right">1.634</td>
+<td align="right">2.213</td>
+<td align="right">0.393</td>
+<td align="right">1.620</td>
+<td align="right">7.087</td>
+<td align="right">1.098</td>
+<td align="right">55</td>
 </tr>
 <tr class="odd">
 <td align="left">bw_1</td>
-<td align="right">0.993</td>
-<td align="right">1.033</td>
-<td align="right">0.908</td>
-<td align="right">0.998</td>
-<td align="right">1.049</td>
-<td align="right">1.237</td>
-<td align="right">132</td>
+<td align="right">0.989</td>
+<td align="right">1.061</td>
+<td align="right">0.895</td>
+<td align="right">0.990</td>
+<td align="right">1.104</td>
+<td align="right">1.201</td>
+<td align="right">95</td>
 </tr>
 <tr class="even">
 <td align="left">bw_2</td>
-<td align="right">1.054</td>
-<td align="right">1.720</td>
-<td align="right">0.356</td>
-<td align="right">1.058</td>
-<td align="right">2.887</td>
-<td align="right">1.124</td>
-<td align="right">152</td>
+<td align="right">1.114</td>
+<td align="right">1.392</td>
+<td align="right">0.596</td>
+<td align="right">1.105</td>
+<td align="right">2.379</td>
+<td align="right">1.548</td>
+<td align="right">56</td>
 </tr>
 <tr class="odd">
 <td align="left">d.A</td>
@@ -1083,93 +1228,93 @@ r_{jk} \sim Binomial(p_{jk},n_{jk})
 </tr>
 <tr class="even">
 <td align="left">d.B</td>
-<td align="right">0.459</td>
-<td align="right">1.841</td>
-<td align="right">0.179</td>
-<td align="right">0.521</td>
-<td align="right">1.201</td>
-<td align="right">2.717</td>
-<td align="right">37</td>
+<td align="right">0.413</td>
+<td align="right">1.906</td>
+<td align="right">0.146</td>
+<td align="right">0.377</td>
+<td align="right">1.197</td>
+<td align="right">3.160</td>
+<td align="right">44</td>
 </tr>
 <tr class="odd">
 <td align="left">d.C</td>
-<td align="right">1.306</td>
-<td align="right">1.783</td>
-<td align="right">0.534</td>
-<td align="right">1.293</td>
-<td align="right">3.725</td>
-<td align="right">2.249</td>
-<td align="right">24</td>
+<td align="right">0.662</td>
+<td align="right">1.639</td>
+<td align="right">0.231</td>
+<td align="right">0.797</td>
+<td align="right">1.432</td>
+<td align="right">2.212</td>
+<td align="right">26</td>
 </tr>
 <tr class="even">
 <td align="left">d.D</td>
-<td align="right">0.387</td>
-<td align="right">2.188</td>
-<td align="right">0.112</td>
-<td align="right">0.443</td>
-<td align="right">1.198</td>
-<td align="right">3.827</td>
-<td align="right">51</td>
+<td align="right">0.720</td>
+<td align="right">1.728</td>
+<td align="right">0.275</td>
+<td align="right">0.668</td>
+<td align="right">2.102</td>
+<td align="right">1.776</td>
+<td align="right">41</td>
 </tr>
 <tr class="odd">
 <td align="left">g</td>
-<td align="right">1.253</td>
-<td align="right">2.084</td>
-<td align="right">0.425</td>
-<td align="right">1.318</td>
-<td align="right">4.079</td>
-<td align="right">5.458</td>
-<td align="right">13</td>
+<td align="right">0.789</td>
+<td align="right">1.943</td>
+<td align="right">0.334</td>
+<td align="right">0.678</td>
+<td align="right">3.106</td>
+<td align="right">4.140</td>
+<td align="right">28</td>
 </tr>
 <tr class="even">
 <td align="left">tau</td>
-<td align="right">0.399</td>
-<td align="right">0.286</td>
-<td align="right">0.076</td>
-<td align="right">0.308</td>
-<td align="right">1.091</td>
-<td align="right">2.036</td>
-<td align="right">34</td>
+<td align="right">0.364</td>
+<td align="right">0.285</td>
+<td align="right">0.033</td>
+<td align="right">0.313</td>
+<td align="right">1.194</td>
+<td align="right">1.480</td>
+<td align="right">24</td>
 </tr>
 <tr class="odd">
 <td align="left">tau.bb_1</td>
-<td align="right">0.033</td>
-<td align="right">0.056</td>
-<td align="right">0.001</td>
-<td align="right">0.016</td>
-<td align="right">0.208</td>
-<td align="right">1.358</td>
-<td align="right">38</td>
+<td align="right">0.067</td>
+<td align="right">0.084</td>
+<td align="right">0.007</td>
+<td align="right">0.037</td>
+<td align="right">0.247</td>
+<td align="right">1.278</td>
+<td align="right">42</td>
 </tr>
 <tr class="even">
 <td align="left">tau.bb_2</td>
-<td align="right">0.997</td>
-<td align="right">0.535</td>
-<td align="right">0.181</td>
-<td align="right">0.932</td>
-<td align="right">1.929</td>
-<td align="right">1.073</td>
-<td align="right">40</td>
+<td align="right">0.692</td>
+<td align="right">0.528</td>
+<td align="right">0.037</td>
+<td align="right">0.538</td>
+<td align="right">1.821</td>
+<td align="right">1.046</td>
+<td align="right">23</td>
 </tr>
 <tr class="odd">
 <td align="left">tau.bw_1</td>
-<td align="right">0.044</td>
-<td align="right">0.039</td>
-<td align="right">0.004</td>
-<td align="right">0.030</td>
-<td align="right">0.153</td>
-<td align="right">1.191</td>
-<td align="right">43</td>
+<td align="right">0.069</td>
+<td align="right">0.077</td>
+<td align="right">0.007</td>
+<td align="right">0.042</td>
+<td align="right">0.292</td>
+<td align="right">1.308</td>
+<td align="right">29</td>
 </tr>
 <tr class="even">
 <td align="left">tau.bw_2</td>
-<td align="right">0.683</td>
-<td align="right">0.428</td>
-<td align="right">0.109</td>
-<td align="right">0.610</td>
-<td align="right">1.628</td>
-<td align="right">1.083</td>
-<td align="right">36</td>
+<td align="right">0.297</td>
+<td align="right">0.299</td>
+<td align="right">0.009</td>
+<td align="right">0.169</td>
+<td align="right">1.035</td>
+<td align="right">1.108</td>
+<td align="right">27</td>
 </tr>
 </tbody>
 </table>
@@ -1233,43 +1378,43 @@ r_{jk} \sim Binomial(p_{jk},n_{jk})
 <tbody>
 <tr class="odd">
 <td align="left">bb_1</td>
-<td align="right">0.969</td>
-<td align="right">1.124</td>
-<td align="right">0.761</td>
-<td align="right">0.979</td>
-<td align="right">1.230</td>
-<td align="right">1.248</td>
-<td align="right">158</td>
+<td align="right">1.006</td>
+<td align="right">1.029</td>
+<td align="right">0.955</td>
+<td align="right">1.007</td>
+<td align="right">1.057</td>
+<td align="right">1.816</td>
+<td align="right">122</td>
 </tr>
 <tr class="even">
 <td align="left">bb_2</td>
-<td align="right">5.319</td>
-<td align="right">2.210</td>
-<td align="right">1.208</td>
-<td align="right">6.165</td>
-<td align="right">22.496</td>
-<td align="right">1.452</td>
-<td align="right">24</td>
+<td align="right">1.089</td>
+<td align="right">2.157</td>
+<td align="right">0.277</td>
+<td align="right">1.069</td>
+<td align="right">4.529</td>
+<td align="right">1.194</td>
+<td align="right">92</td>
 </tr>
 <tr class="odd">
 <td align="left">bw_1</td>
-<td align="right">1.003</td>
-<td align="right">1.152</td>
-<td align="right">0.714</td>
-<td align="right">1.002</td>
-<td align="right">1.341</td>
-<td align="right">1.224</td>
-<td align="right">446</td>
+<td align="right">1.001</td>
+<td align="right">1.066</td>
+<td align="right">0.894</td>
+<td align="right">1.000</td>
+<td align="right">1.086</td>
+<td align="right">1.028</td>
+<td align="right">276</td>
 </tr>
 <tr class="even">
 <td align="left">bw_2</td>
-<td align="right">0.947</td>
-<td align="right">1.749</td>
-<td align="right">0.389</td>
-<td align="right">0.838</td>
-<td align="right">3.164</td>
-<td align="right">1.071</td>
-<td align="right">88</td>
+<td align="right">0.903</td>
+<td align="right">1.876</td>
+<td align="right">0.234</td>
+<td align="right">0.903</td>
+<td align="right">3.358</td>
+<td align="right">1.059</td>
+<td align="right">184</td>
 </tr>
 <tr class="odd">
 <td align="left">d.A</td>
@@ -1283,92 +1428,92 @@ r_{jk} \sim Binomial(p_{jk},n_{jk})
 </tr>
 <tr class="even">
 <td align="left">d.B</td>
-<td align="right">0.548</td>
-<td align="right">1.917</td>
-<td align="right">0.227</td>
-<td align="right">0.426</td>
-<td align="right">1.530</td>
-<td align="right">3.749</td>
-<td align="right">58</td>
+<td align="right">0.366</td>
+<td align="right">2.317</td>
+<td align="right">0.128</td>
+<td align="right">0.263</td>
+<td align="right">2.225</td>
+<td align="right">2.677</td>
+<td align="right">120</td>
 </tr>
 <tr class="odd">
 <td align="left">d.C</td>
-<td align="right">1.207</td>
-<td align="right">1.804</td>
-<td align="right">0.437</td>
-<td align="right">1.057</td>
-<td align="right">4.941</td>
-<td align="right">1.597</td>
-<td align="right">25</td>
+<td align="right">0.577</td>
+<td align="right">2.914</td>
+<td align="right">0.093</td>
+<td align="right">0.412</td>
+<td align="right">4.662</td>
+<td align="right">2.679</td>
+<td align="right">39</td>
 </tr>
 <tr class="even">
 <td align="left">d.D</td>
-<td align="right">0.795</td>
-<td align="right">2.757</td>
-<td align="right">0.150</td>
-<td align="right">0.656</td>
-<td align="right">4.222</td>
-<td align="right">4.571</td>
+<td align="right">0.259</td>
+<td align="right">2.168</td>
+<td align="right">0.058</td>
+<td align="right">0.270</td>
+<td align="right">1.026</td>
+<td align="right">1.494</td>
 <td align="right">52</td>
 </tr>
 <tr class="odd">
 <td align="left">g</td>
-<td align="right">0.069</td>
-<td align="right">425.214</td>
-<td align="right">0.000</td>
-<td align="right">0.473</td>
-<td align="right">547.298</td>
-<td align="right">1.524</td>
-<td align="right">9</td>
+<td align="right">0.606</td>
+<td align="right">17.296</td>
+<td align="right">0.001</td>
+<td align="right">0.463</td>
+<td align="right">172.459</td>
+<td align="right">1.348</td>
+<td align="right">12</td>
 </tr>
 <tr class="even">
 <td align="left">tau</td>
-<td align="right">0.352</td>
-<td align="right">0.229</td>
-<td align="right">0.025</td>
-<td align="right">0.351</td>
-<td align="right">0.821</td>
-<td align="right">1.211</td>
-<td align="right">26</td>
+<td align="right">0.687</td>
+<td align="right">0.508</td>
+<td align="right">0.046</td>
+<td align="right">0.616</td>
+<td align="right">1.878</td>
+<td align="right">2.067</td>
+<td align="right">28</td>
 </tr>
 <tr class="odd">
 <td align="left">tau.bb_1</td>
-<td align="right">0.131</td>
-<td align="right">0.227</td>
-<td align="right">0.012</td>
-<td align="right">0.048</td>
-<td align="right">0.804</td>
-<td align="right">1.455</td>
-<td align="right">51</td>
+<td align="right">0.029</td>
+<td align="right">0.033</td>
+<td align="right">0.002</td>
+<td align="right">0.024</td>
+<td align="right">0.087</td>
+<td align="right">1.334</td>
+<td align="right">29</td>
 </tr>
 <tr class="even">
 <td align="left">tau.bb_2</td>
-<td align="right">0.580</td>
-<td align="right">0.493</td>
-<td align="right">0.050</td>
-<td align="right">0.379</td>
-<td align="right">1.733</td>
-<td align="right">2.276</td>
-<td align="right">54</td>
+<td align="right">0.956</td>
+<td align="right">0.506</td>
+<td align="right">0.167</td>
+<td align="right">0.933</td>
+<td align="right">1.924</td>
+<td align="right">1.012</td>
+<td align="right">47</td>
 </tr>
 <tr class="odd">
 <td align="left">tau.bw_1</td>
-<td align="right">0.114</td>
-<td align="right">0.200</td>
-<td align="right">0.005</td>
-<td align="right">0.035</td>
-<td align="right">0.757</td>
-<td align="right">1.294</td>
-<td align="right">38</td>
+<td align="right">0.073</td>
+<td align="right">0.069</td>
+<td align="right">0.014</td>
+<td align="right">0.047</td>
+<td align="right">0.270</td>
+<td align="right">1.153</td>
+<td align="right">50</td>
 </tr>
 <tr class="even">
 <td align="left">tau.bw_2</td>
-<td align="right">0.713</td>
-<td align="right">0.536</td>
-<td align="right">0.036</td>
-<td align="right">0.550</td>
-<td align="right">1.870</td>
-<td align="right">1.053</td>
+<td align="right">0.847</td>
+<td align="right">0.532</td>
+<td align="right">0.119</td>
+<td align="right">0.761</td>
+<td align="right">1.855</td>
+<td align="right">1.072</td>
 <td align="right">24</td>
 </tr>
 </tbody>

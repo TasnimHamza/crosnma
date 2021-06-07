@@ -15,7 +15,7 @@ prt.data.ad <- do.call(rbind,prt.data.ad0)
 all.data <- rbind(std.data[c('study','trt','outcome','n','design')],prt.data.ad)
 data.pair = pairwise(treat = trt, event = outcome, n = n,
                           data = all.data, studlab = study, sm = "OR")
-net1 = netmeta(data.pair)
+net1 = netmeta(data.pair,warn = FALSE)
 
 ## ------------------------------------------------------------------------
 return(netgraph(net1,offset = 0.1)) # ,col=1:net1$m col=as.numeric(all.data$design)
