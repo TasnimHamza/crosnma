@@ -34,6 +34,7 @@ The `prt.data` contains 2950 rows, each refers to a participant in the study. We
 ```{r}
 head(prt.data)
 ```
+
 For each participant, we have information for the occurrence of the relapses (0=no, 1=yes) `outcome`, the treatment label `trt`, the age (in years) `age` and  sex (0 = Female, 1 = Male) `sex` of the participant. The other following columns are set on study-level (it is repeated for each participant of the study): the study id `study`, the design of the study ( needs to be either rct or nrs) `design`, the risk of bias on each study (set as a low, high or unclear) `bias` and the year of publication `year`.
 
 We display the full data that is available on study-level:
@@ -103,7 +104,7 @@ We run the model in Section 2.1 two consequent times. First we estimate the rela
 
 ## RoB-adjusted model 1
 
-We incoprprate the risk of bias (RoB) into the IPD and the AD models by adding the bias term $\gamma_j R_j$ to each.
+We incorporate the risk of bias (RoB) into the IPD and the AD models by adding the bias term $\gamma_j R_j$ to each.
 
 **model IPD only**
 
@@ -141,7 +142,7 @@ $$
 
 ## RoB-adjusted model 2
 
-Another way to incorporate the study RoB is by adding the bias adjusted relative treatment effect $\theta_{jk}$ instead of the unadjusted one $\delta_{jk}$. Then to model $\theta_{jk}$ by a bimodal normal distribution as in Table 2 below. We estimate the bias probability $\pi_j$ by either assigning a beta distribution or by using a study charactistics $z_j$ through a logistic transformation. 
+Another way to incorporate the study RoB is by adding the bias adjusted relative treatment effect $\theta_{jk}$ instead of the unadjusted one $\delta_{jk}$. Then to model $\theta_{jk}$ by a bi-modal normal distribution as in Table 2 below. We estimate the bias probability $\pi_j$ by either assigning a beta distribution or by using a study characteristics $z_j$ through a logistic transformation. 
 
 **model IPD only**
 
@@ -199,7 +200,7 @@ The network should be checked for its connectivity before running the analysis. 
 
 ## Network characteristics
 ```{r}
-# to be added
+knitr::kable(ns.tab(prt.data,std.data))
 ```
 
 # The R implementation

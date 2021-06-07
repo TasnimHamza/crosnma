@@ -195,10 +195,13 @@ The network should be checked for its connectivity before running the analysis. 
 
 **Network plot**
 ```{r}
-# to be added later
+netplot(prt.data,std.data)
 ```
 
 ## Network characteristics
+
+In the following table, we summarize the number of studies from each design and each data format:
+
 ```{r}
 knitr::kable(ns.tab(prt.data,std.data))
 ```
