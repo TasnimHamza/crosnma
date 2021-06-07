@@ -59,3 +59,9 @@ net1 <- netmeta(TE, seTE, treat1, treat2, studlab,
 netgraph(net1)
 
 
+matrix(ns.ipd.rct=length(unique(prt.data[prt.data$design=='rct',]$study)),
+           ns.ipd.nrs=length(unique(prt.data[prt.data$design=='nrs',]$study)),
+           ns.ad.rct=length(unique(std.data[std.data$design=='rct',]$study)),
+           ns.ad.nrs=length(unique(std.data[std.data$design=='nrs',]$study))
+)
+

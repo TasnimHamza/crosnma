@@ -42,7 +42,7 @@ jagsfit1 <- crosnma.run(model=mod1,
               n.chains=3)
 
 ## -----------------------------------------------------------------------------
-knitr::kable(summary(jagsfit1,expo=T))
+knitr::kable(summary(jagsfit1,expo=T,))
 
 ## -----------------------------------------------------------------------------
 # to be added
