@@ -67,3 +67,9 @@ m <- matrix(c(ns.ipd.rct=length(unique(prt.data[prt.data$design=='rct',]$study))
 , 2,2)
 row.names(m) <- c('RCT','NRS')
 colnames(m) <- c('IPD','AD')
+
+
+
+
+
+
