@@ -1,4 +1,4 @@
 load.mix <- function(){
   library(rjags)
-  load.module('mix')
+  load.module("mix")
 }

@@ -6,7 +6,7 @@
 devtools::install_github("TasnimHamza/crosnma",force = TRUE)
 library(crosnma)
 load.module('mix') # needed for adjust2 method, library(rjags) might be needed
-load.mix()
+
 #-------- data --------#
 head(prt.data) # participant data
 head(std.data) # aggregate data

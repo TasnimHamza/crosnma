@@ -112,7 +112,6 @@
 #' @import tidyr
 #' @import coda
 #' @import netmeta
-#' @evalNamespace load.mix()
 #' @seealso \code{\link{crosnma.run}}, \code{\link{jags.model}}
 
 
