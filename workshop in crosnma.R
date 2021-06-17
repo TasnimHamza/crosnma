@@ -3,9 +3,10 @@
 
 #-------- load the libray --------#
 # install.packages("devtools") # install the package if you didn't before
-devtools::install_github("TasnimHamza/crosnma")
+devtools::install_github("TasnimHamza/crosnma",force = TRUE)
 library(crosnma)
-
+load.module('mix') # needed for adjust2 method, library(rjags) might be needed
+load.mix()
 #-------- data --------#
 head(prt.data) # participant data
 head(std.data) # aggregate data
@@ -142,7 +143,7 @@ mod5 <- crosnma.model(prt.data=prt.data,
                       reference='A',
                       trt.effect='random',
                       #---------- bias adjustment ----------
-                      method.bias='adjust1',
+                      method.bias='adjust2',
                       bias=c('bias','bias'),
                       bias.type='add',
                       bias.effect='common',

@@ -1,18 +1,8 @@
-#!!! modify: the prior method work only when the all elements in run.nrs are set, put defaults
-# delete from all reference.nrs
-# add default to bias.type, bias.effect
-#+++  check: the same number of covariates should be in IPD and AD
-#+++  check: prior of tau are only allowed when 'random' is chosen as an effect
-# check checkings
-# allow to run IPD onyl or AD only
-# check that the length of the arguments that indicate names is 2
-# if the within- and between-studies reg coef is NOT splitted, then specifying regb.effect or regw.effect as random, we run a random. and common if both are specified common
-# when the prt.data or std.data, only one variable name need to be given
-#++ add the inconsistency check
-#++ add check when adjust1 is chosen, bias.type should be specified
-### make all optional NULL
-### add to @return all objects
-### BUGSnet, the user can control d's distribution
+#!!! check: the same number of covariates should be in IPD and AD
+#!!! check checkings
+#!!! check that the length of the arguments that indicate names is 2
+#!!! check when the prt.data or std.data, only one variable name need to be given
+
 #' Create JAGS model and data to run generic NMA and NMR for dichotomous outcomes
 #' @description Create JAGS model and data; jags code is created from the internal function \code{crosnma.code}.
 #'
@@ -26,61 +16,54 @@
 #' @param n A character of the name of the number of participants variable in std.data.
 #' @param design A character vector with the names of the design variable in prt.data and std.data, respectively.
 #' @param reference A character indicating the name of the reference treatment. This option must be specified otherwise the 'placebo' is set as a reference.
-#' @param trt.effect A character for the relationship within the study-specific treatment effects, (\eqn{d_{k}}). Options are 'random' or 'common', see details.
+#' @param trt.effect A character for the relationship within the study-specific treatment effects, (\eqn{d_{k}}). Options are 'random' or 'common'.
 #' @param covariate An optional list indicating the name of the covariates in prt.data and std.data to conduct network meta regression
 #' The default option is covariate=NULL where no covariate adjustment is applied.
 #' The covariates can be either numeric or dichotomous variables. The user can provide up to 3 covaraites. The covariate needs to be provided for both prt.data and std.data, respectively.
 #' @param reg0.effect An optional character indicating the relationship across studies for prognostic effects expressed by the regression coefficient, (\eqn{\beta_{1,j}}), in a study \eqn{j}.
-#' Options are 'independent' or 'random', see details. We recommend using the default 'independent'. This is required when the covariate is not NULL.
+#' Options are 'independent' or 'random'. We recommend using the default 'independent'. This is required when the covariate is not NULL.
 #' @param regb.effect An optional character indicating the relationship across studies between-study regression coefficient,(\eqn{\beta^B_{2,jk}}), which quantify the treatment-mean covariate interaction.
-#'  Options are 'random' or 'common', see details. Default is 'random'. This is required when the covariate is not NULL.
+#'  Options are 'random' or 'common'. Default is 'random'. This is required when the covariate is not NULL.
 #' @param regw.effect An optional character  indicating the relationship across studies for the within-study regression coefficient, (\eqn{\beta^W_{2,jk}}), which models the treatment-covariate interaction effect at the individual level.
-#' Options are 'random' or 'common', see details. Default is 'random'. This is required when the covariate is not NULL.
-#' @param split.regcoef A logical. If TRUE the within- (\eqn{\beta^W_{2,jk}}) and between-study (\eqn{\beta^B_{2,jk}}) coefficients will be splitted in the analysis of prt.data. See details.
+#' Options are 'random' or 'common'. Default is 'random'. This is required when the covariate is not NULL.
+#' @param split.regcoef A logical. If TRUE the within- (\eqn{\beta^W_{2,jk}}) and between-study (\eqn{\beta^B_{2,jk}}) coefficients will be splitted in the analysis of prt.data.
 #' The default is TRUE. It is needed only when the covariate is not NULL.
 #' When the split.regcoef = FALSE, only one regression coefficient need to be estimated under either random effect model (regb.effect='random' or regw.effect='random') or common-effect model (regb.effect='common' or regw.effect='common')
 #' @param method.bias An optional character for defining the method to combine randomised clinical trials (RCT) and non-randomised studies (NRS).
 #' Options are 'naive' for naive synthesize, 'prior' for using NRS estimates as a prior information and RCTs in the likelihood
 #' or 'adjust1' and 'adjust2' to allow a bias adjustment following either Dias [ref] or Verde [ref] approaches, respectively
 #' @param bias An optional character vector with two elements indicating the name of the variable that includes the risk of bias adjustment in prt.data and std.data, respectively.
-#' It is required when method.bias='adjust1'. See details. The entries of this variable is a character that can be either low, high or unclear. These values need to be repeated for participants in the same study.
+#' It is required when method.bias='adjust1'. The entries of this variable is a character that can be either low, high or unclear. These values need to be repeated for participants in the same study.
 #' @param bias.type An Optional charachter of the effect of bias in the treatment effect.
 #' Three options are possible: 'add' for additive bias effect,'mult' for multiplicative bias effect and'both' for both an additive and a multiplicative term
-#' It is required when method.bias='adjust1'. See details.
-#' @param bias.covariate An optional vector of two characters for the variable name that will be used in estimating the probability of bias, see details.
+#' It is required when method.bias='adjust1'.
+#' @param bias.covariate An optional vector of two characters for the variable name that will be used in estimating the probability of bias.
 #' @param bias.effect An optional character indicating the relationship for the bias coefficients, (\eqn{\gamma_{j}}), across studies.
-#' Options are 'random' or 'common', see details. It is required when method.bias='adjust1' or 'adjust2'.
+#' Options are 'random' or 'common'. It is required when method.bias='adjust1' or 'adjust2'.
 #' @param prior An optional list to control the prior for various parameters in JAGS model. Those are the heterogeneity parameters for the treatment effects (when 'random' is chosen as effect):
 #' tau.reg0 for the effect of progonostic covariates, tau.regb and tau.regw for within- and between-study covariate effect, respectively,
 #' and tau.gamma for bias effect. Currently only the uniform distribution is supported, e.g. 'dunif(0,3)'.
 #' When the method.bias='adjust1' or 'adjust2', the user may provide priors to control the bias probability.
 #' There are 4 possible bias probabilities: RCT with low/high bias (pi.low.rct, pi.high.rct), NRS with low/high bias (pi.low.nrs, pi.high.nrs).
-#' Each prior should be given a beta distribution with the two parameters (see details to help you choose them)  as this for example 'dbeta(3,1)'.
-#' @param run.nrs An optional list when the method to include NRS is set at 'prior'.
-#' The list consists of the follwoing: (\code{var.infl}) controls the inflation of the varaince of NRS estimates and its values range between 0 (least confidence in NRS) and 1 (full confidence in NRS).
-#' (\code{mean.shift}) is the bias shift to be added/subtracted from the estimated NRS parameters. Either (\code{var.infl}) or (\code{mean.shift}) can be provided but not both.
-#' and other arguments to control the MCMC chains: the number of adaptions n.adapt, number of iterations n.iter, number of burn in n.burnin,
-#' number of thinning thin and number of chains n.chains, see \code{\link{jags.model}} arguments from rjags package.
+#' Each prior should be given a beta distribution with the two parameters as this for example 'dbeta(3,1)'.
+#' @param run.nrs A list is needed when the method to include NRS is set at 'prior'.
+#' The list consists of the follwoing (we assign a default for each element of the list): (\code{var.infl}) controls the inflation of the varaince of NRS estimates and its values range between 0 (the least confidence in NRS) and 1 (full confidence in NRS, default value).
+#' (\code{mean.shift}) is the bias shift to be added/subtracted from the estimated NRS parameters (0 is the default). Either (\code{var.infl}) or (\code{mean.shift}) should be provided but not both.
+#' and other arguments to control the MCMC chains (default value is in the parentheses): the number of adaptions n.adapt (500), number of iterations n.iter(10000), number of burn in n.burnin (4000),
+#' number of thinning thin (1) and number of chains n.chains (2), see \code{\link{jags.model}} arguments from rjags package.
 #' @return \code{crosnma.model} returns an object of class \code{crosnmaModel} which is a list containing the following components:
-#' @return \code{jags} - A long character string containing JAGS code that will be run in \code{\link{jags}}.
-#' @return \code{data} - The data used in the JAGS code.
-#' @return \code{trt.key} - Treatments mapped to integer numbers, used to run JAGS code.
-#' @return \code{covariate} - A list of the the names of the covariate variable in prt.data and std.data
-#' @return \code{trt.effect} - A string for the relationship within the study-specific treatment effects
-#' @return \code{method.bias} - A string for defining the method to combine randomised clinical trials (RCT) and non-randomised studies (NRS.
-#' @export crosnma.model
-#' @importFrom magrittr %>%
-#' @importFrom magrittr "%<>%"
-#' @importFrom plyr mapvalues
-#' @importFrom rlang quo
-#' @import dplyr
-#' @import ggplot2
-#' @import rjags
-#' @import tidyr
-#' @import coda
-#' @import netmeta
-#' @seealso \code{\link{crosnma.run}}, \code{\link{jags.model}}
-#' @example
+#' @return \code{jagsmodel}  A long character string containing JAGS code that will be run in \code{\link{jags}}.
+#' @return \code{data}  The data used in the JAGS code.
+#' @return \code{trt.key}  Treatments mapped to integer numbers, used to run JAGS code.
+#' @return \code{trt.effect} A string for the relationship within the study-specific treatment effects
+#' @return \code{method.bias}  A string for defining the method to combine randomised clinical trials (RCT) and non-randomised studies (NRS.
+#' @return \code{covariate}  A list of the the names of the covariate variable in prt.data and std.data
+#' @return \code{split.regcoef} A logical. If TRUE the within- (\eqn{\beta^W_{2,jk}}) and between-study (\eqn{\beta^B_{2,jk}}) coefficients will be splitted in the analysis of prt.data.
+#' @return \code{regb.effect} An optional character  indicating the relationship across studies for the between-study regression coefficient.
+#' @return \code{regw.effect} A character  indicating the relationship across studies for the within-study regression coefficient.
+#' @return \code{bias.effect} A character indicating the relationship for the bias coefficients, (\eqn{\gamma_{j}}), across studies.
+#' @return \code{bias.type} A charachter indicating the effect of bias in the treatment effect; additive ('add') or multiplicative ('mult') or both ('both').
+#' @examples
 #' # An example from simulated data on participant level and study level
 #' # data
 #' data(prt.data)
@@ -117,6 +100,21 @@
 #'  #=========================#
 #' summary(fit)
 #' plot(fit)
+#'
+#' @export crosnma.model
+#' @importFrom magrittr %>%
+#' @importFrom magrittr "%<>%"
+#' @importFrom plyr mapvalues
+#' @importFrom rlang quo
+#' @import dplyr
+#' @import ggplot2
+#' @import rjags
+#' @import tidyr
+#' @import coda
+#' @import netmeta
+#' @evalNamespace load.mix()
+#' @seealso \code{\link{crosnma.run}}, \code{\link{jags.model}}
+
 
 crosnma.model <- function(prt.data,
                        std.data,
@@ -151,13 +149,13 @@ crosnma.model <- function(prt.data,
                                   pi.low.nrs=NULL
                        ),
                        # ---------- when method.bias='prior' ----------
-                       run.nrs=list(var.infl=NULL,
-                                    mean.shift=NULL,
-                                    n.adapt = NULL,
-                                    n.iter=NULL,
-                                    n.burnin = NULL,
-                                    thin=NULL,
-                                    n.chains=NULL)
+                       run.nrs=list(var.infl=1,
+                                    mean.shift=0,
+                                    n.adapt = 500,
+                                    n.iter=10000,
+                                    n.burnin = 4000,
+                                    thin=1,
+                                    n.chains=2)
 ){
   options(warn=-1)
   # Bind variables to function
@@ -268,6 +266,7 @@ crosnma.model <- function(prt.data,
   if(!is.null(data11$bias)){if(!any(unique(data11$bias)%in%c('low','high','unclear'))) stop("bias values must be either low, high or unclear")}
 
   if(!is.null(method.bias)){if(is.null(bias)&(method.bias%in%c('adjust1','adjust2'))) stop("bias should be specified if method.bias = 'adjust1' or 'adjust2'")}
+  if(!is.null(method.bias)){if(is.null(bias.type)&(method.bias%in%c('adjust1'))) stop("bias.type should be specified if method.bias = 'adjust1'")}
   if(!is.null(data11)){if(any(!unique(data11$design)%in%c('rct','nrs'))) stop("For prt.data, design must be set to either 'rct' ( randomised clinical trials) or 'nrs' ( non-randomised studies)")}
   if(!is.null(data22)){if(any(!unique(data22$design)%in%c('rct','nrs'))) stop("For std.data, design must be set to either 'rct' ( randomised clinical trials) or 'nrs' ( non-randomised studies)")}
   if(!is.null(bias.type)){if(!(bias.type%in%c('add','mult','both')))stop("bias.type need to be set as 'add' (additive), 'mult' (multiplicative) or 'both' (additive and multiplicative)")}
@@ -699,9 +698,6 @@ crosnma.model <- function(prt.data,
   if(method.bias=='prior'){
     # data NRS
     if(!(reference %in% data1.nrs$trt)&!(reference %in% data2.nrs$trt)) stop("Reference treatment should be present in the list of treatments in NRS.")
-#
-#     if(!(run.nrs[["reference.nrs"]] %in% c(data1.nrs$trt,data2.nrs$trt))) stop("Reference treatment of NRS data is not available in the list of treatments.")
-
     trt.df.nrs <- data.frame(trt=unique(c(data1.nrs$trt,as.character(data2.nrs$trt))))
 
     trt.key.nrs <- trt.df.nrs$trt %>% unique %>% sort %>% tibble(trt.ini=.) %>%

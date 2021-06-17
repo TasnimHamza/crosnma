@@ -1,8 +1,11 @@
 ---
-title: "Cross-design and cross-data format synthesis using Network Meta-Analysis crosnma"
+title: "crosnma: using Network Meta-Analysis to synthesize cross-design evidence and cross-format data"
 author: "Tasnim Hamza and Georgia Salanti"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output:
+  html_document:
+    toc: true
+    number_sections: true
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
   %\VignetteEngine{knitr::rmarkdown}
@@ -18,7 +21,7 @@ knitr::opts_chunk$set(
 ```
 
 
-```{r setup}
+```{r}
 library(crosnma)
 ```
 
@@ -453,7 +456,7 @@ mod5 <- crosnma.model(prt.data=prt.data,
                    reference='A',
                    trt.effect='random',
                    #---------- bias adjustment ----------
-                   method.bias='adjust1',
+                   method.bias='adjust2',
                    bias=c('bias','bias'),
                    bias.type='add',
                    bias.effect='common',

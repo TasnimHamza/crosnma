@@ -1,4 +1,3 @@
-#!!! Think of what to monitor
 #' Run Generic NMA or NMR model for dichotomous outcomes
 #' @description Takes jags code from an object produced by \code{crosnma.model} and runs model using \code{jags}.
 #'
@@ -8,15 +7,55 @@
 #' @param n.iter Number of iterations for the mcmc chains.
 #' @param thin Thinning factor for the mcmc chains. Default is 1.
 #' @param n.chains Number of mcmc chains. Default is 3.
+#' @param quiet A logical. If TRUE, the warning message will not be displayed
 #' See \code{\link{jags.model}} for more info.
 #'
-#' @return \code{crosnma.run} returns an object of class \code{crosnmaRun} which is a list containing the following components:
+#' @return \code{crosnma.run} returns an object of class \code{crosrun} which is a list containing the following components:
 #' @return \code{samples} - The MCMC samples produced by running the BUGS model.
 #' @return \code{model} - The \code{BUGSnetModel} object obtained from \code{nma.model} which was used to run \code{jags}.
 #' @return \code{trt.key} - Treatments mapped to numbers, used to run BUGS code.
-#' @export
-#' @seealso \code{\link{crosnma.model}},\code{\link{jags.model}}
 #' @examples
+#' # An example from simulated data on participant level and study level
+#' # data
+#' data(prt.data)
+#' data(std.data)
+#'  #=========================#
+#'   # Create a jags model  #
+#'  #=========================#
+#'  # We conduct network meta-analysis assuming a random effect model.
+#'  # The data comes from randomised-controlled trials and non-randomised studies. They will be combined naively.
+#'  # The data has 2 different formats: individual participant data, prt.data, and study-level data, std.data.
+#' mod <- crosnma.model(prt.data=prt.data,
+#'                   std.data=std.data,
+#'                   trt=c('trt','trt'),
+#'                   study=c('study','study'),
+#'                   outcome=c('outcome','outcome'),
+#'                   n='n',
+#'                   design=c('design','design'),
+#'                   reference='A',
+#'                   trt.effect='random',
+#'                   covariate = NULL,
+#'                   method.bias='naive'
+#'                    )
+#'  #=========================#
+#'     # Fit jags model  #
+#'  #=========================#
+#' fit <- crosnma.run(model=mod,
+#'                 n.adapt = 20,
+#'                 n.iter=50,
+#'                 thin=1,
+#'                 n.chains=3)
+#'
+#'  #=========================#
+#'    # Display the output   #
+#'  #=========================#
+#' summary(fit)
+#' plot(fit)
+#'
+#'
+#' @seealso \code{\link{crosnma.model}},\code{\link{jags.model}}
+#' @export
+
 crosnma.run <- function(model,
                      n.adapt = 1000,
                      n.burnin = floor(n.iter / 2),

@@ -25,11 +25,13 @@ crosnma.run(
 
 \item{thin}{Thinning factor for the mcmc chains. Default is 1.}
 
-\item{n.chains}{Number of mcmc chains. Default is 3.
+\item{n.chains}{Number of mcmc chains. Default is 3.}
+
+\item{quiet}{A logical. If TRUE, the warning message will not be displayed
 See \code{\link{jags.model}} for more info.}
 }
 \value{
-\code{crosnma.run} returns an object of class \code{crosnmaRun} which is a list containing the following components:
+\code{crosnma.run} returns an object of class \code{crosrun} which is a list containing the following components:
 
 \code{samples} - The MCMC samples produced by running the BUGS model.
 
@@ -39,6 +41,46 @@ See \code{\link{jags.model}} for more info.}
 }
 \description{
 Takes jags code from an object produced by \code{crosnma.model} and runs model using \code{jags}.
+}
+\examples{
+# An example from simulated data on participant level and study level
+# data
+data(prt.data)
+data(std.data)
+ #=========================#
+  # Create a jags model  #
+ #=========================#
+ # We conduct network meta-analysis assuming a random effect model.
+ # The data comes from randomised-controlled trials and non-randomised studies. They will be combined naively.
+ # The data has 2 different formats: individual participant data, prt.data, and study-level data, std.data.
+mod <- crosnma.model(prt.data=prt.data,
+                  std.data=std.data,
+                  trt=c('trt','trt'),
+                  study=c('study','study'),
+                  outcome=c('outcome','outcome'),
+                  n='n',
+                  design=c('design','design'),
+                  reference='A',
+                  trt.effect='random',
+                  covariate = NULL,
+                  method.bias='naive'
+                   )
+ #=========================#
+    # Fit jags model  #
+ #=========================#
+fit <- crosnma.run(model=mod,
+                n.adapt = 20,
+                n.iter=50,
+                thin=1,
+                n.chains=3)
+
+ #=========================#
+   # Display the output   #
+ #=========================#
+summary(fit)
+plot(fit)
+
+
 }
 \seealso{
 \code{\link{crosnma.model}},\code{\link{jags.model}}

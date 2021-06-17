@@ -1,6 +1,4 @@
 #!!! works for MA !! modify the prior to add beta0 and beta.w only when IPD=T ????
-# beta.prior is just provided when ipd=T, need to be fixed
-#++ make two sperate tau.beta's: tau.beta1,  tau.beta2 and tau.beta3
 #+++ add deviance
 #!!! construct a DEFAULT prior, a simple way, d~dnorm (0, (10*max.delta)^-2)
 crosnma.code <- function(ipd = T,

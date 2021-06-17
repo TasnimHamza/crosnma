@@ -1,5 +1,5 @@
 ---
-title: "Cross-design and cross-data format synthesis using Network Meta-Analysis crosnma"
+title: "crosnma: using Network Meta-Analysis to synthesize cross-design evidence and cross-format data"
 author: "Tasnim Hamza and Georgia Salanti"
 date: "`r Sys.Date()`"
 output: 
@@ -13,7 +13,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = ALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -21,8 +21,10 @@ knitr::opts_chunk$set(
 ```
 
 
-```{r setup}
+```{r mm}
 library(crosnma)
+# library(rjags)
+# load.module('mix')
 ```
 
 # Introduction 
@@ -240,9 +242,9 @@ Next, we fit the NMA model using `crosnma.run()`which requires the number of ada
 ```{r}
 # run jags
 jagsfit1 <- crosnma.run(model=mod1,
-                        n.adapt = 200,
-                        n.iter=10000,
-                        n.burnin = 4000,
+                        n.adapt = 20,
+                        n.iter=100,
+                        n.burnin = 40,
                         thin=1,
                         n.chains=2)
 ```
@@ -294,9 +296,9 @@ The MCMC is run under the same set up as in the naive model.
 ```{r}
 # run jags
 jagsfit2 <- crosnma.run(model=mod2,
-                        n.adapt = 200,
-                        n.iter=10000,
-                        n.burnin = 4000,
+                        n.adapt = 20,
+                        n.iter=100,
+                        n.burnin = 40,
                         thin=1,
                         n.chains=2)
 ```
@@ -355,9 +357,9 @@ The MCMC is run under the same set up as in the naive model.
 ```{r}
 # run jags
 jagsfit3 <- crosnma.run(model=mod3,
-                        n.adapt = 200,
-                        n.iter=10000,
-                        n.burnin = 4000,
+                        n.adapt = 20,
+                        n.iter=100,
+                        n.burnin = 40,
                         thin=1,
                         n.chains=2)
 ```
@@ -415,9 +417,9 @@ mod4 <- crosnma.model(prt.data=prt.data,
 ```{r}
 # run jags
 jagsfit4 <- crosnma.run(model=mod4,
-                        n.adapt = 200,
-                        n.iter=10000,
-                        n.burnin = 4000,
+                       n.adapt = 20,
+                        n.iter=100,
+                        n.burnin = 40,
                         thin=1,
                         n.chains=2)
 ```
@@ -456,7 +458,7 @@ mod5 <- crosnma.model(prt.data=prt.data,
                    reference='A',
                    trt.effect='random',
                    #---------- bias adjustment ----------
-                   method.bias='adjust1',
+                   method.bias='adjust2',
                    bias=c('bias','bias'),
                    bias.type='add',
                    bias.effect='common',
@@ -476,9 +478,9 @@ mod5 <- crosnma.model(prt.data=prt.data,
 ```{r}
 # run jags
 jagsfit5 <- crosnma.run(model=mod5,
-                        n.adapt = 200,
-                        n.iter=10000,
-                        n.burnin = 4000,
+                       n.adapt = 20,
+                        n.iter=100,
+                        n.burnin = 40,
                         thin=1,
                         n.chains=2)
 ```
