@@ -2,7 +2,7 @@
 % Please edit documentation in R/crosnma.run.R
 \name{crosnma.run}
 \alias{crosnma.run}
-\title{Run Generic NMA or NMR model for dichotomous outcomes}
+\title{Run NMA or NMR model to cross-synthesis in NMA and NMR for dichotomous outcomes}
 \usage{
 crosnma.run(
   model,
@@ -10,7 +10,7 @@ crosnma.run(
   n.burnin = floor(n.iter/2),
   n.iter,
   thin = 1,
-  n.chains = 3,
+  n.chains = 2,
   quiet = TRUE
 )
 }
@@ -23,9 +23,9 @@ crosnma.run(
 
 \item{n.iter}{Number of iterations for the mcmc chains.}
 
-\item{thin}{Thinning factor for the mcmc chains. Default is 1.}
+\item{thin}{Number of thinning for the mcmc chains. Default is 1.}
 
-\item{n.chains}{Number of mcmc chains. Default is 3.}
+\item{n.chains}{Number of mcmc chains. Default is 2.}
 
 \item{quiet}{A logical. If TRUE, the warning message will not be displayed
 See \code{\link{jags.model}} for more info.}
@@ -33,26 +33,26 @@ See \code{\link{jags.model}} for more info.}
 \value{
 \code{crosnma.run} returns an object of class \code{crosrun} which is a list containing the following components:
 
-\code{samples} - The MCMC samples produced by running the BUGS model.
+\code{samples}  The MCMC samples produced by running the BUGS model.
 
-\code{model} - The \code{BUGSnetModel} object obtained from \code{nma.model} which was used to run \code{jags}.
+\code{model}  The \code{crosnmaModel} object obtained from \code{crosnma.model} which was used to run \code{jags}.
 
-\code{trt.key} - Treatments mapped to numbers, used to run BUGS code.
+\code{trt.key}  A Table of the treatments and its mapped integer number (used in JAGS model).
 }
 \description{
-Takes jags code from an object produced by \code{crosnma.model} and runs model using \code{jags}.
+Takes jags model from an object produced by \code{crosnma.model} and runs model using \code{jags}.
 }
 \examples{
-# An example from simulated data on participant level and study level
+# An example from participant-level data and study-level data.
 # data
 data(prt.data)
 data(std.data)
  #=========================#
   # Create a jags model  #
  #=========================#
- # We conduct network meta-analysis assuming a random effect model.
+ # We conduct a network meta-analysis assuming a random effect model.
  # The data comes from randomised-controlled trials and non-randomised studies. They will be combined naively.
- # The data has 2 different formats: individual participant data, prt.data, and study-level data, std.data.
+ # The data has 2 different formats: individual participant data (prt.data) and study-level data (std.data).
 mod <- crosnma.model(prt.data=prt.data,
                   std.data=std.data,
                   trt=c('trt','trt'),

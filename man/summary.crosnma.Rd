@@ -11,8 +11,7 @@
 
 \item{digits}{The number of significant digits printed. The default value is 3.}
 
-\item{quantiles}{A numeric vector of probabilities with values in [0,1]. The default value is
-intervals = c(0.025, 0.5, 0.975).}
+\item{quantiles}{A numeric vector of probabilities. The default value is c(0.025, 0.5, 0.975).}
 
 \item{expo}{A logical indicating whether to expontiate the parameters of relative treatment effect and covariate effect}
 
