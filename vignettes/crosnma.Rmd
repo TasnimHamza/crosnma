@@ -1,5 +1,5 @@
 ---
-title: "crosnma: using Network Meta-Analysis to synthesize cross-design evidence and cross-format data"
+title: "crosnma for synthesize Cross-design evidence and Cross-format  data using Network Meta-Analysis"
 author: "Tasnim Hamza and Georgia Salanti"
 date: "`r Sys.Date()`"
 output: 
@@ -23,25 +23,27 @@ knitr::opts_chunk$set(
 
 ```{r mm}
 library(crosnma)
-# library(rjags)
-# load.module('mix')
+library(rjags)
+load.module('mix')
 ```
 
 # Introduction 
-Network meta-analysis (NMA) is a common tool to compare multiple interventions simultaneously. This requires synthesize the available evidence that might come as different study design or data format. As different study designs, the evidence can be obtained from non-randomized studies (NRS) or randomized controlled trials (RCT). RCT evidence quality is considered the highest and at a lower risk of bias, however, the restricted settings when RCTs are conducted limit the generalizability of their results. Therefore, combining RCT and NRS evidence in NMA may help overcome some of the limitations. Such evidence can be accessible in different data formats as individual participant data (IPD) or aggregate data (AD). We establish a cross-design and cross-data format package (`crosnma`) to utilize all available and relevant evidence.
+In network meta-analysis we synthesize all relevant available evidence about health outcomes from competing treatments. That evidence might come from different study designs and in different formats: from non-randomized studies (NRS) or randomized controlled trials (RCT) as individual participant data (IPD) or as aggregate data (AD). We establish the (`crosnma`) package to utilize all available evidence.
 
-We describe the R package `crosnma` in a worked example about relapsing remitting multiple sclerosis (RRMS). The primary outcome is the occurrence of relapses in two years (binary outcome, 0/1). In the analysis, the outcome will be expressed as odds ratio (OR). The aim is to compare the efficacy of four treatments. Data is available from 6 different studies in different formats and different designs. 
+This document demonstrates how to use `crosnma` to perform a synthesize from cross-design evidence and cross-format data. The package has been developed for conducting Bayesian network meta-analysis and meta-regression. All models are implemented in JAGS.
+
+We describe the workflow within the package using a worked example about relapsing remitting multiple sclerosis (RRMS). The primary outcome is the occurrence of relapses in two years (binary outcome, 0/1). In the analysis, the outcome will be expressed as odds ratio (OR). The aim is to compare the efficacy of four treatments using the data from 6 different studies in different formats and different designs. 
 
 # The synthesis model of individual participant data (IPD) and aggregate data (AD)
 
-We introduce the model to synthesis individual participant data (IPD) and aggregate data (AD). Each data format could come from randomized clinical trials (RCT) or non-randomized studies (NRS). These two designs could be combined in one of four different methods. We describe the four synthesis models for network meta-regression. However, we can run the network meta-analysis by decline the covariates terms from the models. Let's begin by setting the notations that will be used in the description of the models. 
+We introduce the model to synthesis RCT and NRS where each one can be either available on individual-level (IPD) or/and on study-level (AD). We describe the four synthesis models for network meta-regression. However, we can run network meta-analysis by declining covariate terms from the models. Let's begin by setting the notations that will be used in the description of the four models. 
 
 | Notation 	| Description| Argument in `crosnma.model()`| 
 |:-------------------|:-----------|:------|
 |$i=1, ..., np_j$ | participant id|  |
 |$j=1, ..., ns$ | study id|  |
 |$k=1, ..., K$ | treatment index|  |
-|$ns_{IPD}, ns_{AD}, ns_{RCT}, ns_{NRS}$| number of studies with index denote the design or format of the study|  |
+|$ns_{IPD}, ns_{AD}, ns_{RCT}, ns_{NRS}$| the number of studies. The index refers to the design or format of the study|  |
 |$y_{ijk}$ | binary outcome (0/1)| `outcome` |
 |$p_{ijk}$ | probability of the event to occur| |
 |$r_{jk}$ | the number of events per arm| `outcome` |
@@ -51,14 +53,14 @@ We introduce the model to synthesis individual participant data (IPD) and aggreg
 |$\delta_{jk}$|log(OR) of treatment k relative to $b$||
 |$x_{ijk}$|the covariate|`covariate`|
 |$\bar{x}_{j}$|the mean covariate for study $j$||
-|$d_{Ak}$| the basic parameters, $d_{AA}=0$ (A is the reference in the network)|use `reference` to assign the reference treatment $A$|
+|$d_{Ak}$| the basic parameters. Here, $d_{AA}=0$ when A set as the reference in the network|use `reference` to assign the reference treatment|
 |$z_j$| study characteristics to estimate the bias probability $\pi_j$| `bias.covariate` |
 |$w_j$| inflation factor of variance for the NRS estimates | the element `var.infl` in `run.nrs`|
 |$\vartheta_j$| mean shift of the NRS estimates | the element `mean.shift` in `run.nrs`|
-*it is assigned automatically to the reference in the network ($A$), if it is available on the study. If not, it is assigned automatically to the first alphabetically treatment on the study
+*If the reference in the network ($A$) is available on the study, it is assigned automatically to that reference.  If not, it is assigned to the first alphabetically ordered treatment on the study.
 
 ## Naive synthesis
-We synthesis the evidence from RCT and NRS without acknowledging the differences between them. For both of them, we model the IPD data and the AD data as the following, see Section 2.2.1 in [@hamza_2021].
+We synthesis the evidence from RCT and NRS without acknowledging the differences between them. We combine the IPD data from RCT and NRS in one model and we do the same in another model with the AD information. Then, we combine the estimates from both parts as described in Section 2.5. See the full details in Section 2.2.1 in @hamza_2021.
 
 **model IPD only**
 
@@ -68,9 +70,9 @@ $$
 \begin{equation}
   logit(p_{ijk}) =
     \begin{cases}
-      u_j +\beta_{1,j} x_{ijk} & \text{if $k=b$}\\
-      u_j +\delta_{jk} + (\beta_{1,j}+\beta^w_{2,jk}) x_{ijk}+
- (\beta^B_{2,jk}-\beta^w_{2,jk}) \bar{x}_{.j} & \text{if $k≠b$}
+      u_j +\beta_{0,j} x_{ijk} & \text{if $k=b$}\\
+      u_j +\delta_{jk} + (\beta_{0,j}+\beta^w_{1,jk}) x_{ijk}+
+ (\beta^B_{1,jk}-\beta^w_{1,jk}) \bar{x}_{.j} & \text{if $k≠b$}
     \end{cases}       
 \end{equation}
 
@@ -82,17 +84,17 @@ $$
   logit(p_{jk}) =
     \begin{cases}
       u_j  & \text{if $k=b$}\\
-      u_j +\delta_{jk} +\beta^B_{2,jk} \bar{x}_{j} & \text{if $k≠b$}
+      u_j +\delta_{jk} +\beta^B_{1,jk} \bar{x}_{j} & \text{if $k≠b$}
     \end{cases}       
 \end{equation}
 
 ## Using non-randomized studies (NRS) as a prior
 
-First we estimate the relative treatment effects using only the NRS (use `run.nrs` in `crosnma.model()` to control the process). Second, we use the NRS estimates ($\hat{d}^{NRS}_{Ak},\hat{V}^{NRS}_{Ak}$) as a prior information for the basic parameters of RCT data, $d_{Ak} \sim N(\hat{d}^{NRS}_{Ak},\hat{V}^{NRS}_{Ak})$. To control the NRS influence in the RCT estimates, we can either inflate the NRS variance by dividing by $w_j$ (the inflated variance is $\hat{V}^{NRS}_{Ak}/w_j$) or shift the NRS means by $\vartheta$.
+First we estimate the relative treatment effects using only the NRS (use `run.nrs` in `crosnma.model()` to control this process). Second, we use the NRS estimates ($\hat{d}^{NRS}_{Ak},\hat{V}^{NRS}_{Ak}$) as a prior information for the basic parameters of RCT data, $d_{Ak} \sim N(\hat{d}^{NRS}_{Ak},\hat{V}^{NRS}_{Ak})$. To control the NRS influence in the RCT estimates, we can either inflate the NRS variance by dividing by $w_j$ (the inflated variance is $\hat{V}^{NRS}_{Ak}/w_j$) or shift the NRS means by $\vartheta$.
 
-## Risk of Bias-adjusted model 1
+## Bias-adjusted model 1
 
-We incorporate the risk of bias (RoB) into the IPD and the AD models by adding the bias term $\gamma_j R_j$ to each one of them as follows:
+We incorporate the risk of bias (RoB) into the IPD and the AD models by adding the bias term $\gamma_j R_j$ to both models as follows:
 
 **model IPD only**
 
@@ -102,9 +104,9 @@ $$
 \begin{equation}
   logit(p_{ijk}) =
     \begin{cases}
-      u_j +\beta_{1,j} x_{ijk} & \text{if $k=b$}\\
-      u_j +\delta_{jk} + (\beta_{1,j}+\beta^w_{2,jk}) x_{ijk}+
- (\beta^B_{2,jk}-\beta^w_{2,jk}) \bar{x}_{.j}+\gamma_j R_j & \text{if $k≠b$}
+      u_j +\beta_{0,j} x_{ijk} & \text{if $k=b$}\\
+      u_j +\delta_{jk} + (\beta_{0,j}+\beta^w_{1,jk}) x_{ijk}+
+ (\beta^B_{1,jk}-\beta^w_{1,jk}) \bar{x}_{.j}+\gamma_j R_j & \text{if $k≠b$}
     \end{cases}       
 \end{equation}
 
@@ -117,7 +119,7 @@ $$
     \begin{cases}
       u_j  & \text{if $k=b$}\\
       u_j +\delta_{jk} +
- \beta^B_{2,jk} \bar{x}_{j}+\gamma_j R_j & \text{if $k≠b$}
+ \beta^B_{1,jk} \bar{x}_{j}+\gamma_j R_j & \text{if $k≠b$}
     \end{cases}       
 \end{equation}
 
@@ -128,9 +130,9 @@ R_j \sim Bernoulli(\pi_j)
 $$
 
 
-## Risk of Bias-adjusted model 2
+## Bias-adjusted model 2
 
-Another way to incorporate the study RoB is by adding the bias adjusted relative treatment effect $\theta_{jk}$ instead of the unadjusted one $\delta_{jk}$. Then to model $\theta_{jk}$ by a bi-modal normal distribution as in Table 2 below. We estimate the bias probability $\pi_j$ by either assigning a beta distribution or by using a study characteristics $z_j$ through a logistic transformation. 
+Another way to incorporate the RoB of the study is by replacing \delta_{jk} by the bias-adjusted relative treatment effect $\theta_{jk}$. Then $\theta_{jk}$ is modeled by a bimodal normal distribution as described in Table 2. We can estimate the bias probability $\pi_j$ by either assigning a beta distribution or by using the study characteristics $z_j$ through a logistic transformation, see Table 2. 
 
 **model IPD only**
 
@@ -140,9 +142,9 @@ $$
 \begin{equation}
   logit(p_{ijk}) =
     \begin{cases}
-      u_j +\beta_{1,j} x_{ijk} & \text{if $k=b$}\\
-      u_j +\theta_{jk} + (\beta_{1,j}+\beta^w_{2,jk}) x_{ijk}+
- (\beta^B_{2,jk}-\beta^w_{2,jk}) \bar{x}_{j} & \text{if $k≠b$}
+      u_j +\beta_{0,j} x_{ijk} & \text{if $k=b$}\\
+      u_j +\theta_{jk} + (\beta_{0,j}+\beta^w_{1,jk}) x_{ijk}+
+ (\beta^B_{1,jk}-\beta^w_{1,jk}) \bar{x}_{j} & \text{if $k≠b$}
     \end{cases}       
 \end{equation}
 
@@ -154,13 +156,13 @@ $$
   logit(p_{jk}) =
     \begin{cases}
       u_j & \text{if $k=b$}\\
-      u_j +\theta_{jk} +\beta^B_{2,jk} \bar{x}_{j} & \text{if $k≠b$}
+      u_j +\theta_{jk} +\beta^B_{1,jk} \bar{x}_{j} & \text{if $k≠b$}
     \end{cases}       
 \end{equation}
 
 ## Assumptions about the model parameters
 
-The table below summarizes the different assumptions implemented in the package about combining the parameters in the model described the previous section. 
+The table below summarizes the different assumptions implemented in the package about combining the parameters in the four model described above. 
 
 | Parameter 	| Assumptions| Argument in `crosnma.model()`|  	
 |:----------------------|:-----------|:------|
@@ -179,26 +181,30 @@ The table below summarizes the different assumptions implemented in the package 
 || $\pi_j = a+bz_j$|  |
 
 # Application to the analysis of a network of studies comparing drugs for relapsing-remitting multiple sclerosis
-The data sets have 6 studies. These studies are either available as study-level data `std.data` (2 studies) or as individual participant data `prt.data` (four studies). The `prt.data` have been manipulated by re-sampling from the original data set. Three of the `prt.data` are RCTs and one comes from an observational study (NRS). The two `std.data` are RCTs. Both datasets consist of four drugs which are anonymized.
+Both datasets have 6 studies. These studies are either available as study-level data `std.data` (2 studies) or as individual participant data `prt.data` (four studies). The `prt.data` have been manipulated by re-sampling from the original data set. Three of the `prt.data` are RCTs and one comes from an observational study (NRS). The two `std.data` are RCTs. Both datasets consist of four drugs which are anonymized.
 
-The `prt.data` contains 2950 rows, each refers to a participant in the study. We display the first few rows of the data set:
+The `prt.data` contains 2950 rows, each row refers to a participant in the study. We display the first few rows of the data set:
 
 ```{r}
 head(prt.data)
 ```
 
-For each participant, we have information for the occurrence of the relapses (0=no, 1=yes) `outcome`, the treatment label `trt`, the age (in years) `age` and  sex (0 = Female, 1 = Male) `sex` of the participant. The following columns are set on study-level (it is repeated for each participant of the study): the study id `study`, the design of the study (needs to be either rct or nrs) `design`, the risk of bias on each study (set as low, high or unclear) `bias` and the year of publication `year`.
+For each participant, we have information for the occurrence of the relapses (0=no, 1=yes) `outcome`, the treatment label `trt`, the age (in years) `age` and  sex (0 = Female, 1 = Male) `sex` of the participant. The following columns are set on study-level (it is repeated for each participant of the study): the study id `study`, the design of the study (needs to be either rct or nrs) `design`, the risk of bias on each study (can be set as low, high or unclear) `bias` and the year of publication `year`.
 
-We display the full data that is available on study-level:
+We display the full study-level data:
+
 ```{r}
 head(std.data)
 ```
+
 For all studies, we provide the following information on each arm level: the total number of participants `n` and the number of those who relapsed `outcome`, the treatment label `trt`. At study-level, we have the study id `study`, the design of the study `design`, the mean age `age`, the percentage of males `sex`, the risk of bias on the study `bias` and the year of publication `year`.
 
 **Check network connectivity**
+
 The network should be checked for its connectivity before running the analysis. This is a vital step as the model will run even if the network is not connected.
 
 *Network plot*
+
 ```{r}
 netplot(prt.data,std.data)
 ```
@@ -212,13 +218,14 @@ knitr::kable(ns.tab(prt.data,std.data))
 ```
 
 #  R implementation
+
 There are two steps to run the NMA/NMR model. The first step is to create JAGS model using `crosnma.model()` which creates the JAGS code and the data. In the second step, the output of that function will be used in `crosnma.run()` to run the analysis through JAGS [@plummer_jags]. 
 
 ## Naïve synthesis
 ### Naïve network meta-analysis 
 **Set up JAGS model**
 
-We start by indicating the names of the datasets on participant- (`prt.data`) and study-level (`std.data`). Then, the name of the variables on each dataset needs to be given respectively in `prt.data` and `std.data`.  Next, the `reference` treatment needs to be assigned ( drug A). By choosing `trt.effect=random`, we assign a normal distribution to each relative treatment effect across studies, see the table in Section 2.1. Finally, the different designs; RCT and NRS are combined with the information taken at face-value; `method.bias = 'naive'`.
+We start by indicating the names of the datasets on participant- (`prt.data`) and study-level (`std.data`). Then, the name of the variables on each dataset needs to be given respectively in `prt.data` and `std.data`.  Next, the `reference` treatment needs to be assigned (we set it to drug A). By choosing `trt.effect=random`, we are assigning a normal distribution to each relative treatment effect to allow the synthesis across studies, see the table in Section 2.1. Finally, the different designs; RCT and NRS are combined with the information taken at face-value; `method.bias = 'naive'`.
 
 ```{r}
 # jags model: code+data
@@ -237,7 +244,7 @@ We start by indicating the names of the datasets on participant- (`prt.data`) an
 
 **Run JAGS**
 
-Next, we fit the NMA model using `crosnma.run()`which requires the number of adaptations, iterations, thinning and chains to be set.
+Next, we fit the NMA model using `crosnma.run()`which requires us to set the number of adaptations, iterations, thinning and chains.
 
 ```{r}
 # run jags
@@ -259,14 +266,17 @@ We summarize the estimated parameters in the following table.
 knitr::kable(summary(jagsfit1,expo=T))
 ```
 
+The estimated parameters are: exp(d.B) which is the estimated OR of B vs A, exp(d.C) and exp(d.D) are the OR of C and D relative to A, respectively. tau refers to the estimates of the heterogeneity standard deviation in the relative treatment effect across studies.
+
 *Trace plot of estimates*
+We need also to check the convergence of the MCMC chains, for example, by visually inspecting the trace plot.
 
 ```{r}
 coda::traceplot(jagsfit1$samples)
 ```
 
-### Network meta regression 
-In this part, we run NMR model by adding sex and age as covariates from both datasets. We set a list of 2 covariates in `prt.data` and `std.data`, respectively, `covariate=list(c('age'),c('age'))`. The first element in the list indicates the names of the covariate column in `prt.data` and the second element refers to the corresponding names in `std.data`.
+### Naïve network meta-regression 
+In this part, we run NMR model by adding age as a covariate from both datasets. We set a list of 2 covariates in `prt.data` and `std.data`, respectively, `covariate=list(c('age'),c('age'))`. The first element in the list indicates the names of the covariate column in `prt.data` and the second element refers to the corresponding names in `std.data`.
 
 **Set up JAGS model**
 
@@ -311,7 +321,7 @@ jagsfit2 <- crosnma.run(model=mod2,
 knitr::kable(summary(jagsfit2))
 ```
 
-The estimated parameters are: exp(d.B) is the estimated OR of B vs A, exp(d.C) and exp(d.D) are the OR of C and D relative to A, respectively. The parameter b_1 is the coefficient of the age and tau estimates the heterogeneity standard deviation in the relative treatment effect across studies. Finally, tau.b_1 refers to the heterogeneity standard deviation for the age effect. 
+Here, we additionally get the estimate of b_1 which indicates the mean effect of age and tau.b_1 which refers to the heterogeneity standard deviation in the effect of age across studies. 
 
 *Trace plot of estimates*
 
@@ -326,10 +336,11 @@ To combine both designs, we use NRS evidence to construct a prior for the relati
 
 In this case, two additional arguments are needed to control combining RCT and NRS.
 
-1.  We indicate using NRS as prior by setting ` method.bias='prior'`.  
-1. This means that a NMA is initially run with only NRS data. This requires the following MCMC settings: the number of adaptations, iterations, burn-ins, thinning and chains. 
+1. We indicate using NRS as prior by setting ` method.bias='prior'`.  
+1. That means we need to run NMA with only NRS data. This requires the following MCMC settings: the number of adaptations, iterations, burn-ins, thinning and chains, assigned to ` run.nrs`. 
 
-In this method, the prior for the basic parameters is set to a normal distribution that is either a minimally informative prior `d~dnorm(0, 1e-4)` (for those comparisons for which we don't have NRS ) or the NRS mean and variance of the effects estimated in the NRS.  The mean can be shifted by `mean.shift` to reflect the potential bias in NRS and/or the variance can be inflated by `var.infl` to control the influence of NRS on the final estimation. 
+In this method, the prior for the basic parameters is set to a normal distribution that is either a minimally informative prior `d~dnorm(0, 1e-4)` (for those comparisons for which we don't have NRS ) or the NRS mean and variance of the effects estimated in the NRS.  The mean can be shifted by `mean.shift` to reflect the potential bias in NRS and/or the variance can be inflated by `var.infl` to control the influence of NRS on the final estimation. Both should be provided in ` run.nrs`.
+
 ```{r}
 # jags model: code+data
 mod3 <- crosnma.model(prt.data=prt.data,
@@ -351,8 +362,6 @@ mod3 <- crosnma.model(prt.data=prt.data,
 ```
 
 **Run JAGS**
-
-The MCMC is run under the same set up as in the naive model.
 
 ```{r}
 # run jags
@@ -379,12 +388,14 @@ coda::traceplot(jagsfit3$samples)
 ```
 
 
-## Risk of Bias-adjusted model 1
-In this part, we run again the NMR model using `sex` and `age` as covariates. But now, the overall relative treatment effects are estimated from both NRS and RCT with adjustment to study-specific bias following the method introduced by [@dias_2010] and extended here; see also Section 2.3 above.
+##   Bias-adjusted model 1
+In this part, the overall relative treatment effects are estimated from both NRS and RCT with adjustment to study-specific bias following the method introduced by [@dias_2010] and extended here; see also Section 2.3 above.
 
 **Set up JAGS model**
 
-We provide the name of the bias variable `bias=c('bias','bias')` in `prt.data` and `std.data`, respectively. The first element of the vector refers to the column name of bias in `prt.data` and the second in `std.data`. By default, the effect of bias is assumed to be additive `bias.type='add'` and equal across studies `bias.effect='common'`. Optionally, we can give a list of the different priors to control the estimates of the various model parameters. Here, we set a uniform distribution to the common heterogeneity of the treatment effect across studies, `tau.trt='dunif(0,3)'`. We also set beta distribution (${Beta(a,b)}$) as priors for the probability of bias on each study. The default priors are as follows: high bias RCT `pi.high.rct='dbeta(5,1)'`, low bias RCT `pi.low.rct='dbeta(1,20)'`,high bias NRS `pi.high.nrs='dbeta(30,1)'` and low bias NRS `pi.low.nrs='dbeta(1,2)'`.  The ratio ${a/b}$ controls the skewness of the beta distribution.  The closer to 1 the ratio a/b, the more the mean of probability of bias gets closer to 1 and the study acquires 'major' bias adjustment.
+We provide the name of the bias variable `bias=c('bias','bias')` in `prt.data` and `std.data`, respectively. The first element of the vector refers to the column name of bias in `prt.data` and the second in `std.data`. By default, the effect of bias is assumed to be additive `bias.type='add'` and equal across studies `bias.effect='common'`. 
+
+Optionally, we can give a list of the different priors to control the estimates of the various model parameters. Here, we set a uniform distribution to the common heterogeneity of the treatment effect across studies, `tau.trt='dunif(0,3)'`. We also set a beta distribution (${Beta(a,b)}$) as priors for the probability of bias on each study. The default priors are as follows: high bias RCT `pi.high.rct='dbeta(5,1)'`, low bias RCT `pi.low.rct='dbeta(1,20)'`, high bias NRS `pi.high.nrs='dbeta(30,1)'` and low bias NRS `pi.low.nrs='dbeta(1,2)'`. The ratio ${a/b}$ controls the skewness of the beta distribution.  The closer to 1 the ratio a/b, the more the mean of probability of bias gets closer to 1 and the study acquires 'major' bias adjustment.
 
 ```{r}
 # jags model: code+data
@@ -432,6 +443,8 @@ jagsfit4 <- crosnma.run(model=mod4,
 knitr::kable(summary(jagsfit4))
 ```
 
+The parameter `g` refers to the mean bias effect on each study.
+
 *Trace plot of estimates*
 
 ```{r}
@@ -439,12 +452,11 @@ coda::traceplot(jagsfit4$samples)
 ```
 
 
-
-## Risk of Bias-adjusted model 2
+##   Bias-adjusted model 2
 
 **Set up JAGS model**
 
-The arguments for `method.bias='adjust2'` are similar to the ones used above for `method.bias='adjust1'`. However, there are two main differences between the two adjustment models. First, in `'adjust2'`, the relative treatment effects are modeled with a bi-modal normal distribution instead of a univariate normal distribution as in  `'adjust1'` method. Second, the study-probability of bias can be predicted by covariates, such as for example the a year of study publication. These can be set as `bias.covariate = c('year','year')` and via a logistic model they will be linked to the bias probabilities in `'adjust2'`. In `'adjust1'`, instead we assume  a (${Beta(a,b)}$) to estimate the probability of bias. For more details see [@verde_2020] and our extension in Section 2.4.
+The arguments for `method.bias='adjust2'` are similar to the ones used before in `method.bias='adjust1'`. The only additional argument is `bias.covariate = c('year','year')` which indicates using the year of study publication to estimate the study-probability of bias. The bias probabilities will be linked to  `year` through logistic model ( internally coded). For more details see [@verde_2020] and our extension in Section 2.4.
 
 ```{r}
 # jags model: code+data
