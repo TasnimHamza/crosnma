@@ -1,6 +1,7 @@
 # 1. check if it works only for IPD: YES
 devtools::install_github("TasnimHamza/crosnma",force = TRUE)
 devtools::load_all()
+
 library(crosnma)
 netplot(prt.data,std.data)
 # jags model: code+data

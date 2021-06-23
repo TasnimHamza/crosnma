@@ -37,6 +37,7 @@ jagsfit1 <- crosnma.run(model=mod1,
 summary(jagsfit1,expo=T)
 coda::traceplot(jagsfit1$samples)
 
+mean(prt.data$sex[prt.data$study==3])
 #-------- 2. Naive NMR --------#
 # jags model: code+data
 mod2 <- crosnma.model(prt.data=prt.data,
@@ -50,17 +51,17 @@ mod2 <- crosnma.model(prt.data=prt.data,
                       trt.effect='random',
                       #----------  meta-regression ----------
                       covariate = list(c('age'),c('age')),
-                      split.regcoef = F,
+                      split.regcoef = T,
                       #---------- bias adjustment ----------
                       method.bias='naive'
 )
 # run jags
 jagsfit2 <- crosnma.run(model=mod2,
-                        n.adapt = 20,
-                        n.iter=100,
-                        n.burnin = 40,
+                        n.adapt = 500,
+                        n.iter=10000,
+                        n.burnin = 4000,
                         thin=1,
-                        n.chains=2)
+                        n.chains=3)
 # output
 summary(jagsfit2,expo=T)
 coda::traceplot(jagsfit2$samples)
@@ -76,6 +77,9 @@ mod3 <- crosnma.model(prt.data=prt.data,
                       design=c('design','design'),
                       reference='A',
                       trt.effect='random',
+                      #----------  meta-regression ----------
+                      covariate = list(c('age'),c('age')),
+                      split.regcoef = F,
                       #---------- bias adjustment ----------
                       method.bias='prior',
                       run.nrs=list(n.adapt = 10,
@@ -84,11 +88,11 @@ mod3 <- crosnma.model(prt.data=prt.data,
                                    thin=1,
                                    n.chains=2))
 
-# run jags
+cat(mod3$jagsmodel)# run jags
 jagsfit3 <- crosnma.run(model=mod3,
-                        n.adapt = 20,
-                        n.iter=100,
-                        n.burnin = 40,
+                        n.adapt = 200,
+                        n.iter=10000,
+                        n.burnin = 4000,
                         thin=1,
                         n.chains=2)
 
@@ -108,26 +112,22 @@ mod4 <- crosnma.model(prt.data=prt.data,
                       design=c('design','design'),
                       reference='A',
                       trt.effect='random',
+                      #----------  meta-regression ----------
+                      covariate = list(c('sex'),c('sex')),
+                      split.regcoef = T,
                       #---------- bias adjustment ----------
                       method.bias='adjust1',
                       bias=c('bias','bias'),
                       bias.type='add',
-                      bias.effect='common',
-                      #---------- assign a prior ----------
-                      prior=list(tau.trt='dunif(0,1)',
-                                 pi.high.rct='dbeta(5,1)',
-                                 pi.low.rct='dbeta(1,2)',
-                                 pi.high.nrs='dbeta(30,1)',
-                                 pi.low.nrs='dbeta(1,20)'
-                      )
+                      bias.effect='common'
 )
 # run jags
 jagsfit4 <- crosnma.run(model=mod4,
-                        n.adapt = 20,
-                        n.iter=100,
-                        n.burnin = 40,
+                        n.adapt = 500,
+                        n.iter=10000,
+                        n.burnin = 4000,
                         thin=1,
-                        n.chains=2)
+                        n.chains=3)
 # output
 summary(jagsfit4,expo=T)
 coda::traceplot(jagsfit4$samples)

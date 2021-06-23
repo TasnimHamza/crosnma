@@ -1,19 +1,19 @@
-#' Run NMA or NMR model to cross-synthesis in NMA and NMR for dichotomous outcomes
-#' @description Takes jags model from an object produced by \code{crosnma.model} and runs model using \code{jags}.
+#' Run JAGS to synthesize cross-design evidence and cross-format data in NMA and NMR for dichotomous outcomes
+#' @description Takes the JAGS model from an object produced by \code{crosnma.model} and runs it using \code{jags} package.
 #'
-#' @param model A \code{crosnmaModel} object produced by running \code{crosnma.model}.
-#' @param n.adapt Number of adaptations for the mcmc chains.
-#' @param n.burnin Number of burnin iterations for the mcmc chains.
-#' @param n.iter Number of iterations for the mcmc chains.
-#' @param thin Number of thinning for the mcmc chains. Default is 1.
-#' @param n.chains Number of mcmc chains. Default is 2.
+#' @param model A \code{crosnmaModel} object produced by \code{crosnma.model}.
+#' @param n.adapt Number of adaptations for the MCMC chains.
+#' @param n.burnin Number of burnin iterations for the MCMC chains.
+#' @param n.iter Number of iterations for the MCMC chains.
+#' @param thin Number of thinning for the MCMC chains. Default is 1.
+#' @param n.chains Number of MCMC chains. Default is 2.
 #' @param quiet A logical. If TRUE, the warning message will not be displayed
 #' See \code{\link{jags.model}} for more info.
 #'
 #' @return \code{crosnma.run} returns an object of class \code{crosrun} which is a list containing the following components:
-#' @return \code{samples}  The MCMC samples produced by running the BUGS model.
+#' @return \code{samples}  The MCMC samples produced by running the JAGS model.
 #' @return \code{model}  The \code{crosnmaModel} object obtained from \code{crosnma.model} which was used to run \code{jags}.
-#' @return \code{trt.key}  A Table of the treatments and its mapped integer number (used in JAGS model).
+#' @return \code{trt.key}  A table of the treatment names and their correspondence to integers used in the JAGS model.
 #' @examples
 #' # An example from participant-level data and study-level data.
 #' # data

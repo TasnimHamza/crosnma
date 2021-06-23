@@ -2,7 +2,7 @@
 % Please edit documentation in R/crosnma.run.R
 \name{crosnma.run}
 \alias{crosnma.run}
-\title{Run NMA or NMR model to cross-synthesis in NMA and NMR for dichotomous outcomes}
+\title{Run JAGS to synthesize cross-design evidence and cross-format data in NMA and NMR for dichotomous outcomes}
 \usage{
 crosnma.run(
   model,
@@ -15,17 +15,17 @@ crosnma.run(
 )
 }
 \arguments{
-\item{model}{A \code{crosnmaModel} object produced by running \code{crosnma.model}.}
+\item{model}{A \code{crosnmaModel} object produced by \code{crosnma.model}.}
 
-\item{n.adapt}{Number of adaptations for the mcmc chains.}
+\item{n.adapt}{Number of adaptations for the MCMC chains.}
 
-\item{n.burnin}{Number of burnin iterations for the mcmc chains.}
+\item{n.burnin}{Number of burnin iterations for the MCMC chains.}
 
-\item{n.iter}{Number of iterations for the mcmc chains.}
+\item{n.iter}{Number of iterations for the MCMC chains.}
 
-\item{thin}{Number of thinning for the mcmc chains. Default is 1.}
+\item{thin}{Number of thinning for the MCMC chains. Default is 1.}
 
-\item{n.chains}{Number of mcmc chains. Default is 2.}
+\item{n.chains}{Number of MCMC chains. Default is 2.}
 
 \item{quiet}{A logical. If TRUE, the warning message will not be displayed
 See \code{\link{jags.model}} for more info.}
@@ -33,14 +33,14 @@ See \code{\link{jags.model}} for more info.}
 \value{
 \code{crosnma.run} returns an object of class \code{crosrun} which is a list containing the following components:
 
-\code{samples}  The MCMC samples produced by running the BUGS model.
+\code{samples}  The MCMC samples produced by running the JAGS model.
 
 \code{model}  The \code{crosnmaModel} object obtained from \code{crosnma.model} which was used to run \code{jags}.
 
-\code{trt.key}  A Table of the treatments and its mapped integer number (used in JAGS model).
+\code{trt.key}  A table of the treatment names and their correspondence to integers used in the JAGS model.
 }
 \description{
-Takes jags model from an object produced by \code{crosnma.model} and runs model using \code{jags}.
+Takes the JAGS model from an object produced by \code{crosnma.model} and runs it using \code{jags} package.
 }
 \examples{
 # An example from participant-level data and study-level data.

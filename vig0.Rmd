@@ -21,14 +21,13 @@ knitr::opts_chunk$set(
 ```
 
 
-```{r mm, warning=FALSE}
+```{r mm}
 library(crosnma)
 library(rjags)
 load.module('mix')
 ```
 
 # Introduction 
-
 In network meta-analysis we synthesize all relevant available evidence about health outcomes from competing treatments. That evidence might come from different study designs and in different formats: from non-randomized studies (NRS) or randomized controlled trials (RCT) as individual participant data (IPD) or as aggregate data (AD). We set up the package (`crosnma`) to synthesize all available evidence.
 
 This document demonstrates how to use `crosnma` to synthesize from cross-design evidence and cross-format data via Bayesian network meta-analysis and meta-regression (NMA and NMR). All models are implemented in JAGS [@plummer_jags].
@@ -95,7 +94,7 @@ First we estimate the relative treatment effects using only the NRS (use `run.nr
 
 ## Bias-adjusted model 1
 
-In this and the next model we incorporate the judgments about the study risk of bias (RoB) by extending the method introduced by @dias_2010. In model 1 we add the bias term $\gamma_j R_j$ to both the AD and IPD parts of the model as follows:
+In this and the next model we incorporate the judgments about the study risk of bias (RoB) by extending the method introduced by [@dias_2010]. In model 1 we add the bias term $\gamma_j R_j$ to both the AD and IPD parts of the model as follows:
 
 **model IPD only**
 
@@ -127,11 +126,11 @@ $$
 R_j \sim Bernoulli(\pi_j)
 $$
 
-The bias probabilities $\pi_j$ are study-specific and can be estimated in two ways. They are either given informative beta priors (${Beta(a,b)}$) that are set according to the risk of bias. The default priors are as follows: high bias RCT `pi.high.rct='dbeta(5,1)'`, low bias RCT `pi.low.rct='dbeta(1,20)'`, high bias NRS `pi.high.nrs='dbeta(30,1)'` and low bias NRS `pi.low.nrs='dbeta(1,2)'`. The ratio ${a/b}$ controls the skewness of the beta distribution.  The closer to 1 the ratio a/b, the more the mean of probability of bias gets closer to 1 and the study acquires 'major' bias adjustment. Alternatively,  we can use the study characteristics $z_j$ to predict $\pi_j$ through a logistic transformation (internally coded).
+The bias probabilities $\pi_j$ are study-specific and can be estimated in two way. They are either given informative beta priors (${Beta(a,b)}$) that are set according to the risk of bias. The default priors are as follows: high bias RCT `pi.high.rct='dbeta(5,1)'`, low bias RCT `pi.low.rct='dbeta(1,20)'`, high bias NRS `pi.high.nrs='dbeta(30,1)'` and low bias NRS `pi.low.nrs='dbeta(1,2)'`. The ratio ${a/b}$ controls the skewness of the beta distribution.  The closer to 1 the ratio a/b, the more the mean of probability of bias gets closer to 1 and the study acquires 'major' bias adjustment. Alternatively,  we can use the study characteristics $z_j$ to predict $\pi_j$ through a logistic transformation (internally coded).
 
 ## Bias-adjusted model 2
 
-Another way to incorporate the RoB of the study is by replacing $\delta_{jk}$ by a "bias-adjusted" relative treatment effect $\theta_{jk}$. Then $\theta_{jk}$ is modeled with a bimodal normal distribution as described in Section 2.5. For more details see @verde_2020.
+Another way to incorporate the RoB of the study is by replacing $\delta_{jk}$ by a "bias-adjusted" relative treatment effect $\theta_{jk}$. Then $\theta_{jk}$ is modeled with a bimodal normal distribution as described in Section 2.5. For more details see [@verde_2020].
 
 **model IPD only**
 
@@ -241,9 +240,9 @@ Next, we fit the NMA model using `crosnma.run()`which requires us to set the num
 ```{r}
 # run jags
 jagsfit1 <- crosnma.run(model=mod1,
-                        n.adapt = 500,
-                        n.iter=10000,
-                        n.burnin = 4000,
+                        n.adapt = 20,
+                        n.iter=100,
+                        n.burnin = 40,
                         thin=1,
                         n.chains=2)
 ```
@@ -290,9 +289,9 @@ The MCMC is run under the same set up as in the network meta-analysis.
 ```{r}
 # run jags
 jagsfit2 <- crosnma.run(model=mod2,
-                        n.adapt = 500,
-                        n.iter=10000,
-                        n.burnin = 4000,
+                        n.adapt = 20,
+                        n.iter=100,
+                        n.burnin = 40,
                         thin=1,
                         n.chains=2)
 ```
@@ -311,9 +310,9 @@ Again, we check convergence with trace plots
 coda::traceplot(jagsfit2$samples)
 ```
 
-### Using non-randomized studies as a prior in network meta-regression
+### Using non-randomized studies as a prior in network meta-analysis
 
-To run NMA with a prior from NRS, two additional arguments are needed: we indicate using NRS as prior by setting ` method.bias='prior'`. That means that the model runs internally NMA with only NRS data which then are used to construct informative priors. This requires defining MCMC settings (the number of adaptations, iterations, burn-ins, thinning and chains) in the argument `run.nrs`. 
+To run NMA witha a prior from NRS, two additional arguments are needed:We indicate using NRS as prior by setting ` method.bias='prior'`. That means that the model runs internally NMA with only NRS data which then are used to construct informative priors. This requires defining MCMC settings (the number of adaptations, iterations, burn-ins, thinning and chains) in the argument `run.nrs`. 
 
 In this method, the prior for the basic parameters is set to a normal distribution. For basic parameters not examined in the NRS, the code sets a minimally informative prior `d~dnorm(0, 1e-4)`, To account for possible bias, the means of the distribution can be shifted by `mean.shift` to reflect the potential bias in NRS and/or the variance can be inflated by `var.infl` to control the influence of NRS on the final estimation. Both should be provided in `run.nrs`.
 
@@ -334,9 +333,9 @@ mod3 <- crosnma.model(prt.data=prt.data,
                    #---------- bias adjustment ---------- 
                    method.bias='prior',
                    run.nrs=list(var.infl=0.6, 
-                                n.adapt = 500,
-                                n.iter=10000,
-                                n.burnin = 4000,
+                                n.adapt = 10,
+                                n.iter=5000,
+                                n.burnin = 400,
                                 thin=1,
                                 n.chains=2))
 ```
@@ -345,9 +344,9 @@ mod3 <- crosnma.model(prt.data=prt.data,
 ```{r}
 # run jags
 jagsfit3 <- crosnma.run(model=mod3,
-                        n.adapt = 500,
-                        n.iter=10000,
-                        n.burnin = 4000,
+                        n.adapt = 20,
+                        n.iter=100,
+                        n.burnin = 40,
                         thin=1,
                         n.chains=2)
 ```
@@ -394,9 +393,9 @@ mod4 <- crosnma.model(prt.data=prt.data,
 ```{r}
 # run jags
 jagsfit4 <- crosnma.run(model=mod4,
-                       n.adapt = 500,
-                        n.iter=10000,
-                        n.burnin = 4000,
+                       n.adapt = 20,
+                        n.iter=100,
+                        n.burnin = 40,
                         thin=1,
                         n.chains=2)
 ```
@@ -416,7 +415,7 @@ coda::traceplot(jagsfit4$samples)
 ```
 
 
-###   Bias-adjusted model 2
+##   Bias-adjusted model 2
 
 The arguments for `method.bias='adjust2'` are similar to the ones used before in `method.bias='adjust1'`.
 
@@ -444,11 +443,11 @@ mod5 <- crosnma.model(prt.data=prt.data,
 ```{r}
 # run jags
 jagsfit5 <- crosnma.run(model=mod5,
-                       n.adapt = 500,
-                       n.iter=10000,
-                       n.burnin = 4000,
-                       thin=1,
-                       n.chains=2)
+                       n.adapt = 20,
+                        n.iter=100,
+                        n.burnin = 40,
+                        thin=1,
+                        n.chains=2)
 ```
 
 
