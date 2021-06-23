@@ -14,25 +14,23 @@
 \item{quantiles}{A numeric vector of probabilities to present posterior summaries. The default value is c(0.025, 0.5, 0.975) for the 95% credible interval and the median.}
 
 \item{expo}{A logical value indicating whether to exponentiate the parameters of relative treatment effect and covariate effect. Default is TRUE.}
-
-\item{...}{\dots}
 }
 \value{
-returns a matrix containing the following summary statistics (in columns) for each estimated parameter:
+\code{summary.crosnma} returns a matrix containing the following summary statistics (in columns) for each estimated parameter:
 
-Mean the mean of the posterior distribution
+\code{Mean} the mean of the posterior distribution
 
-SD the standard deviation of the posterior distribution
+\code{SD} the standard deviation of the posterior distribution
 
-2.5% the 2.5% quantile of the posterior distribution (the lower bound of the 95% credible interval)
+\code{2.5\%} the 2.5% quantile of the posterior distribution (the lower bound of the 95% credible interval)
 
-50% the median of the posterior distribution
+\code{50\%} the median of the posterior distribution
 
-97.5% the 97.5% quantile of theposterior distribution (the upper bound of the 95% credible interval)
+\code{97.5\%} the 97.5% quantile of theposterior distribution (the upper bound of the 95% credible interval)
 
-Rhat Gelman-Rubin statistic. The further the value from 1, the worse the mixing of chains and so the convergence.
+\code{Rhat} Gelman-Rubin statistic. The further the value of Rhat from 1, the worse the mixing of chains and so the convergence.
 
-n.eff an estimate of the effective sample size. The smaller the value, the greater the uncertanity associated with the corresponding parameter.
+\code{n.eff} an estimate of the effective sample size. The smaller the value of n.eff the greater the uncertanity associated with the corresponding parameter.
 }
 \description{
 Generic summary function for crosnma.run object
