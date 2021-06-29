@@ -37,7 +37,7 @@ We describe the workflow within the package using a worked example from a networ
 
 # The synthesis models
 
-We first introduce the model that synthesizes studies  with individual-level (IPD) or/and study-level (AD) ignoring their design (naïve synthesis).  Then, we present three possible models that account for the different study designs. In the table below we set the notation that will be used in the description of the four models. 
+We first introduce the model that synthesizes studies  with individual-level (IPD) or/and aggregate (AD) ignoring their design (naïve synthesis).  Then, we present three possible models that account for the different study designs. In the table below we set the notation that will be used in the description of the four models. 
 
 | Notation 	| Description| Argument in `crosnma.model()`| 
 |:-------------------|:-----------|:------|
@@ -154,6 +154,11 @@ Another way to incorporate the RoB of the study is by replacing $\delta_{jk}$ by
     \end{cases}       
 \end{equation}
 
+where the bias-adjusted relative treatment effect ($\theta_{jk}$) are modelled as following 
+$$
+\theta_{jk} \sim (1-\pi_j)N(d_{Ak}-d_{Ab}, \tau_\delta^2) + \pi_jN(d_{Ak}-d_{Ab}+\gamma_j, \tau_\delta^2+\tau_\gamma^2)
+$$
+
 ## Assumptions about the model parameters
 
 The table below summarizes the different assumptions implemented in the package about combining the parameters in the models described above. 
@@ -168,7 +173,6 @@ The table below summarizes the different assumptions implemented in the package 
 |   	|Common-effect: $\beta_{1,jk}^W = B_{1, Ak}^W-B_{1, Ab}^W$| `regw.effect='common'`|
 |Between-study covariate-treatment interaction ($\beta_{1, jk}^B$)| Random-effects: $\beta_{1,jk}^B \sim N(B_{1, Ak}^B-B_{1, Ab}^B, \tau_{\beta_1^B})$| `regb.effect='random'` |
 |   	|Common-effect: $\beta_{1,jk}^B = B_{1, Ak}^B-B_{1, Ab}^B$| `regb.effect='common'`|
-|bias-adjusted relative treatment effect ($\theta_{jk}$)| Random-effects: $\theta_{jk} \sim (1-\pi_j)N(d_{Ak}-d_{Ab}, \tau_\delta^2) + \pi_jN(d_{Ak}-d_{Ab}+\gamma_j, \tau_\delta^2+\tau_\gamma^2)$| `trt.effect='random'` |
 |Bias effect ($\gamma_{j}$)| Random-effects: $\gamma_{j} \sim N(\Gamma, \tau_{\gamma})$| `bias.effect='random'` |
 |   	|Common-effect: $\gamma_{j} = \Gamma$| `bias.effect='common'`|
 |Bias probability ($\pi_j$)| $\pi_j \sim Beta(a,b)$|  |
@@ -177,7 +181,7 @@ The table below summarizes the different assumptions implemented in the package 
 # Synthesis of studies comparing drugs for relapsing-remitting multiple sclerosis
 
 ## Description of the data
-The data we use are fictitious but have been developed to resample to real RCTs with IPD and aggregated data included in @Tramacere15. The studies provide either study-level data `std.data` (2 RCTs) or as individual participant data `prt.data` (3 RCTs and 1 cohort study). Both datasets compare in total four drugs which are anonymized.
+The data we use are fictitious but have been developed to resample to real RCTs with IPD and aggregated data included in @Tramacere15. The studies provide either aggregate data `std.data` (2 RCTs) or as individual participant data `prt.data` (3 RCTs and 1 cohort study). Both datasets compare in total four drugs which are anonymized.
 
 The `prt.data` contains 2950 rows, each row refers to a participant in the study. We display the first few rows of the data set:
 
@@ -185,9 +189,9 @@ The `prt.data` contains 2950 rows, each row refers to a participant in the study
 head(prt.data)
 ```
 
-For each participant, we have information for the `outcome` relapse (0=no, 1=yes), the treatment label `trt`, the `age` (in years) and  `sex` (0 = Female, 1 = Male) of the participant. The following columns are set on study-level (it is repeated for each participant in each study): the `study` id, the `design` of the study (needs to be either rct or nrs), the risk of `bias` on each study (can be set as low, high or unclear) and the `year` of publication .
+For each participant, we have information for the `outcome` relapse (0=no, 1=yes), the treatment label `trt`, the `age` (in years) and  `sex` (0 = Female, 1 = Male) of the participant. The following columns are set on aggregate (it is repeated for each participant in each study): the `study` id, the `design` of the study (needs to be either rct or nrs), the risk of `bias` on each study (can be set as low, high or unclear) and the `year` of publication .
 
-The study-level data has the standard format for meta-analysis
+The aggregate data has the standard format for meta-analysis
 
 ```{r}
 head(std.data)
@@ -214,7 +218,7 @@ There are two steps to run the NMA/NMR model. The first step is to create a JAGS
 
 ### Naïve network meta-analysis 
 
-We start by indicating the names of the datasets on participant- (`prt.data`) and study-level (`std.data`). Then, the name of the variables on each dataset needs to be given respectively in `prt.data` and `std.data`.  Next, the `reference` treatment needs to be assigned (we set it to drug A). By choosing `trt.effect=random`, we are assigning a normal distribution to each relative treatment effect to allow the synthesis across studies, see the table in Section 2.1. Finally, the different designs; RCT and NRS are combined with the information taken at face-value; `method.bias = 'naive'`.
+We start by indicating the names of the datasets on participant- (`prt.data`) and aggregate (`std.data`). Then, the name of the variables on each dataset needs to be given respectively in `prt.data` and `std.data`.  Next, the `reference` treatment needs to be assigned (we set it to drug A). By choosing `trt.effect=random`, we are assigning a normal distribution to each relative treatment effect to allow the synthesis across studies, see the table in Section 2.1. Finally, the different designs; RCT and NRS are combined with the information taken at face-value; `method.bias = 'naive'`.
 
 Optionally, we can specify a prior to the common heterogeneity of the treatment effect across studies, `tau.trt='dunif(0,3)'`.
 
@@ -303,7 +307,7 @@ and the output table is presented below
 knitr::kable(summary(jagsfit2))
 ```
 
-Here, we additionally estimate b_1 which indicates the mean effect of age and tau.b_1 which refers to the heterogeneity standard deviation in the effect of age across studies. 
+Here, we additionally estimate b_1 which indicates the mean effect of age and tau.b_1 which refers to the heterogeneity standard deviation in the effect of age across studies. To improve the convergence of MCMC, we choose to not split the within- and between-study age coefficient which means having only one parameter to estimate $(\beta^W_{1,jk} = \beta^B_{1,jk}=\beta_{1,jk})$. 
 
 Again, we check convergence with trace plots
 

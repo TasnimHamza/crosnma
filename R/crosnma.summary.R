@@ -6,15 +6,17 @@
 #'@return \code{summary.crosnma} returns a matrix containing the following summary statistics (in columns) for each estimated parameter:
 #'@return \code{Mean} the mean of the posterior distribution
 #'@return \code{SD} the standard deviation of the posterior distribution
-#'@return \code{2.5\%} the 2.5% quantile of the posterior distribution (the lower bound of the 95% credible interval)
+#'@return \code{2.5\%} the 2.5\% quantile of the posterior distribution (the lower bound of the 95% credible interval)
 #'@return \code{50\%} the median of the posterior distribution
-#'@return \code{97.5\%} the 97.5% quantile of theposterior distribution (the upper bound of the 95% credible interval)
+#'@return \code{97.5\%} the 97.5\% quantile of the posterior distribution (the upper bound of the 95% credible interval)
 #'@return \code{Rhat} Gelman-Rubin statistic. The further the value of Rhat from 1, the worse the mixing of chains and so the convergence.
 #'@return \code{n.eff} an estimate of the effective sample size. The smaller the value of n.eff the greater the uncertanity associated with the corresponding parameter.
 #'
 #'@export
 #'
 #'
+#'
+
 summary.crosnma <- function(x, digits = 3,  quantiles = c(0.025, 0.5, 0.975), expo=TRUE, ...)
 {
 
