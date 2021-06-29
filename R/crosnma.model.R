@@ -15,7 +15,7 @@
 #' @param outcome A vector of length 2 with the names of the outcome variable (as character) in prt.data and std.data, respectively.
 #' @param n A character of the name of the number of participants variable in std.data.
 #' @param design A vector of length 2 with the names of the design variable (as character) in prt.data and std.data, respectively.
-#' @param reference A character indicating the name of the reference treatment.
+#' @param reference A character indicating the name of the reference treatment. When the reference is not specified, the first alphabetic treatment will be used as a reference in the analysis.
 #' @param trt.effect A character defining the model for the study-specific treatment effects. Options are 'random' (default) or 'common'.
 #' @param covariate An optional list with two vectors, the first vector indicating the name of the covariates in prt.data and the second is for the corresponding ones in std.data, to conduct a network meta-regression
 #' The covariates can be either numeric or dichotomous variables. The user can provide up to 3 covariates. The covariate needs to be provided for both prt.data and std.data, respectively.
@@ -268,7 +268,7 @@ crosnma.model <- function(prt.data,
   if(!is.null(data22)){if(any(!unique(data22$design)%in%c('rct','nrs'))) stop("For std.data, design must be set to either 'rct' ( randomised clinical trials) or 'nrs' ( non-randomised studies)")}
   if(!is.null(bias.type)){if(!(bias.type%in%c('add','mult','both')))stop("bias.type need to be set as 'add' (additive), 'mult' (multiplicative) or 'both' (additive and multiplicative)")}
 
-  if(!(reference %in% c(data11$trt,data22$trt))) stop("Reference treatment is not available in the list of treatments.")
+  #if(!(reference %in% c(data11$trt,data22$trt))) stop("Reference treatment is not available in the list of treatments.")
   if(!is.null(data22)){if(!is.numeric(data22$n)|sum(data22$n%%1)!=0|any(data22$n==0)) stop("Sample size must be an integer greater than 0.")}
   if(!is.null(data22)){if(!is.numeric(data22$r)|sum(data22$r%%1)!=0) stop("Outcome must be an integer greater than or equal 0.")}
   if(!is.null(data22)){if(sum(data22$r>data22$n)!=0) stop("Sample size must be greater than number of events.")}
@@ -314,7 +314,6 @@ crosnma.model <- function(prt.data,
   # pull relevant fields from the data and apply naming convention
 
 
-  if(!(reference %in% data11$trt)&!(reference %in% data22$trt)) stop("Reference treatment is not present in the list of treatments.")
 
   # include/exclude NRS
   if(is.null(method.bias)){
@@ -339,7 +338,8 @@ crosnma.model <- function(prt.data,
 
   # set a trt key from the two datasets
   trt.df <- data.frame(trt=unique(c(data1$trt,data2$trt)))
-  reference <- ifelse(is.null(reference),sort(trt.df$trt)[1], reference )
+  reference <- ifelse(is.null(reference),sort(as.character(trt.df$trt))[1], reference )
+  if(!(reference %in% data11$trt)&!(reference %in% data22$trt)) stop("Reference treatment is not present in the list of treatments.")
 
   trt.key <- trt.df$trt %>% unique %>% sort %>% tibble(trt.ini=.) %>%
     filter(trt.ini!=reference) %>% add_row(trt.ini=reference, .before=1) %>%

@@ -245,9 +245,9 @@ Next, we fit the NMA model using `crosnma.run()`which requires us to set the num
 ```{r}
 # run jags
 jagsfit1 <- crosnma.run(model=mod1,
-                        n.adapt = 10,
-                        n.iter=100,
-                        n.burnin = 40,
+                        n.adapt = 500,
+                        n.iter=5000,
+                        n.burnin = 2000,
                         thin=1,
                         n.chains=2)
 ```
@@ -294,9 +294,9 @@ The MCMC is run under the same set up as in the network meta-analysis.
 ```{r}
 # run jags
 jagsfit2 <- crosnma.run(model=mod2,
-                        n.adapt = 10,
-                        n.iter=100,
-                        n.burnin = 40,
+                        n.adapt = 500,
+                        n.iter=5000,
+                        n.burnin = 2000,
                         thin=1,
                         n.chains=2)
 ```
@@ -349,9 +349,9 @@ mod3 <- crosnma.model(prt.data=prt.data,
 ```{r}
 # run jags
 jagsfit3 <- crosnma.run(model=mod3,
-                        n.adapt = 10,
-                        n.iter=100,
-                        n.burnin = 40,
+                        n.adapt = 500,
+                        n.iter=5000,
+                        n.burnin = 2000,
                         thin=1,
                         n.chains=2)
 ```
@@ -398,9 +398,9 @@ mod4 <- crosnma.model(prt.data=prt.data,
 ```{r}
 # run jags
 jagsfit4 <- crosnma.run(model=mod4,
-                       n.adapt = 10,
-                        n.iter=100,
-                        n.burnin = 40,
+                       n.adapt = 500,
+                        n.iter=5000,
+                        n.burnin = 2000,
                         thin=1,
                         n.chains=2)
 ```
@@ -448,9 +448,9 @@ mod5 <- crosnma.model(prt.data=prt.data,
 ```{r}
 # run jags
 jagsfit5 <- crosnma.run(model=mod5,
-                       n.adapt = 10,
-                        n.iter=100,
-                        n.burnin = 40,
+                       n.adapt = 500,
+                        n.iter=5000,
+                        n.burnin = 2000,
                         thin=1,
                         n.chains=2)
 ```
