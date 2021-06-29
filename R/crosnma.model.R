@@ -9,22 +9,23 @@
 #' @param prt.data An object of class data.frame containing the individual participant dataset. Each row contains the data of a single participant.
 #' The data frame needs to have the following columns: treatment, study identification, outcome (event and non-event), design. Additional columns might be required for certain analyses.
 #' @param std.data An object of class data.frame containing the study-level dataset. Each row represents the information of study arm.
-#' The data frame needs to have the following columns: treatment, study identification, outcome (number of events), sample size and design. Additional columns might be required for certain analysis.
+#' The data frame needs to have the following columns: treatment, study identification, outcome (number of events), sample size and design. Additional columns might be required for certain analyses.
 #' @param trt A vector of length 2 with the names of the treatment variable (as character) in prt.data and std.data, respectively.
 #' @param study A vector of length 2 with the names of the study variable (as character) in prt.data and std.data, respectively.
 #' @param outcome A vector of length 2 with the names of the outcome variable (as character) in prt.data and std.data, respectively.
 #' @param n A character of the name of the number of participants variable in std.data.
 #' @param design A vector of length 2 with the names of the design variable (as character) in prt.data and std.data, respectively.
-#' @param reference A character indicating the name of the reference treatment. This option must be specified otherwise the 'placebo' is set as a reference.
+#' @param reference A character indicating the name of the reference treatment.
 #' @param trt.effect A character defining the model for the study-specific treatment effects. Options are 'random' (default) or 'common'.
-#' @param covariate An optional list with two elements, the first indicating the name of the covariates in prt.data and the second is for the corresponding ones in std.data, to conduct network meta regression
+#' @param covariate An optional list with two vectors, the first vector indicating the name of the covariates in prt.data and the second is for the corresponding ones in std.data, to conduct a network meta-regression
 #' The covariates can be either numeric or dichotomous variables. The user can provide up to 3 covariates. The covariate needs to be provided for both prt.data and std.data, respectively.
-#' The default option is covariate=NULL where no covariate adjustment is applied (network meta-analysis).
-#' @param reg0.effect An optional character (when \code{covariate} is not NULL) indicating the relationship across studies for the prognostic effects expressed by the regression coefficient, ($\beta_{0,j}$), in a study \eqn{j}.
+#' For example, we set `covariate=list(c(‘age’, ‘sex’), c(‘age’, ‘sex’))` to adjust for 2 covariates.
+#' The default option is `covariate=NULL` where no covariate adjustment is applied (network meta-analysis).
+#' @param reg0.effect An optional character (when \code{covariate} is not NULL) indicating the relationship across studies for the prognostic effects expressed by the regression coefficient, (\eqn{\beta_0}), in a study \eqn{j}.
 #' Options are 'independent' or 'random'. We recommend using 'independent' (default).
-#' @param regb.effect An optional character (when \code{covariate} is not NULL) indicating the relationship across studies for the between-study regression coefficient. This parameter quantifies the treatment-mean covariate interaction.
+#' @param regb.effect An optional character (when \code{covariate} is not NULL) indicating the relationship across studies for the between-study regression coefficient (\eqn{\beta^B}). This parameter quantifies the treatment-mean covariate interaction.
 #'  Options are 'random' or 'common'. Default is 'random'.
-#' @param regw.effect An optional character (when \code{covariate} is not NULL)  indicating the relationship across studies for the within-study regression coefficient. This parameter quantifies the treatment-covariate interaction effect at the individual level.
+#' @param regw.effect An optional character (when \code{covariate} is not NULL)  indicating the relationship across studies for the within-study regression coefficient (\eqn{\beta^W}). This parameter quantifies the treatment-covariate interaction effect at the individual level.
 #' Options are 'random' and 'common'. Default is 'random'.
 #' @param split.regcoef A logical value (when \code{covariate} is not NULL). If TRUE the within- and between-study coefficients will be splitted in the analysis of prt.data.
 #' The default is TRUE. When the split.regcoef = FALSE, only a single regression coefficient will be estimated to represent both the between-studies and within-studies covariate effects.
@@ -32,9 +33,9 @@
 #' Options are 'naive' for naive synthesize, 'prior' for using NRS to inform priors for the relative treatment effects in RCTs.
 #' or 'adjust1' and 'adjust2' to allow a bias adjustment.
 #' @param bias An optional vector of length 2 (required when method.bias='adjust1' or 'adjust2') indicating the name of the variable (as character) that includes the risk of bias adjustment in prt.data and std.data, respectively.
-#' The entries of this variable should be a character with entries either low, high or unclear. These values need to be repeated for the participants that belong to the same study.
-#' @param bias.type An optional character defining of bias on the treatment effect (required when method.bias='adjust1' or 'adjust2').
-#' Three options are possible: 'add' for additive bias effect,'mult' for multiplicative bias effect and'both' for both an additive and a multiplicative term.
+#' The entries of this variable should be a character with entries that need to be spelled as such 'low', 'high' or 'unclear'. These values need to be repeated for the participants that belong to the same study.
+#' @param bias.type An optional character defining of bias on the treatment effect (required when method.bias='adjust1').
+#' Three options are possible: 'add' to add the additive bias effect,'mult' for multiplicative bias effect and 'both' includes both an additive and a multiplicative terms.
 #' @param bias.covariate An optional vector of two characters (required when method.bias='adjust1' or 'adjust2'). It has the variable name of the variable that will be used in estimating the probability of bias.
 #' @param bias.effect An optional character indicating the relationship for the bias coefficients across studies.
 #' Options are 'random' or 'common' (default). It is required when method.bias='adjust1' or 'adjust2'.
@@ -44,8 +45,8 @@
 #' When the method.bias='adjust1' or 'adjust2', the user may provide priors to control the bias probability.
 #' For the bias probabilities, beta distributions are assumed with the following default values: RCT with low (pi.low.rct='dbeta(1,20)')/high (pi.high.rct='dbeta(3,1)') bias, NRS with low(pi.low.rct='dbeta(1,2)')/high (pi.high.rct='dbeta(30,1)') bias (pi.low.nrs, pi.high.nrs).
 #' @param run.nrs An optional list is needed when the NRS used as a prior (method.bias='prior').
-#' The list consists of the follwoing: (\code{var.infl}) controls the inflation of the varaince of NRS estimates and its values range between 0 (NRS do not contribute at all and the prior is vague) and 1 (the NRS evidence is used at face value, default approach).
-#' The parameter (\code{mean.shift}) is the bias shift to be added/subtracted from the estimated NRS mean treatment effects (0 is the default). Either (\code{var.infl}) or (\code{mean.shift}) should be provided but not both.
+#' The list consists of the following: (\code{var.infl}) controls the common inflation of the varaince of NRS estimates (\eqn{w}) and its values range between 0 (NRS do not contribute at all and the prior is vague) and 1 (the NRS evidence is used at face value, default approach).
+#' The parameter (\code{mean.shift}) is the bias shift (\eqn{\zeta}) to be added/subtracted from the estimated mean treatment effects (on the log-scale) from NRS network (0 is the default). Either (\code{var.infl}) or (\code{mean.shift}) should be provided but not both.
 #' Here you can also specify the arguments to control the MCMC chains with default value is in the parentheses: the number of adaptions n.adapt (500), number of iterations n.iter(10000), number of burn in n.burnin (4000),
 #' number of thinning thin (1) and number of chains n.chains (2), see \code{\link{jags.model}} arguments from rjags package.
 #' @return \code{crosnma.model} returns an object of class \code{crosnmaModel} which is a list containing the following components:
@@ -119,7 +120,7 @@ crosnma.model <- function(prt.data,
                        outcome,
                        n,
                        design,
-                       reference,
+                       reference=NULL,
                        trt.effect='random',
                        #---------- meta regression ----------
                        covariate = NULL,#list(c('age','sex','EDSS'),c('age','sex','EDSS')), #default NULL
@@ -338,6 +339,7 @@ crosnma.model <- function(prt.data,
 
   # set a trt key from the two datasets
   trt.df <- data.frame(trt=unique(c(data1$trt,data2$trt)))
+  reference <- ifelse(is.null(reference),sort(trt.df$trt)[1], reference )
 
   trt.key <- trt.df$trt %>% unique %>% sort %>% tibble(trt.ini=.) %>%
     filter(trt.ini!=reference) %>% add_row(trt.ini=reference, .before=1) %>%
@@ -823,7 +825,7 @@ crosnma.model <- function(prt.data,
                                                           to=trt.key.nrs$trt.jags,
                                                           warn_missing = FALSE)%>%as.integer)
     d.nrs <- summary(jagssamples.nrs)[[1]][,'Mean']+ifelse(is.null(run.nrs$mean.shift),0,run.nrs$mean.shift)
-    prec.nrs <- (1/summary(jagssamples.nrs)[[1]][,'SD']^2)*ifelse(is.null(run.nrs$var.infl),1,run.nrs$var.infl)
+    prec.nrs <- ifelse(is.null(run.nrs$var.infl),1,run.nrs$var.infl)/(summary(jagssamples.nrs)[[1]][,'SD']^2)
 
     d.prior.nrs <- ""
     for (i in 2:nrow(trt.key2)) {
