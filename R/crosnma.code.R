@@ -517,7 +517,9 @@ crosnma.code <- function(ipd = T,
 
       # binomial likelihood of number of events for each study j in arm k
       r[j,k] ~ dbin(pa[j,t.ad[j,k]],n[j,k])
-    }
+          }
+
+
     # referent arm
     logit(pa[j,t.ad[j,1]]) <- u[j]
 

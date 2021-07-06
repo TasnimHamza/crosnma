@@ -6,11 +6,11 @@
 #' @format A data frame with 2950 rows and 8 variables:
 #' \describe{
 #'   \item{study}{numeric, study identifier}
-#'   \item{outcome}{binray data, respond indicator, 0=respond and 1=no-respond}
+#'   \item{outcome}{binary data, respond indicator, 0=respond and 1=no-respond}
 #'   \item{trt}{character, indicating the assigned treatment to each participant}
 #'   \item{design}{character, design of the study, either 'rct' or 'nrs'}
 #'   \item{age}{numeric, age of the participant}
-#'   \item{sex}{binray data, sex of the participant, 0=Female and 1=Male}
+#'   \item{sex}{binary data, sex of the participant, 0=Female and 1=Male}
 #'   \item{bias}{character, the risk of bias of the study, 'low', 'high','unclear'}
 #'   \item{year}{numeric, the year published of the study}
 #'

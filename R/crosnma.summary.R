@@ -10,7 +10,7 @@
 #'@return \code{50\%} the median of the posterior distribution
 #'@return \code{97.5\%} the 97.5\% quantile of the posterior distribution (the upper bound of the 95% credible interval)
 #'@return \code{Rhat} Gelman-Rubin statistic. The further the value of Rhat from 1, the worse the mixing of chains and so the convergence.
-#'@return \code{n.eff} an estimate of the effective sample size. The smaller the value of n.eff the greater the uncertanity associated with the corresponding parameter.
+#'@return \code{n.eff} an estimate of the effective sample size. The smaller the value of n.eff the greater the uncertainty associated with the corresponding parameter.
 #'
 #'@export
 #'

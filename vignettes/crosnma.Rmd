@@ -91,11 +91,11 @@ $$
 
 ## Using non-randomized studies (NRS) as a prior
 
-First we estimate the relative treatment effects using only the NRS (use `run.nrs` in `crosnma.model()` to control this process). Then we use the NRS estimates ($\hat{d}^{NRS}_{Ak},\hat{V}^{NRS}_{Ak}$) as a prior information for the basic parameters of RCT data, $d_{Ak} \sim N(\hat{d}^{NRS}_{Ak},\hat{V}^{NRS}_{Ak})$. To control the NRS influence in the RCT estimates, we can either inflate the prior variance by dividing it by a common inflation factor $w$ (the inflated variances are $\hat{V}^{NRS}_{Ak}/w$) or shift the NRS means by $\zeta$.
+First we estimate the relative treatment effects using only the NRS (use `run.nrs` in `crosnma.model()` to control this process). Then we use the NRS estimates ($\tilde{d}^{NRS}_{Ak},V^{NRS}_{Ak}$) as a prior information for the basic parameters of RCT data, $d_{Ak} \sim N(\tilde{d}^{NRS}_{Ak},V^{NRS}_{Ak})$. To control the NRS influence in the RCT estimates, we can either inflate the prior variance by dividing it by a common inflation factor $w$ (the inflated variances are $V^{NRS}_{Ak}/w$) or shift the NRS means by $\zeta$.
 
 ## Bias-adjusted model 1
 
-In this and the next model we incorporate the judgments about the study risk of bias (RoB) by extending the method introduced by @dias_2010. In model 1, we either multiply the bias term $\gamma_{1,j}^{R_j}$ or add it $\gamma_{2,j} R_j$ to the relative treatment effect on both the AD and IPD parts of the model. We can also consider only a single type of bias effect, that is either multiplcative or additive and in this case a single coefficient ($\gamma_j$) will be estimated.
+In this and the next model we incorporate the judgments about the study risk of bias (RoB) by extending the method introduced by @dias_2010. In model 1, we either multiply the bias term $\gamma_{1,j}^{R_j}$ or add $\gamma_{2,j} R_j$ to the relative treatment effect on both the AD and IPD parts of the model. We might include only one of the aforementioned bias terms and in this case a single coefficient ($\gamma_j$) will be estimated.
 
 **model IPD only**
 
@@ -109,9 +109,7 @@ In this and the next model we incorporate the judgments about the study risk of 
 \end{equation}
 
 **model AD only**
-$$
-r_{jk} \sim Binomial(p_{jk},n_{jk})
-$$
+
 \begin{equation}
   logit(p_{jk}) =
     \begin{cases}
@@ -127,7 +125,7 @@ $$
 R_j \sim Bernoulli(\pi_j)
 $$
 
-The bias probabilities $\pi_j$ are study-specific and can be estimated in two different ways. They are either given informative beta priors (${Beta(a,b)}$) that are set according to the risk of bias. The default priors are as follows: high bias RCT `pi.high.rct='dbeta(3,1)'`, low bias RCT `pi.low.rct='dbeta(1,20)'`, high bias NRS `pi.high.nrs='dbeta(30,1)'` and low bias NRS `pi.low.nrs='dbeta(1,2)'`. The ratio ${a/b}$ controls the skewness of the beta distribution.  The closer to 1 the ratio a/b, the more the mean of probability of bias gets closer to 1 and the study acquires 'major' bias adjustment. Alternatively,  we can use the study characteristics $z_j$ to predict $\pi_j$ through a logistic transformation (internally coded).
+The bias probabilities $\pi_j$ are study-specific and can be estimated in two different ways. They are either given informative beta priors (${Beta(a,b)}$) that are set according to the risk of bias. The default beta priors are as follows: high bias RCT `pi.high.rct='dbeta(3,1)'`, low bias RCT `pi.low.rct='dbeta(1,20)'`, high bias NRS `pi.high.nrs='dbeta(30,1)'` and low bias NRS `pi.low.nrs='dbeta(1,2)'`. The ratio ${a/b}$ controls the skewness of the beta distribution.  The closer to 1 the ratio a/b, the more the mean of probability of bias gets closer to 1 and the study acquires 'major' bias adjustment. Alternatively,  we can use the study characteristics $z_j$ to predict $\pi_j$ through a logistic transformation (internally coded).
 
 ## Bias-adjusted model 2
 
@@ -154,7 +152,7 @@ Another way to incorporate the RoB of the study is by replacing $\delta_{jk}$ by
     \end{cases}       
 \end{equation}
 
-where the bias-adjusted relative treatment effect ($\theta_{jk}$) are modelled as follows
+where the bias-adjusted relative treatment effect ($\theta_{jk}$) are modeled as follows
 $$
 \theta_{jk} \sim (1-\pi_j)N(d_{Ak}-d_{Ab}, \tau_\delta^2) + \pi_jN(d_{Ak}-d_{Ab}+\gamma_j, \tau_\delta^2+\tau_\gamma^2)
 $$
@@ -166,15 +164,15 @@ The table below summarizes the different assumptions implemented in the package 
 | Parameter 	| Assumptions| Argument in `crosnma.model()`|  	
 |:----------------------|:-----------|:------|
 |relative treatment effect ($\delta_{jk}$)| Random-effects: $\delta_{jk} \sim N(d_{Ak}-d_{Ab}, \tau_\delta^2)$| `trt.effect='random'` |
-|   	|Common-effect: $\delta_{jk}=d_{Ak}-d_{Ab}$| `trt.effect='common'`|
+| |Common-effect: $\delta_{jk}=d_{Ak}-d_{Ab}$| `trt.effect='common'`|
 |Covariate effect $\beta_{0, j}$ | Independent effects: $\beta_{0, j} \sim N(0, 10^2)$| `reg0.effect='independent'` |
-|   	|Random-effects: $\beta_{0,j} \sim N(B_0, \tau_{\beta_0})$| `reg0.effect='random'`|
+|  |Random-effects: $\beta_{0,j} \sim N(B_0, \tau_{\beta_0})$| `reg0.effect='random'`|
 |Within-study covariate-treatment interaction ($\beta_{1, jk}^W$)| Random-effects: $\beta_{1, jk}^W \sim N(B_{1, Ak}^W-B_{1, Ab}^W, \tau_{\beta_1^W})$| `regw.effect='random'` |
-|   	|Common-effect: $\beta_{1,jk}^W = B_{1, Ak}^W-B_{1, Ab}^W$| `regw.effect='common'`|
+| 	|Common-effect: $\beta_{1,jk}^W = B_{1, Ak}^W-B_{1, Ab}^W$| `regw.effect='common'`|
 |Between-study covariate-treatment interaction ($\beta_{1, jk}^B$)| Random-effects: $\beta_{1,jk}^B \sim N(B_{1, Ak}^B-B_{1, Ab}^B, \tau_{\beta_1^B})$| `regb.effect='random'` |
-|   	|Common-effect: $\beta_{1,jk}^B = B_{1, Ak}^B-B_{1, Ab}^B$| `regb.effect='common'`|
+|  	|Common-effect: $\beta_{1,jk}^B = B_{1, Ak}^B-B_{1, Ab}^B$| `regb.effect='common'`|
 |Bias effect ($\gamma_{\{1,2\},j}$)| Random-effects: $\gamma_{\{1,2\},j} \sim N(\Gamma_{\{1,2\}}, \tau_{\gamma})$| `bias.effect='random'` |
-|   	|Common-effect: $\gamma_{j} = \Gamma_{\{1,2\}$| `bias.effect='common'`|
+| 	|Common-effect: $\gamma_{\{1,2\},j}=\Gamma_{\{1,2\}}$| `bias.effect='common'`|
 |Bias probability ($\pi_j$)| $\pi_j \sim Beta(a,b)$|  |
 || $\pi_j = a+bz_j$|  |
 
@@ -218,9 +216,9 @@ There are two steps to run the NMA/NMR model. The first step is to create a JAGS
 
 ### Naïve network meta-analysis 
 
-We start by indicating the names of the datasets on participant- (`prt.data`) and aggregate data (`std.data`). Then, the name of the variables on each dataset needs to be given respectively in `prt.data` and `std.data`.  Next, the `reference` treatment needs to be assigned (we set it to drug A). By choosing `trt.effect=random`, we are assigning a normal distribution to each relative treatment effect to allow the synthesis across studies, see the table in Section 2.1. Finally, the different designs; RCT and NRS are combined with the information taken at face-value; `method.bias = 'naive'`.
+We start by indicating the names of the datasets on participant-level (`prt.data`) and aggregate data (`std.data`). Then, the name of the variables on each dataset needs to be given respectively in `prt.data` and `std.data`.  Next, the `reference` treatment needs to be assigned (we set it to drug A). By choosing `trt.effect=random`, we are assigning a normal distribution to each relative treatment effect to allow the synthesis across studies, see the table in Section 2.1. Finally, the different designs; RCT and NRS are combined with the information taken at face-value; `method.bias = 'naive'`.
 
-Optionally, we can specify a prior to the common heterogeneity of the treatment effect across studies through the `prior` argument we add `tau.trt='dunif(0,3)'`, see below.
+Optionally, we can specify a prior to the common heterogeneity of the treatment effect across studies. We indicate that distribution in the argument `prior` as `tau.trt='dunif(0,3)'`, see below.
 
 
 ```{r}
@@ -245,9 +243,9 @@ Next, we fit the NMA model using `crosnma.run()`which requires us to set the num
 ```{r}
 # run jags
 jagsfit1 <- crosnma.run(model=mod1,
-                        n.adapt = 500,
-                        n.iter=5000,
-                        n.burnin = 2000,
+                        n.adapt = 50,
+                        n.iter=500,
+                        n.burnin = 200,
                         thin=1,
                         n.chains=2)
 ```
@@ -260,9 +258,9 @@ knitr::kable(summary(jagsfit1,expo=F))
 
 The estimated OR of B vs A can be obtained as exp(d.B) and similarly for exp(d.C) and exp(d.D) are the ORs of C and D relative to A, respectively. The value of tau refers to the estimates of the heterogeneity standard deviation in the relative treatment effects across studies.
 
-We need also to assess the convergence of the MCMC chains either by visually inspect the trace plot or checking the Gelman and Rubin statistic, Rhat (it should be almost 1), see the above table.
+We need also to assess the convergence of the MCMC chains either by visually inspect the trace plot or checking the Gelman and Rubin statistic, Rhat (it should be approximately 1) in the table above.
 
-```{r}
+```{r,out.width='.49\\linewidth', fig.width=3, fig.height=3,fig.show='hold',fig.align='center'}
 coda::traceplot(jagsfit1$samples)
 ```
 
@@ -294,9 +292,9 @@ The MCMC is run under the same set up as in the network meta-analysis.
 ```{r}
 # run jags
 jagsfit2 <- crosnma.run(model=mod2,
-                        n.adapt = 500,
-                        n.iter=5000,
-                        n.burnin = 2000,
+                        n.adapt = 50,
+                        n.iter=500,
+                        n.burnin = 200,
                         thin=1,
                         n.chains=2)
 ```
@@ -307,11 +305,11 @@ and the output table is presented below
 knitr::kable(summary(jagsfit2,expo=FALSE))
 ```
 
-Here, we additionally estimate b_1 which indicates the mean effect of age and tau.b_1 which refers to the heterogeneity standard deviation in the effect of age across studies. To improve the convergence of MCMC, we choose to not split the within- and between-study age coefficient therefore we obtain the estimate for a single parameter $(\beta^W_{1,jk} = \beta^B_{1,jk}=\beta_{1,jk})$. 
+Now, we additionally estimate b_1 which indicates the mean effect of age and tau.b_1 which refers to the heterogeneity standard deviation in the effect of age across studies. Here, we obtain a single estimate  because we choose to not split the within- and between-study age coefficients $(\beta^W_{1,jk} = \beta^B_{1,jk}=\beta_{1,jk})$ to improve the convergence of MCMC.
 
 Again, we check convergence with trace plots
 
-```{r}
+```{r,out.width='.49\\linewidth', fig.width=3, fig.height=3,fig.show='hold',fig.align='center'}
 coda::traceplot(jagsfit2$samples)
 ```
 
@@ -349,9 +347,9 @@ mod3 <- crosnma.model(prt.data=prt.data,
 ```{r}
 # run jags
 jagsfit3 <- crosnma.run(model=mod3,
-                        n.adapt = 500,
-                        n.iter=5000,
-                        n.burnin = 2000,
+                        n.adapt = 50,
+                        n.iter=500,
+                        n.burnin = 200,
                         thin=1,
                         n.chains=2)
 ```
@@ -362,7 +360,7 @@ knitr::kable(summary(jagsfit3,expo=F))
 ```
 
 
-```{r}
+```{r,out.width='.49\\linewidth', fig.width=3, fig.height=3,fig.show='hold',fig.align='center'}
 coda::traceplot(jagsfit3$samples)
 ```
 
@@ -398,9 +396,9 @@ mod4 <- crosnma.model(prt.data=prt.data,
 ```{r}
 # run jags
 jagsfit4 <- crosnma.run(model=mod4,
-                       n.adapt = 500,
-                        n.iter=5000,
-                        n.burnin = 2000,
+                       n.adapt = 50,
+                        n.iter=500,
+                        n.burnin = 200,
                         thin=1,
                         n.chains=2)
 ```
@@ -415,7 +413,7 @@ The parameter `g` refers to the mean bias effect, common for all studies.
 
 The trace plots are shown below
 
-```{r}
+```{r,out.width='.49\\linewidth', fig.width=3, fig.height=3,fig.show='hold',fig.align='center'}
 coda::traceplot(jagsfit4$samples)
 ```
 
@@ -448,9 +446,9 @@ mod5 <- crosnma.model(prt.data=prt.data,
 ```{r}
 # run jags
 jagsfit5 <- crosnma.run(model=mod5,
-                       n.adapt = 500,
-                        n.iter=5000,
-                        n.burnin = 2000,
+                       n.adapt = 50,
+                        n.iter=500,
+                        n.burnin = 200,
                         thin=1,
                         n.chains=2)
 ```
@@ -463,7 +461,7 @@ knitr::kable(summary(jagsfit5,expo=F))
 
 
 
-```{r}
+```{r,out.width='.49\\linewidth', fig.width=3, fig.height=3,fig.show='hold',fig.align='center'}
 coda::traceplot(jagsfit5$samples)
 ```
 
