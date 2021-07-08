@@ -1,6 +1,7 @@
 #!!! works for MA !! modify the prior to add beta0 and beta.w only when IPD=T ????
 #+++ add deviance
 #!!! construct a DEFAULT prior, a simple way, d~dnorm (0, (10*max.delta)^-2)
+# R[j] is not needed for adjust2
 crosnma.code <- function(ipd = T,
                       ad = T,
                       trt.effect='random',
@@ -400,19 +401,39 @@ crosnma.code <- function(ipd = T,
       }
 
     }else if(method.bias=="adjust2"){
-      theta.effect.ipd <- "theta[j,t.ipd[j,k]] ~ dnormmix(c(md[j,t.ipd[j,k]],md[j,t.ipd[j,k]]+gamma[j]),c(precd[j,t.ipd[j,k]],precd[j,t.ipd[j,k]]+prec.gamma), c(pi[j],1-pi[j]))
+      if(trt.effect=="random"){
+        theta.effect.ipd <- "theta[j,t.ipd[j,k]] ~ dnormmix(c(md[j,t.ipd[j,k]],md[j,t.ipd[j,k]]+gamma[j]),c(precd[j,t.ipd[j,k]],precd[j,t.ipd[j,k]]+prec.gamma), c(pi[bias_index[j]],1-pi[bias_index[j]]))
         # multi-arm correction
       md[j,t.ipd[j,k]]<- mean[j,k] + sw[j,k]
       w[j,k]<- (theta[j,t.ipd[j,k]]  - mean[j,k])
       sw[j,k]<- sum(w[j,1:(k-1)])/(k-1)
       precd[j,t.ipd[j,k]]<- prec *2*(k-1)/k"
 
-      theta.effect.ad <- "theta[j+ns.ipd,t.ad[j,k]] ~ dnormmix(c(md.ad[j,t.ad[j,k]],md.ad[j,t.ad[j,k]]+gamma[j+ns.ipd]),c(precd.ad[j,t.ad[j,k]],precd.ad[j,t.ad[j,k]]+prec.gamma), c(pi[j],1-pi[j]))
+        theta.effect.ad <- "theta[j+ns.ipd,t.ad[j,k]] ~ dnormmix(c(md.ad[j,t.ad[j,k]],md.ad[j,t.ad[j,k]]+gamma[j+ns.ipd]),c(precd.ad[j,t.ad[j,k]],precd.ad[j,t.ad[j,k]]+prec.gamma), c(pi[bias_index[j]],1-pi[bias_index[j]]))
         # multi-arm correction
       md.ad[j,t.ad[j,k]]<- mean.ad[j,k] + sw.ad[j,k]
       w.ad[j,k]<- (theta[j+ns.ipd,t.ad[j,k]]  - mean.ad[j,k])
       sw.ad[j,k]<- sum(w.ad[j,1:(k-1)])/(k-1)
       precd.ad[j,t.ad[j,k]]<- prec *2*(k-1)/k"
+      }else if(trt.effect=="common"){
+        theta.effect.ipd <- "theta[j,t.ipd[j,k]] <- (pi[bias_index[j]]*md[j,t.ipd[j,k]])+((1-pi[bias_index[j]])*(md[j,t.ipd[j,k]]+gamma[j]))
+        # multi-arm correction
+      md[j,t.ipd[j,k]]<- mean[j,k] + sw[j,k]
+      w[j,k]<- (theta[j,t.ipd[j,k]]  - mean[j,k])
+      sw[j,k]<- sum(w[j,1:(k-1)])/(k-1)
+      precd[j,t.ipd[j,k]]<- prec *2*(k-1)/k"
+
+        theta.effect.ad <- "theta[j+ns.ipd,t.ad[j,k]] <- (pi[bias_index[j]]*md.ad[j,t.ad[j,k]])+((1-pi[bias_index[j]])*(md.ad[j,t.ad[j,k]]+gamma[j+ns.ipd]))
+        # multi-arm correction
+      md.ad[j,t.ad[j,k]]<- mean.ad[j,k] + sw.ad[j,k]
+      w.ad[j,k]<- (theta[j+ns.ipd,t.ad[j,k]]  - mean.ad[j,k])
+      sw.ad[j,k]<- sum(w.ad[j,1:(k-1)])/(k-1)
+      precd.ad[j,t.ad[j,k]]<- prec *2*(k-1)/k"
+      }else{
+        stop("Please indicate the model of treatment effect as either 'random' or 'common' ")
+
+      }
+
       if(bias.effect=='random'){
         gamma.effect <- paste0("
          for (j in 1:(ns.ipd+ns.ad)) {gamma[j]~dnorm(g,prec.gamma)}

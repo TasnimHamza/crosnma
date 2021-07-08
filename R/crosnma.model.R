@@ -1,5 +1,4 @@
 #!!! check: the same number of covariates should be in IPD and AD
-#!!! check checkings
 #!!! check that the length of the arguments that indicate names is 2
 #!!! check when the prt.data or std.data, only one variable name need to be given
 
