@@ -154,7 +154,7 @@ Another way to incorporate the RoB of the study is by replacing $\delta_{jk}$ by
 
 where the bias-adjusted relative treatment effect ($\theta_{jk}$) are modeled as follows
 $$
-\theta_{jk} \sim (1-\pi_j)N(d_{Ak}-d_{Ab}, \tau_\delta^2) + \pi_jN(d_{Ak}-d_{Ab}+\gamma_j, \tau_\delta^2+\tau_\gamma^2)
+\theta_{jk} \sim \pi_j N(d_{Ak}-d_{Ab}, \tau_\delta^2) +  (1-\pi_j)N(d_{Ak}-d_{Ab}+\gamma_j, \tau_\delta^2+\tau_\gamma^2)
 $$
 
 ## Assumptions about the model parameters

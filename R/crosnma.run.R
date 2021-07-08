@@ -85,7 +85,7 @@ crosnma.run <- function(model,
                           quiet=quiet)
 
   # runjags.options(silent.jags=TRUE, silent.runjags=TRUE)
-  if(n.burnin!=0) jagsburnin <- update(jagsfit, n.iter=n.burnin)
+  if(n.burnin!=0) update(jagsfit, n.burnin)
 
   # ---- monitor
   # basics
