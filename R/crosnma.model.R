@@ -1,3 +1,4 @@
+#!!! Error when NRS is not provided then there is no need to specify the method.bias
 #!!! check: the same number of covariates should be in IPD and AD
 #!!! check that the length of the arguments that indicate names is 2
 #!!! check when the prt.data or std.data, only one variable name need to be given

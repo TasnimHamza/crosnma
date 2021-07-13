@@ -8,6 +8,7 @@
 #' @param thin Number of thinning for the MCMC chains. Default is 1.
 #' @param n.chains Number of MCMC chains. Default is 2.
 #' @param quiet A logical. If TRUE, the warning message will not be displayed
+#' @param monitor A vector of additional parameters to monitor. Default is NULL
 #' See \code{\link{jags.model}} for more info.
 #'
 #' @return \code{crosnma.run} returns an object of class \code{crosrun} which is a list containing the following components:
@@ -62,7 +63,8 @@ crosnma.run <- function(model,
                      n.iter,
                      thin=1,
                      n.chains=2,
-                     quiet=TRUE
+                     quiet=TRUE,
+                     monitor=NULL
                      # inits = "DEFAULT"
 ){
 
@@ -89,7 +91,7 @@ crosnma.run <- function(model,
 
   # ---- monitor
   # basics
-  make.monitor <- "d"
+  make.monitor <- c("d",monitor)
   if(model$trt.effect=="random") make.monitor <- c(make.monitor, "tau")
   # meta-regression
   if(!is.null(model$covariate)){
