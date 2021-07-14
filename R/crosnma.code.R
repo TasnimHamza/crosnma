@@ -389,7 +389,7 @@ crosnma.code <- function(ipd = T,
                                "
                       pi[4]~",prior.pi.low.nrs,  # low NRS
                                "
-                      pi[5]~ dbeta(1,1)"
+                      pi[5]~dbeta(1,1)"
         )# unclear RCT or NRS")
       }else{
         adjust.prior <- paste0(gamma.effect,"
