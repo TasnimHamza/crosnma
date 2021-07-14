@@ -2,6 +2,7 @@
 #+++ add deviance
 #!!! construct a DEFAULT prior, a simple way, d~dnorm (0, (10*max.delta)^-2)
 # R[j] is not needed for adjust2
+#??? when split.reg=F, regb.effect and regw.effect should be set as 'common' otherwise it will be random
 crosnma.code <- function(ipd = T,
                       ad = T,
                       trt.effect='random',
@@ -492,7 +493,7 @@ crosnma.code <- function(ipd = T,
     y[i]~dbern(p[i])
 
     # logistic transformation - to estimate Odds Ratio (OR)
-    logit(p[i]) <- u[study[i]]+theta[study[i],trt[i]]*(1-equals(trt[i],bl[i])) %s %s
+    logit(p[i]) <- u[study[i]]+theta[study[i],trt[i]]*(1-equals(trt[i],bl[i]))%s%s
   }
 
   for(j in 1:(ns.ipd)){ # loop through IPD studies
@@ -547,7 +548,7 @@ crosnma.code <- function(ipd = T,
     for (k in 2:na.ad[j]){ # loop through non-referent AD arms
 
       # logistic transformation with treatment-by-covariate interactions in study-level - to estimate Odds Ratio (OR)
-      logit(pa[j,t.ad[j,k]]) <- u[j]+theta[j+ns.ipd,t.ad[j,k]] %s%s
+      logit(pa[j,t.ad[j,k]]) <- u[j]+theta[j+ns.ipd,t.ad[j,k]]%s%s
 
       # distribution of random effects
       %s
