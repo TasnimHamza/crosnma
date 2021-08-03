@@ -2,6 +2,7 @@
 #!!! check: the same number of covariates should be in IPD and AD
 #!!! check that the length of the arguments that indicate names is 2
 #!!! check when the prt.data or std.data, only one variable name need to be given
+#!!! CHANGE the default beta distribution for high RCT and low NRS to dbeta(4,6) and dbeta(6,4), update Vignette and arguments description below
 
 #' Create JAGS model to synthesize cross-design evidence and cross-format data in NMA and NMR for dichotomous outcomes
 #' @description This function creates a JAGS model and the needed data. The JAGS code is created from the internal function \code{crosnma.code}.
