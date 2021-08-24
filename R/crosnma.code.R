@@ -493,7 +493,7 @@ crosnma.code <- function(ipd = T,
     y[i]~dbern(p[i])
 
     # logistic transformation - to estimate Odds Ratio (OR)
-    logit(p[i]) <- u[study[i]]+theta[study[i],trt[i]]*(1-equals(trt[i],bl[i]))%s%s
+    logit(p[i]) <- u[study[i]]+(theta[study[i],trt[i]]*(1-equals(trt[i],bl[i])))%s%s
   }
 
   for(j in 1:(ns.ipd)){ # loop through IPD studies
@@ -548,7 +548,7 @@ crosnma.code <- function(ipd = T,
     for (k in 2:na.ad[j]){ # loop through non-referent AD arms
 
       # logistic transformation with treatment-by-covariate interactions in study-level - to estimate Odds Ratio (OR)
-      logit(pa[j,t.ad[j,k]]) <- u[j]+theta[j+ns.ipd,t.ad[j,k]]%s%s
+      logit(pa[j,t.ad[j,k]]) <- u[j]+(theta[j+ns.ipd,t.ad[j,k]])%s%s
 
       # distribution of random effects
       %s
