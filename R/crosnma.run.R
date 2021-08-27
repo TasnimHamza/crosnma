@@ -1,3 +1,4 @@
+# set init as BUGSnet have done
 #' Run JAGS to synthesize cross-design evidence and cross-format data in NMA and NMR for dichotomous outcomes
 #' @description Takes the JAGS model from an object produced by \code{crosnma.model} and runs it using \code{jags} package.
 #'

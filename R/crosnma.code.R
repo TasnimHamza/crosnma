@@ -543,12 +543,12 @@ crosnma.code <- function(ipd = T,
 
 
     # referent arm
-    logit(pa[j,t.ad[j,1]]) <- u[j]
+    logit(pa[j,t.ad[j,1]]) <- u[j+ns.ipd]
 
     for (k in 2:na.ad[j]){ # loop through non-referent AD arms
 
       # logistic transformation with treatment-by-covariate interactions in study-level - to estimate Odds Ratio (OR)
-      logit(pa[j,t.ad[j,k]]) <- u[j]+(theta[j+ns.ipd,t.ad[j,k]])%s%s
+      logit(pa[j,t.ad[j,k]]) <- u[j+ns.ipd]+(theta[j+ns.ipd,t.ad[j,k]])%s%s
 
       # distribution of random effects
       %s
