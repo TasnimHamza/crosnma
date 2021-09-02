@@ -1,5 +1,5 @@
 # crosnm
-: An R Package to Synthesize Cross-Design Evidence and Cross-Format Data Using Network Meta-Analysis
+crosnma (CROSs-design and CROSs-Format synthesis using Network Meta-Analysis) is an R Package that allows for synthesize the data that can be in various formats; individual-participants (IPD) or aggregated (AD) and can come from non-randomized or randomized studies (NRS, RCT).
 # Installation
 The package can be installed in Rstudio directly from GitHub using the R package `devtools` 
 ```
