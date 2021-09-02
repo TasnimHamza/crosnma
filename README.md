@@ -8,15 +8,15 @@ install.packages("devtools")
 
 # Then install crosnma
 devtools::install_github("TasnimHamza/crosnma")
-```
 For the bias-adjustment 2 method, we need further to install the R package `rjags` to load the mixture of normals module `load.module("mix")`.
+
 ```
 # Install the rjags
 install.packages("rjags")
 library("rjags")
 # To be able to load the mix module 
 load.module("mix")
-
+```
 # How to use crosnma?
 There are two steps to run the NMA/NMR model. The first step is to create a JAGS model using `crosnma.model()` which produces the JAGS code and the data. In the second step, the output of that function will be used in `crosnma.run()` to run the MCMC (Markov chain Monte Carlo) through JAGS.
 
