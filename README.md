@@ -8,8 +8,8 @@ install.packages("devtools")
 
 # Then install crosnma
 devtools::install_github("TasnimHamza/crosnma")
+```
 For the bias-adjustment 2 method, we need further to install the R package `rjags` to load the mixture of normals module `load.module("mix")`.
-
 ```
 # Install the rjags
 install.packages("rjags")
