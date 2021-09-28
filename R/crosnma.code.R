@@ -3,6 +3,7 @@
 #!!! construct a DEFAULT prior, a simple way, d~dnorm (0, (10*max.delta)^-2)
 # R[j] is not needed for adjust2
 #??? when split.reg=F, regb.effect and regw.effect should be set as 'common' otherwise it will be random
+# adjust2, common-effect, in multiarm-correction, delete the prec line
 crosnma.code <- function(ipd = T,
                       ad = T,
                       trt.effect='random',
@@ -417,14 +418,14 @@ crosnma.code <- function(ipd = T,
       sw.ad[j,k]<- sum(w.ad[j,1:(k-1)])/(k-1)
       precd.ad[j,t.ad[j,k]]<- prec *2*(k-1)/k"
       }else if(trt.effect=="common"){
-        theta.effect.ipd <- "theta[j,t.ipd[j,k]] <- (pi[bias_index[j]]*md[j,t.ipd[j,k]])+((1-pi[bias_index[j]])*(md[j,t.ipd[j,k]]+gamma[j]))
+        theta.effect.ipd <- "theta[j,t.ipd[j,k]] <- ((1-pi[bias_index[j]])*md[j,t.ipd[j,k]])+(pi[bias_index[j]]*(md[j,t.ipd[j,k]]+gamma[j]))
         # multi-arm correction
       md[j,t.ipd[j,k]]<- mean[j,k] + sw[j,k]
       w[j,k]<- (theta[j,t.ipd[j,k]]  - mean[j,k])
       sw[j,k]<- sum(w[j,1:(k-1)])/(k-1)
       precd[j,t.ipd[j,k]]<- prec *2*(k-1)/k"
 
-        theta.effect.ad <- "theta[j+ns.ipd,t.ad[j,k]] <- (pi[bias_index[j]]*md.ad[j,t.ad[j,k]])+((1-pi[bias_index[j]])*(md.ad[j,t.ad[j,k]]+gamma[j+ns.ipd]))
+        theta.effect.ad <- "theta[j+ns.ipd,t.ad[j,k]] <- ((1-pi[bias_index[j]])*md.ad[j,t.ad[j,k]])+(pi[bias_index[j]]*(md.ad[j,t.ad[j,k]]+gamma[j+ns.ipd]))
         # multi-arm correction
       md.ad[j,t.ad[j,k]]<- mean.ad[j,k] + sw.ad[j,k]
       w.ad[j,k]<- (theta[j+ns.ipd,t.ad[j,k]]  - mean.ad[j,k])

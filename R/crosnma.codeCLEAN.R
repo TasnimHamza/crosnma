@@ -1,5 +1,6 @@
 #+++ add deviance
 #!!! construct a DEFAULT prior, a simple way, d~dnorm (0, (10*max.delta)^-2)
+# fix common adjust2 model, it should be the other way around, (1-pi)*...+ pi* ...
 crosnma.codeCLEAN <- function(ipd = T,
                          ad = T,
                          trt.effect='random',
