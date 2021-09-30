@@ -4,6 +4,7 @@
 #!!! check when the prt.data or std.data, only one variable name need to be given
 #!!! CHANGE the default beta distribution for high RCT and low NRS to dbeta(4,6) and dbeta(6,4), update Vignette and arguments description below
 #!!! give study.key in the output
+#!!! create the t, r, n ... matrices after ordering treatments alphapitically per each study - IPD and AD
 #' Create JAGS model to synthesize cross-design evidence and cross-format data in NMA and NMR for dichotomous outcomes
 #' @description This function creates a JAGS model and the needed data. The JAGS code is created from the internal function \code{crosnma.code}.
 #'
@@ -655,7 +656,7 @@ crosnma.model <- function(prt.data,
                                          to=trt.key$trt.jags,
                                          warn_missing = FALSE) %>% as.integer)
 
-    jagstemp2 <- data2 %>% arrange(study) %>% group_by(study) %>% dplyr::mutate(arm = row_number()) %>%
+    jagstemp2 <- data2 %>% arrange(study,trt.jags) %>% group_by(study) %>% dplyr::mutate(arm = row_number()) %>%
       ungroup()%>% select(-c(trt,design,bias))  %>% gather("variable", "value", -study, -arm) %>% spread(arm, value)
 
     jagsdata2 <- list()
