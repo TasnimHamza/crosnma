@@ -4,7 +4,7 @@
 # R[j] is not needed for adjust2
 #??? when split.reg=F, regb.effect and regw.effect should be set as 'common' otherwise it will be random
 # adjust2, common-effect, in multiarm-correction, delete the prec line
-crosnma.code <- function(ipd = T,
+crosnma.codeOLD <- function(ipd = T,
                       ad = T,
                       trt.effect='random',
                       prior.tau.trt=NULL,
