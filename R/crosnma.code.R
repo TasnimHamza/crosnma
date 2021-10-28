@@ -318,6 +318,7 @@ crosnma.code <- function(ipd = T,
       ref.trt.effect.ad0 <- paste0(
         "betab_",i,"[j,t.ipd[j,1]] <- 0 \n"
       )
+      ref.trt.effect.ad0 <- ifelse(ipd,"", ref.trt.effect.ad0)
       ref.trt.effect.ad <- paste0(ref.trt.effect.ad,ref.trt.effect.ad0)
     }
   }
