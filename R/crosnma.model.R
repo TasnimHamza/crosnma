@@ -366,6 +366,14 @@ crosnma.model <- function(prt.data,
 
     # create bias_index or x.bias based on RoB and study type RCT or NRS when  method.bias= 'adjust1' or 'adjust2'
     if(!is.null(bias)){
+      data1%<>%mutate(bias_index=case_when(
+        design=='rct'&bias=='high'~ 1,
+        design=='rct'&bias=='low'~ 2,
+        design=='nrs'&bias=='high'~ 3,
+        design=='nrs'&bias=='low'~ 4,
+        bias=='unclear'~ 5
+      ))
+      bias_index.ipd<- data1%>%group_by(study,bias_index)%>%group_keys()%>%select('bias_index')
       if(!is.null(bias.covariate)){
         # continuous
         if (is.numeric(data1$x.bias) == TRUE) {
@@ -388,16 +396,8 @@ crosnma.model <- function(prt.data,
             mutate(x.bias=mean(x.bias,na.rm = TRUE))
         } else {stop("Invalid datatype for bias covariate.")}
 
-        bias_index.ipd <- NULL
+        # bias_index.ipd <- NULL
       }else{
-        data1%<>%mutate(bias_index=case_when(
-          design=='rct'&bias=='high'~ 1,
-          design=='rct'&bias=='low'~ 2,
-          design=='nrs'&bias=='high'~ 3,
-          design=='nrs'&bias=='low'~ 4,
-          bias=='unclear'~ 5
-        ))
-        bias_index.ipd<- data1%>%group_by(study,bias_index)%>%group_keys()%>%select('bias_index')
         xbias.ipd <- NULL
       }
 
@@ -427,7 +427,6 @@ crosnma.model <- function(prt.data,
           group_by(study.jags)%>%
           mutate(xm1.ipd=mean(x1,na.rm = TRUE))
       } else {stop("Invalid datatype for covariate.")}
-
       # covariate2
       if(!is.null(data1$x2)){
         # continuous
@@ -533,6 +532,14 @@ crosnma.model <- function(prt.data,
 
     # add bias_index based on RoB and study design RCT or NRS. when method.bias ='adjust1' or 'adjust2'
     if(!is.null(bias)){
+      data2%<>%mutate(bias_index=case_when(
+        design=='rct'&bias=='high'~ 1,
+        design=='rct'&bias=='low'~ 2,
+        design=='nrs'&bias=='high'~ 3,
+        design=='nrs'&bias=='low'~ 4,
+        bias=='unclear'~ 5
+      ))
+      bias_index.ad<- data2%>%group_by(study,bias_index)%>%group_keys()%>%select('bias_index')
       if(!is.null(bias.covariate)){
         # continuous
         if (is.numeric(data2$x.bias) == TRUE) {
@@ -555,17 +562,9 @@ crosnma.model <- function(prt.data,
             mutate(x.bias=mean(x.bias,na.rm = TRUE))
         } else {stop("Invalid datatype for bias covariate.")}
 
-        bias_index.ad <- NULL
+        # bias_index.ad <- NULL
       }else{
-        data2%<>%mutate(bias_index=case_when(
-          design=='rct'&bias=='high'~ 1,
-          design=='rct'&bias=='low'~ 2,
-          design=='nrs'&bias=='high'~ 3,
-          design=='nrs'&bias=='low'~ 4,
-          bias=='unclear'~ 5
-        ))
-        bias_index.ad<- data2%>%group_by(study,bias_index)%>%group_keys()%>%select('bias_index')
-        xbias.ad <- NULL
+      xbias.ad <- NULL
       }
 
     }else{
