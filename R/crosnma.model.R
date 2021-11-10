@@ -139,6 +139,8 @@ crosnma.model <- function(prt.data,
                        #---------- bias adjustment ----------
                        method.bias = NULL,
                        bias=NULL, #optional, required for adjust1. It can be either: low, high,
+                       bias.add = NULL,
+                       unfav=NULL,
                        bias.type=NULL,#c('add','mult','both'),
                        bias.covariate=NULL,
                        bias.effect='common',
