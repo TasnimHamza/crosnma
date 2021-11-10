@@ -144,7 +144,6 @@ crosnma.model <- function(prt.data,
                        bias.type=NULL,#c('add','mult','both'),
                        bias.covariate=NULL,
                        bias.effect='common',
-                       unfav=NULL, # c("unfav", "unfav")
                        # ---------- prior ----------
                        prior=list(tau.trt=NULL,
                                   tau.reg0=NULL,
