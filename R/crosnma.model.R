@@ -520,7 +520,7 @@ if (method.bias%in%c("adjust1","adjust2")) {
       select(-study.jags)%>%
       as.matrix()
     # generate JAGS data object
-    jagstemp <- data1 %>% select(-c(study,trt,design,bias.add))
+    jagstemp <- data1 %>% select(-c(study,trt,design,bias.add,unfav))
     for (v in names(jagstemp)){
       jagsdata1[[v]] <- jagstemp %>% pull(v)
     }
