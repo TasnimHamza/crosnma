@@ -405,9 +405,9 @@ crosnma.code <- function(ipd = T,
         }else{
           for (i in 1:2) {
             gamma.effect0 <- paste0("# Common effect for gamma (bias effect)\n",
-                                    ifelse(add.std.in,paste0("for (j in std.in) {gamma",i,"[j]<-g",i,")}\n"),""),
+                                    ifelse(add.std.in,paste0("for (j in std.in) {gamma",i,"[j]<-g",i,"}\n"),""),
                                     ifelse(add.std.act.no,paste0("for (j in std.act.no) {gamma",i,"[j]<-0}\n"),""),
-                                    ifelse(add.std.act.yes,paste0("for (j in std.act.yes) {gamma",i,"[j]<-g.act",i,")}\n"),""),
+                                    ifelse(add.std.act.yes,paste0("for (j in std.act.yes) {gamma",i,"[j]<-g.act",i,"}\n"),""),
                                     ifelse(add.std.in,paste0("g",i,"~dnorm(0, 0.0001)\n"),""),
                                     ifelse(add.std.act.yes,paste0("g.act",i,"~dnorm(0, 0.0001)\n"),"")
             )
@@ -507,7 +507,7 @@ crosnma.code <- function(ipd = T,
                                )
       }else{
         gamma.effect <- paste0("# Common effect for gamma (bias effect)\n",
-                               ifelse(add.std.in,"for (j in std.in) {gamma[j]<-g)}\n",""),
+                               ifelse(add.std.in,"for (j in std.in) {gamma[j]<-g}\n",""),
                                ifelse(add.std.act.no,"for (j in std.act.no) {gamma[j]<-0}\n",""),
                                ifelse(add.std.act.yes,"for (j in std.act.yes) {gamma[j]<-g.act}\n",""),
                                ifelse(add.std.in,"g~dnorm(0, 0.0001)\n",""),
