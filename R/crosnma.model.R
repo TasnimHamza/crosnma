@@ -500,13 +500,13 @@ crosnma.model <- function(prt.data,
 if (method.bias%in%c("adjust1","adjust2")) {
 # From the unfav column create new ref treatment per study
   dd0 <- data1%>%
-    group_by(study)%>%
+    group_by(study.jags)%>%
     mutate(ref.trt.std=.data[["trt"]][unfav==0][1])
 # For each study, arrange treatments by the new ref
-  ns <- length(unique(dd0$study))
+  ns <- length(unique(dd0$study.jags))
   dd1 <-sapply(1:ns,
                function(i){
-                 dstd0 <- dd0[dd0$study==unique(dd0$study)[i],]
+                 dstd0 <- dd0[dd0$study.jags==unique(dd0$study.jags)[i],]
                  dstd<- dstd0%>%arrange(match(trt,ref.trt.std))
                  }
                ,simplify = FALSE)
@@ -520,7 +520,7 @@ if (method.bias%in%c("adjust1","adjust2")) {
       select(-study.jags)%>%
       as.matrix()
     # generate JAGS data object
-    jagstemp <- data1 %>% select(-c(study,trt,design,bias.add,unfav))
+    jagstemp <- data1 %>% select(-c(study,trt,design,bias.add,unfav,bias_index))
     for (v in names(jagstemp)){
       jagsdata1[[v]] <- jagstemp %>% pull(v)
     }
@@ -555,8 +555,8 @@ if (method.bias%in%c("adjust1","adjust2")) {
       unlist()
     jagsdata1$np <- data1 %>% nrow()
     jagsdata1$x.bias <- NULL
-    jagsdata1$bias_index <- NULL
-    jagsdata1$bias <- NULL
+    # jagsdata1$bias_index <- NULL
+    # jagsdata1$bias <- NULL
     # modify names in JAGS object
     names(jagsdata1)[names(jagsdata1) == "r"]  <- "y"
     names(jagsdata1)[names(jagsdata1) == "trt.jags"] <- "trt"
@@ -721,7 +721,7 @@ if (method.bias%in%c("adjust1","adjust2")) {
       dd2 <- do.call(rbind,dd1)
       # create a matrix with the treatment index
       jagstemp2 <- dd2 %>%arrange(study.jags) %>% group_by(study.jags) %>% dplyr::mutate(arm = row_number()) %>%
-        ungroup()%>% dplyr::select(-c(trt,design,bias,ref.trt.std,unfav,bias.add))  %>% gather("variable", "value", -study,-study.jags, -arm) %>% spread(arm, value)
+        ungroup()%>% dplyr::select(-c(trt,design,bias,ref.trt.std,unfav,bias.add,bias_index))  %>% gather("variable", "value", -study,-study.jags, -arm) %>% spread(arm, value)
       jagsdata2 <- list()
       for (v in unique(jagstemp2$variable)){
         jagsdata2[[v]] <- as.matrix(jagstemp2 %>% filter(variable == v) %>% select(-study,-study.jags, -variable))
@@ -746,8 +746,8 @@ if (method.bias%in%c("adjust1","adjust2")) {
     jagsdata2$xm2.ad <- unique(data2$xm2.ad)
     jagsdata2$xm3.ad <- unique(data2$xm3.ad)
     jagsdata2$x.bias <- NULL
-    jagsdata2$bias_index <- NULL
-    jagsdata2$bias <- NULL
+    # jagsdata2$bias_index <- NULL
+    # jagsdata2$bias <- NULL
     # change names
     names(jagsdata2)[names(jagsdata2) == "trt.jags"] <- "t.ad"
   }else{
