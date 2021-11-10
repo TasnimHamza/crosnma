@@ -139,7 +139,7 @@ crosnma.run <- function(model,
         if(model$bias.effect=='random') make.monitor.bias <- c(make.monitor.bias,"tau.gamma1","tau.gamma2")
       }else if(model$bias.type%in%c('add','mult')){
         make.monitor.bias <- c("g")
-        if(length(jagsdata$std.act.yes)!=0) make.monitor.bias <- c(make.monitor.bias,"g.act")
+        if(length(model$jagsdata$std.act.yes)!=0) make.monitor.bias <- c(make.monitor.bias,"g.act")
         if(model$bias.effect=='random') make.monitor.bias <- c(make.monitor.bias,"tau.gamma")
       }
     }

@@ -520,7 +520,7 @@ if (method.bias%in%c("adjust1","adjust2")) {
       select(-study.jags)%>%
       as.matrix()
     # generate JAGS data object
-    jagstemp <- data1 %>% select(-c(study,trt,design,bias.add,unfav,bias_index))
+    jagstemp <- data1 %>% select(-c(study,trt,design,bias.add,unfav,bias_index,bias))
     for (v in names(jagstemp)){
       jagsdata1[[v]] <- jagstemp %>% pull(v)
     }
@@ -937,6 +937,9 @@ if (method.bias%in%c("adjust1","adjust2")) {
                      bias.effect=bias.effect,
                      bias.type=bias.type,
                      bias.covariate=bias.covariate,
+                     add.std.in=ifelse(length(jagsdata$std.in)==0,FALSE, TRUE),
+                     add.std.act.no=ifelse(length(jagsdata$std.act.no)==0,FALSE, TRUE),
+                     add.std.act.yes=ifelse(length(jagsdata$std.act.yes)==0,FALSE, TRUE),
                      prior.tau.trt=prior[['tau.trt']],
                      prior.tau.reg0=prior[['tau.reg0']],
                      prior.tau.regb=prior[['tau.regb']],
