@@ -537,7 +537,7 @@ if (method.bias%in%c("adjust1","adjust2")) {
 
 
     # generate JAGS data object
-    jagstemp <- data1 %>% select(-c(study,trt,design,bias.add))
+    jagstemp <- data1 %>% select(-c(study,trt,design))
     for (v in names(jagstemp)){
       jagsdata1[[v]] <- jagstemp %>% pull(v)
     }
@@ -715,10 +715,10 @@ if (method.bias%in%c("adjust1","adjust2")) {
       dd2 <- do.call(rbind,dd1)
       # create a matrix with the treatment index
       jagstemp2 <- dd2 %>%arrange(study.jags) %>% group_by(study.jags) %>% dplyr::mutate(arm = row_number()) %>%
-        ungroup()%>% dplyr::select(-c(trt,design,bias,ref.trt.std,unfav))  %>% gather("variable", "value", -study,-study.jags, -arm) %>% spread(arm, value)
+        ungroup()%>% dplyr::select(-c(trt,design,bias,ref.trt.std,unfav))  %>% gather("variable", "value", -study,-study.jags, -arm,-bias.add) %>% spread(arm, value)
       jagsdata2 <- list()
       for (v in unique(jagstemp2$variable)){
-        jagsdata2[[v]] <- as.matrix(jagstemp2 %>% filter(variable == v) %>% select(-study,-study.jags, -variable,-bias.add))
+        jagsdata2[[v]] <- as.matrix(jagstemp2 %>% filter(variable == v) %>% select(-study,-study.jags, -variable))
       }
     }else{
       jagstemp2 <- data2 %>% arrange(study.jags,trt.jags) %>% group_by(study.jags) %>% dplyr::mutate(arm = row_number()) %>%
