@@ -376,15 +376,15 @@ crosnma.code <- function(ipd = T,
     if(method.bias=="adjust1"){
       if(bias.type=='add'){
         adjust.str.ipd <- "+R[study[i]]*gamma[study[i]]"
-        adjust.str.ad <- "+R[j+ns.ipd]*gamma[j+ns.ipd]"
+        adjust.str.ad <- "+R[j+ns.ipd]*gamma[(j+ns.ipd)]"
       } else if(bias.type=='mult'){
         adjust.str.ipd <- "*gamma[study[i]]^R[study[i]]"
-        adjust.str.ad <- "*gamma[j+ns.ipd]^R[j+ns.ipd]"
+        adjust.str.ad <- "*gamma[(j+ns.ipd)]^R[j+ns.ipd]"
       } else if(bias.type=='both') {
         adjust.str.ipd <- "*gamma1[study[i]]^R[study[i]]+R[study[i]]*gamma2[study[i]]"
-        adjust.str.ad <- "*gamma1[j+ns.ipd]^R[j+ns.ipd]+R[j+ns.ipd]*gamma2[j+ns.ipd]"
+        adjust.str.ad <- "*gamma1[(j+ns.ipd)]^R[j+ns.ipd]+R[j+ns.ipd]*gamma2[(j+ns.ipd)]"
       } else{
-        stop("The bias type could be either 'add', 'mult' or 'both'")
+        stop("The bias type should be set as 'add', 'mult' or 'both'")
       }
       if(bias.type=='both'){
         gamma.effect <- ""
@@ -392,9 +392,14 @@ crosnma.code <- function(ipd = T,
           for (i in 1:2) {
             gamma.effect0 <- paste0("
             # Random effect for gamma (bias effect)
-         for (j in 1:(ns.ipd+ns.ad)) {gamma",i,"[j]~dnorm(g",i,",prec.gamma",i,")}",
+         for (j in std.in) {gamma",i,"[j]~dnorm(g",i,",prec.gamma",i,")}",
+         "\n
+         for (j in std.act.no) {gamma",i,"[j]~dnorm(0,prec.gamma",i,")}",
+         "\n
+         for (j in std.act.yes) {gamma",i,"[j]~dnorm(g.act",i,",prec.gamma",i,")}",
          "\n
          g",i,"~dnorm(0, 0.0001)\n
+         g.act",i,"~dnorm(0, 0.0001)\n
          tau.gamma",i,"~",prior.tau.gamma,
          "prec.gamma",i," <- pow(tau.gamma",i,",-2)"
             )
@@ -404,8 +409,11 @@ crosnma.code <- function(ipd = T,
           for (i in 1:2) {
             gamma.effect0 <- paste0("
             # Common effect for gamma (bias effect)
-            for (j in 1:(ns.ipd+ns.ad)) {gamma",i,"[j] <- g",i,"}\n",
-                                    "g",i,"~dnorm(0, 0.0001)"
+            for (j in std.in) {gamma",i,"[j] <- g",i,"}\n
+            for (j in std.act.no) {gamma",i,"[j] <- 0}\n
+            for (j in std.act.yes) {gamma",i,"[j] <- g.act",i,"}\n",
+                                    "g",i,"~dnorm(0, 0.0001)",
+                                    "g.act",i,"~dnorm(0, 0.0001)"
             )
             gamma.effect <- paste0(gamma.effect,gamma.effect0)
           }
@@ -415,17 +423,25 @@ crosnma.code <- function(ipd = T,
         if(bias.effect=='random'){
           gamma.effect <- paste0("
           # Random effect for gamma (bias effect)
-         for (j in 1:(ns.ipd+ns.ad)) {gamma[j]~dnorm(g,prec.gamma)}
+         for (j in std.in) {gamma[j]~dnorm(g,prec.gamma)} \n
+         for (j in std.act.no) {gamma[j]~dnorm(0,prec.gamma)} \n
+         for (j in std.act.yes) {gamma[j]~dnorm(g.act,prec.gamma)} \n
+
          g~dnorm(0, 0.01) \n
+         g.act~dnorm(0, 0.01) \n
          tau.gamma~",prior.tau.gamma,
-         "\n prec.gamma <- pow(tau.gamma,-2)"
+         "\n prec.gamma <- pow(tau.gamma,-2)
+         "
           )
         }else{
           gamma.effect <- "
           # Random effect for gamma (bias effect)
-          for (j in 1:(ns.ipd+ns.ad)) {gamma[j]<-g} \n
+          for (j in std.in) {gamma[j]<-g} \n
+          for (j in std.act.no) {gamma[j]<-0} \n
+          for (j in std.act.yes) {gamma[j]<-g.act} \n
+
           g~dnorm(0, 0.01) \n
-          prec.gamma <-0"
+          g.act~dnorm(0, 0.01)"
           warning("Bias effect is assumed common across studies")
         }
       }
@@ -488,15 +504,23 @@ crosnma.code <- function(ipd = T,
 
       if(bias.effect=='random'){
         gamma.effect <- paste0("
-         for (j in 1:(ns.ipd+ns.ad)) {gamma[j]~dnorm(g,prec.gamma)}
+         for (j in std.in) {gamma[j]~dnorm(g,prec.gamma)}\n
+         for (j in std.act.no) {gamma[j]~dnorm(0,prec.gamma)}\n
+         for (j in std.act.yes) {gamma[j]~dnorm(g.act,prec.gamma)}\n
+
          g~dnorm(0, 0.01)
+         g.act~dnorm(0, 0.01)
          tau.gamma~",prior.tau.gamma,
                                "prec.gamma <- pow(tau.gamma,-2)"
         )
       }else{
-        gamma.effect <- "for (j in 1:(ns.ipd+ns.ad)) {gamma[j]<-g}
-         g~dnorm(0, 0.01)
-          prec.gamma <-0"
+        gamma.effect <- "
+        for (j in std.in) {gamma[j]<-g}\n
+        for (j in std.act.no) {gamma[j]<-0}\n
+        for (j in std.act.no) {gamma[j]<-g.act}\n
+
+         g~dnorm(0, 0.01)\n
+         g.act~dnorm(0, 0.01)"
         warning("Bias effect is assumed common across studies")
       }
       if(is.null(bias.covariate)){

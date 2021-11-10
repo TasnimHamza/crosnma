@@ -1,10 +1,11 @@
-#!!! Error when NRS is not provided then there is no need to specify the method.bias
+#!!! Error when NRS is not provided, no need to specify the method.bias
 #!!! check: the same number of covariates should be in IPD and AD
 #!!! check that the length of the arguments that indicate names is 2
 #!!! check when the prt.data or std.data, only one variable name need to be given
 #!!! CHANGE the default beta distribution for high RCT and low NRS to dbeta(4,6) and dbeta(6,4), update Vignette and arguments description below
 #!!! give study.key in the output
 #!!! create the t, r, n ... matrices after ordering treatments alphapitically per each study - IPD and AD
+#++ Add 2 checks, first that the values of unfav column are only 0 or 1 and another check that 0 is unique per study
 #' Create JAGS model to synthesize cross-design evidence and cross-format data in NMA and NMR for dichotomous outcomes
 #' @description This function creates a JAGS model and the needed data. The JAGS code is created from the internal function \code{crosnma.code}.
 #'
@@ -41,6 +42,11 @@
 #' @param bias.covariate An optional vector of two characters (required when method.bias='adjust1' or 'adjust2'). It has the variable name of the variable that will be used in estimating the probability of bias.
 #' @param bias.effect An optional character indicating the relationship for the bias coefficients across studies.
 #' Options are 'random' or 'common' (default). It is required when method.bias='adjust1' or 'adjust2'.
+#' @param unfav An optional vector of length 2 (should be provided when method.bias='adjust1' or 'adjust2') which defines the names of the variables (as character) in prt.data and std.data, respectively, that include an indicator of the unfavoured treatment in each study.
+#' The entries of these variables should be either 0 (unfavoured treatment) or 1 (favourable treatment or treatments). Each study should include only one 0. The values need to be repeated for the participants that belong to the same study.
+#' @param bias.add An optional vector of length 2 (should be provided when method.bias='adjust1' or 'adjust2') which defines the names of the variables (as character) in prt.data and std.data, respectively, that indicates the bias effect in each study.
+#' The entries of these variables should be either 1 (study has inactive treatment and its estimate should be adjusted for bias effect), 2 (study has only active treatments and its estimate should be adjusted for bias effect (different from inactive bias effect)
+#' or 0 (study doesn't need bias adjustment). The values need to be repeated for the participants that belong to the same study.
 #' @param prior An optional list to control the prior for various parameters in JAGS model. When effects are set as 'random', we can set the heterogeneity parameters for: tau.trt for the treatment effects,
 #' tau.reg0 for the effect of prognostic covariates, tau.regb and tau.regw for within- and between-study covariate effect, respectively.
 #' and tau.gamma for bias effect. The default of all heterogeneity parameters is 'dunif(0,2)'. Currently only the uniform distribution is supported.
@@ -136,6 +142,7 @@ crosnma.model <- function(prt.data,
                        bias.type=NULL,#c('add','mult','both'),
                        bias.covariate=NULL,
                        bias.effect='common',
+                       unfav=NULL, # c("unfav", "unfav")
                        # ---------- prior ----------
                        prior=list(tau.trt=NULL,
                                   tau.reg0=NULL,
@@ -180,7 +187,9 @@ crosnma.model <- function(prt.data,
                   r = outcome[1],
                   design=design[1],
                   bias=bias[1],
-                  x.bias=bias.covariate[1])
+                  x.bias=bias.covariate[1],
+                  bias.add=bias.add[1],
+                  unfav=unfav[1])
 
     if(!is.null(covariate)){
       x11 <- covariate[[1]][1]
@@ -206,7 +215,9 @@ crosnma.model <- function(prt.data,
                     n = n,
                     design=design[2],
                     bias=bias[2],
-                    x.bias=bias.covariate[2])
+                    x.bias=bias.covariate[2],
+                    bias.add=bias.add[2],
+                    unfav=unfav[2])
       if(!is.null(covariate)){
         x12 <- covariate[[2]][1]
         x22<- ifelse(is.na(covariate[[2]][2]),list(NULL),covariate[[2]][2])[[1]]
@@ -226,7 +237,9 @@ crosnma.model <- function(prt.data,
                     n = n,
                     design=design[1],
                     bias=bias[1],
-                    x.bias=bias.covariate[1])
+                    x.bias=bias.covariate[1],
+                    bias.add=bias.add[1],
+                    unfav=unfav[1])
       if(!is.null(covariate)){
         x12 <- covariate[[1]][1]
         x22<- ifelse(is.na(covariate[[1]][2]),list(NULL),covariate[[1]][2])[[1]]
@@ -346,6 +359,9 @@ crosnma.model <- function(prt.data,
   trt.key <- trt.df$trt %>% unique %>% sort %>% tibble(trt.ini=.) %>%
     filter(trt.ini!=reference) %>% add_row(trt.ini=reference, .before=1) %>%
     mutate(trt.jags = 1:dim(.)[1])
+  # set a study key from the two datasets
+  study.df <- data.frame(std.id= unique(c(data1$study,data2$study)))
+  study.key <- study.df%>% mutate(study.jags = 1:dim(.)[1])
 
   if(!is.null(prt.data)){
     #Trt mapping
@@ -357,12 +373,9 @@ crosnma.model <- function(prt.data,
     # Study mapping
     #add study mapping to data
     data1 %<>% mutate(study.jags=mapvalues(study,
-                                           from=unique(study),
-                                           to=seq_len(length(unique(study))),
-                                           warn_missing = FALSE
-    )%>% as.integer)
-
-
+                                           from=study.key$std.id,
+                                           to=study.key$study.jags,
+                                           warn_missing = FALSE)%>% as.integer)
 
     # create bias_index or x.bias based on RoB and study type RCT or NRS when  method.bias= 'adjust1' or 'adjust2'
     if(!is.null(bias)){
@@ -482,18 +495,43 @@ crosnma.model <- function(prt.data,
     # create a matrix of treatment per study row
     jagsdata1 <- list()
 
-    jagsdata1$t.ipd <- data1 %>% group_by(study.jags,trt.jags)%>% group_keys()%>%
+    # create the matrix of trt index following the values of unfav column (adjust 1&2)
+if (method.bias%in%c("adjust1","adjust2")) {
+# From the unfav column create new ref treatment per study
+  dd0 <- data1%>%
+    group_by(study)%>%
+    mutate(ref.trt.std=.data[["trt"]][unfav==0][1])
+# For each study, arrange treatments by the new ref
+  ns <- length(unique(dd0$study))
+  dd1 <-sapply(1:ns,
+               function(i){
+                 dstd0 <- dd0[dd0$study==unique(dd0$study)[i],]
+                 dstd<- dstd0%>%arrange(match(trt,ref.trt.std))
+                 }
+               ,simplify = FALSE)
+  dd2 <- do.call(rbind,dd1)
+# create a matrix with the treatment index
+    jagsdata1$t.ipd <-  dd2 %>% group_by(study.jags,trt.jags)%>%
+      select(trt.jags)%>% unique()%>%
       group_by(study.jags)%>%
       dplyr::mutate(arm = row_number())%>%ungroup() %>%
       spread(arm, trt.jags)%>%
       select(-study.jags)%>%
       as.matrix()
+}else{
+  jagsdata1$t.ipd <- data1 %>% group_by(study.jags,trt.jags)%>% group_keys()%>%
+    group_by(study.jags)%>%
+    dplyr::mutate(arm = row_number())%>%ungroup() %>%
+    spread(arm, trt.jags)%>%
+    select(-study.jags)%>%
+    as.matrix()
+}
 
     # create baseline vector
-    data1 %<>% mutate(bl=mapvalues(study,
-                                   from=unique(data1$study),
-                                   to=jagsdata1$t.ipd[,1],
-                                   warn_missing = FALSE) %>% as.integer)
+    # data1 %<>% mutate(bl=mapvalues(study,
+    #                                from=unique(data1$study),
+    #                                to=jagsdata1$t.ipd[,1],
+    #                                warn_missing = FALSE) %>% as.integer)
 
 
 
@@ -654,18 +692,46 @@ crosnma.model <- function(prt.data,
                                          from=trt.key$trt.ini,
                                          to=trt.key$trt.jags,
                                          warn_missing = FALSE) %>% as.integer)
+    #add study mapping to data
+    data2 %<>% mutate(study.jags=mapvalues(study,
+                                           from=study.key$std.id,
+                                           to=study.key$study.jags,
+                                           warn_missing = FALSE) %>% as.integer)
+    # create the matrix of trt index following the values of unfav column (adjust 1&2)
+    if (method.bias%in%c("adjust1","adjust2")) {
+      # From the unfav column create new ref treatment per study
+      dd0 <- data2%>%
+        group_by(study.jags)%>%
+        mutate(ref.trt.std=.data[["trt"]][unfav==0])
+      # For each study, arrange treatments by the new ref
+      ns <- length(unique(dd0$study.jags))
+      dd1 <-sapply(1:ns,
+                   function(i){
+                     dstd0 <- dd0[dd0$study.jags==unique(dd0$study.jags)[i],]
+                     dstd<- dstd0%>%arrange(match(trt,ref.trt.std))
+                   }
+                   ,simplify = FALSE)
+      dd2 <- do.call(rbind,dd1)
+      # create a matrix with the treatment index
+      jagstemp2 <- dd2 %>%arrange(study.jags) %>% group_by(study.jags) %>% dplyr::mutate(arm = row_number()) %>%
+        ungroup()%>% dplyr::select(-c(trt,design,bias,ref.trt.std,unfav))  %>% gather("variable", "value", -study,-study.jags, -arm) %>% spread(arm, value)
+      jagsdata2 <- list()
+      for (v in unique(jagstemp2$variable)){
+        jagsdata2[[v]] <- as.matrix(jagstemp2 %>% filter(variable == v) %>% select(-study,-study.jags, -variable))
+      }
+    }else{
+      jagstemp2 <- data2 %>% arrange(study.jags,trt.jags) %>% group_by(study.jags) %>% dplyr::mutate(arm = row_number()) %>%
+        ungroup()%>% select(-c(trt,design,bias))  %>% gather("variable", "value", -study,-study.jags, -arm) %>% spread(arm, value)
 
-    jagstemp2 <- data2 %>% arrange(study,trt.jags) %>% group_by(study) %>% dplyr::mutate(arm = row_number()) %>%
-      ungroup()%>% select(-c(trt,design,bias))  %>% gather("variable", "value", -study, -arm) %>% spread(arm, value)
-
-    jagsdata2 <- list()
-    for (v in unique(jagstemp2$variable)){
-      jagsdata2[[v]] <- as.matrix(jagstemp2 %>% filter(variable == v) %>% select(-study, -variable))
+      jagsdata2 <- list()
+      for (v in unique(jagstemp2$variable)){
+        jagsdata2[[v]] <- as.matrix(jagstemp2 %>% filter(variable == v) %>% select(-study,-study.jags, -variable))
+      }
     }
 
     # add number of treatments, studies, and arms to JAGS data object
-    jagsdata2$ns.ad <- ifelse(!is.null(data2),data2$study %>% unique()%>%length(),0)
-    jagsdata2$na.ad <- data2 %>% group_by(study) %>%dplyr::summarize(n.arms = n()) %>%
+    jagsdata2$ns.ad <- ifelse(!is.null(data2),data2$study.jags %>% unique()%>%length(),0)
+    jagsdata2$na.ad <- data2 %>% group_by(study.jags) %>%dplyr::summarize(n.arms = n()) %>%
       ungroup() %>% select(n.arms) %>% t() %>% as.vector
     # add covariate
     jagsdata2$x1 <- jagsdata2$x2 <- jagsdata2$x3 <- NULL
@@ -684,11 +750,20 @@ crosnma.model <- function(prt.data,
   }
   # combine jagsdata of IPD and AD
   jagsdata <- c(jagsdata1,jagsdata2)
+
   # combine bias_index and bias covariate from IPD and AD
-  # jagsdata1$xbias <- jagsdata2$xbias <- NULL
   jagsdata$bias_index <- c(bias_index.ipd$bias_index,bias_index.ad$bias_index)
   jagsdata$xbias <- c(xbias.ipd,xbias.ad)
 
+  # when method.bias is adjust1 or adjust 2: add studies index:
+  # 1. studies need bias adjustment and has inactive treatment (bias.add=1)
+  # 2. studies need bias adjustment but has only active treatment (bias.add=2)
+  # 3. studies don't need any bias adjustment
+  bmat <- rbind(data1%>% group_by(study.jags)%>%select(bias.add)%>%unique()%>%select(bias.add),
+                data2%>% group_by(study.jags)%>%select(bias.add)%>%unique())
+  jagsdata$std.in <-bmat$study.jags[bmat$bias.add==1]
+  jagsdata$std.act.no <-bmat$study.jags[bmat$bias.add==0]
+  jagsdata$std.act.yes <-bmat$study.jags[bmat$bias.add==2]
 
 
   #====================================
@@ -731,10 +806,10 @@ crosnma.model <- function(prt.data,
       select(-study)%>%
       as.matrix()
     # add baseline vector
-    data1.nrs %<>% mutate(bl=mapvalues(study,
-                                       from=unique(data1.nrs$study),
-                                       to=jagsdata.nrs$t.ipd[,1],
-                                       warn_missing = FALSE) %>% as.integer)
+    # data1.nrs %<>% mutate(bl=mapvalues(study,
+    #                                    from=unique(data1.nrs$study),
+    #                                    to=jagsdata.nrs$t.ipd[,1],
+    #                                    warn_missing = FALSE) %>% as.integer)
 
     #generate JAGS data object
 
@@ -870,6 +945,7 @@ crosnma.model <- function(prt.data,
   crosmodel <- structure(list(jagsmodel=model,
                            data=jagsdata,
                            trt.key=trt.key,
+                           study.key=study.key,
                            trt.effect=trt.effect,
                            method.bias=method.bias,
                            covariate=covariate,
@@ -882,3 +958,4 @@ crosnma.model <- function(prt.data,
   class = "crosnmaModel")
   return(crosmodel)
 }
+

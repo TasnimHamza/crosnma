@@ -135,14 +135,17 @@ crosnma.run <- function(model,
     if(model$method.bias=='adjust1'){
       if(model$bias.type=='both'){
         make.monitor.bias <- c("g1","g2")
+        if(length(jagsdata$std.act.yes)!=0) make.monitor.bias <- c(make.monitor.bias,c("g.act1","g.act2"))
         if(model$bias.effect=='random') make.monitor.bias <- c(make.monitor.bias,"tau.gamma1","tau.gamma2")
       }else if(model$bias.type%in%c('add','mult')){
         make.monitor.bias <- c("g")
+        if(length(jagsdata$std.act.yes)!=0) make.monitor.bias <- c(make.monitor.bias,"g.act")
         if(model$bias.effect=='random') make.monitor.bias <- c(make.monitor.bias,"tau.gamma")
       }
     }
     if(model$method.bias=='adjust2'){
       make.monitor.bias <- c("g")
+      if(length(jagsdata$std.act.yes)!=0) make.monitor.bias <- c(make.monitor.bias,"g.act")
       if(model$bias.effect=='random') make.monitor.bias <- c(make.monitor.bias,"tau.gamma")
 
     }
