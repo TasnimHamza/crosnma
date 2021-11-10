@@ -418,7 +418,7 @@ crosnma.code <- function(ipd = T,
       }else {
         if(bias.effect=='random'){
           gamma.effect <- paste0("# Random effect for gamma (bias effect)\n",
-                                  ifelse(add.std.in,"for (j in std.in) {gamma[j]~dnorm(g,prec.gamma)\n",""),
+                                  ifelse(add.std.in,"for (j in std.in) {gamma[j]~dnorm(g,prec.gamma)}\n",""),
                                   ifelse(add.std.act.no,"for (j in std.act.no) {gamma[j]~dnorm(0,prec.gamma)}\n",""),
                                   ifelse(add.std.act.yes,"for (j in std.act.yes) {gamma[j]~dnorm(g.act,prec.gamma)}\n",""),
                                   ifelse(add.std.in,"g~dnorm(0, 0.0001)\n",""),
@@ -428,7 +428,7 @@ crosnma.code <- function(ipd = T,
                                   )
         }else{
           gamma.effect <- paste0("# Common effect for gamma (bias effect)\n",
-                                  ifelse(add.std.in,"for (j in std.in) {gamma[j]<-g)}\n",""),
+                                  ifelse(add.std.in,"for (j in std.in) {gamma[j]<-g}\n",""),
                                   ifelse(add.std.act.no,"for (j in std.act.no) {gamma[j]<-0}\n",""),
                                   ifelse(add.std.act.yes,"for (j in std.act.yes) {gamma[j]<-g.act}\n",""),
                                   ifelse(add.std.in,"g~dnorm(0, 0.0001)\n",""),
@@ -497,7 +497,7 @@ crosnma.code <- function(ipd = T,
 
       if(bias.effect=='random'){
         gamma.effect <- paste0("# Random effect for gamma (bias effect)\n",
-                               ifelse(add.std.in,"for (j in std.in) {gamma[j]~dnorm(g,prec.gamma)\n",""),
+                               ifelse(add.std.in,"for (j in std.in) {gamma[j]~dnorm(g,prec.gamma)}\n",""),
                                ifelse(add.std.act.no,"for (j in std.act.no) {gamma[j]~dnorm(0,prec.gamma)}\n",""),
                                ifelse(add.std.act.yes,"for (j in std.act.yes) {gamma[j]~dnorm(g.act,prec.gamma)}\n",""),
                                ifelse(add.std.in,"g~dnorm(0, 0.0001)\n",""),
