@@ -766,8 +766,9 @@ if (method.bias%in%c("adjust1","adjust2")) {
   # 1. studies need bias adjustment and has inactive treatment (bias.add=1)
   # 2. studies need bias adjustment but has only active treatment (bias.add=2)
   # 3. studies don't need any bias adjustment
-  bmat <- rbind(data1%>% group_by(study.jags)%>%select(bias.add)%>%unique()%>%select(bias.add),
-                data2%>% group_by(study.jags)%>%select(bias.add)%>%unique())
+  bmat <- rbind(ifelse(!is.null(data1),list(data1%>% group_by(study.jags)%>%select(bias.add)%>%unique()%>%select(bias.add)), list(NULL))[[1]],
+                ifelse(!is.null(data2),list(data2%>% group_by(study.jags)%>%select(bias.add)%>%unique()), list(NULL))[[1]]
+                )
   jagsdata$std.in <-bmat$study.jags[bmat$bias.add==1]
   jagsdata$std.act.no <-bmat$study.jags[bmat$bias.add==0]
   jagsdata$std.act.yes <-bmat$study.jags[bmat$bias.add==2]
