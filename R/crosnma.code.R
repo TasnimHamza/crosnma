@@ -476,9 +476,8 @@ crosnma.code <- function(ipd = T,
       w.ad[j,k]<- (theta[j+ns.ipd,t.ad[j,k]]  - mean.ad[j,k])
       sw.ad[j,k]<- sum(w.ad[j,1:(k-1)])/(k-1)
       precd.ad[j,t.ad[j,k]]<- prec *2*(k-1)/k"
-        prior.tau.theta <- paste0("
-    # heterogeneity between theta's
-                              tau ~",prior.tau.trt,
+        prior.tau.theta <- paste0("# heterogeneity between theta's
+                                  tau ~",prior.tau.trt,
                                   "\n prec<- pow(tau,-2)")
       }else if(trt.effect=="common"){
         theta.effect.ipd <- "theta[j,t.ipd[j,k]] <- md[j,t.ipd[j,k]]+(pi[bias_index[j]]*gamma[j])
