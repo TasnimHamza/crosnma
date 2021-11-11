@@ -484,15 +484,12 @@ crosnma.code <- function(ipd = T,
         # multi-arm correction
       md[j,t.ipd[j,k]]<- mean[j,k] + sw[j,k]
       w[j,k]<- (theta[j,t.ipd[j,k]]  - mean[j,k])
-      sw[j,k]<- sum(w[j,1:(k-1)])/(k-1)
-      precd[j,t.ipd[j,k]]<- prec *2*(k-1)/k"
-
+      sw[j,k]<- sum(w[j,1:(k-1)])/(k-1)"
         theta.effect.ad <- "theta[j+ns.ipd,t.ad[j,k]] <- md.ad[j,t.ad[j,k]]+(pi[bias_index[j]]*gamma[j+ns.ipd])
         # multi-arm correction
       md.ad[j,t.ad[j,k]]<- mean.ad[j,k] + sw.ad[j,k]
       w.ad[j,k]<- (theta[j+ns.ipd,t.ad[j,k]]  - mean.ad[j,k])
-      sw.ad[j,k]<- sum(w.ad[j,1:(k-1)])/(k-1)
-      precd.ad[j,t.ad[j,k]]<- prec *2*(k-1)/k"
+      sw.ad[j,k]<- sum(w.ad[j,1:(k-1)])/(k-1)"
         prior.tau.theta <- " "
       }else{
         stop("Please indicate the model of treatment effect as either 'random' or 'common' ")
