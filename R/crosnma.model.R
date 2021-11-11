@@ -6,6 +6,7 @@
 #!!! give study.key in the output
 #!!! create the t, r, n ... matrices after ordering treatments alphapitically per each study - IPD and AD
 #++ Add 2 checks, first that the values of unfav column are only 0 or 1 and another check that 0 is unique per study
+# exclude studies with NA for any of bias variables
 #' Create JAGS model to synthesize cross-design evidence and cross-format data in NMA and NMR for dichotomous outcomes
 #' @description This function creates a JAGS model and the needed data. The JAGS code is created from the internal function \code{crosnma.code}.
 #'
