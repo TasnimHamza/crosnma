@@ -45,9 +45,9 @@
 #' Options are 'random' or 'common' (default). It is required when method.bias='adjust1' or 'adjust2'.
 #' @param unfav An optional vector of length 2 (should be provided when method.bias='adjust1' or 'adjust2') which defines the names of the variables (as character) in prt.data and std.data, respectively, that include an indicator of the unfavoured treatment in each study.
 #' The entries of these variables should be either 0 (unfavoured treatment) or 1 (favourable treatment or treatments). Each study should include only one 0. The values need to be repeated for the participants that belong to the same study.
-#' @param bias.add An optional vector of length 2 (should be provided when method.bias='adjust1' or 'adjust2') which defines the names of the variables (as character) in prt.data and std.data, respectively, that indicates the bias effect in each study.
+#' @param bias.group An optional vector of length 2 (should be provided when method.bias='adjust1' or 'adjust2') which defines the names of the variables (as character) in prt.data and std.data, respectively, that indicates the bias effect in each study.
 #' The entries of these variables should be either 1 (study has inactive treatment and its estimate should be adjusted for bias effect), 2 (study has only active treatments and its estimate should be adjusted for bias effect (different from inactive bias effect)
-#' or 0 (study doesn't need bias adjustment). The values need to be repeated for the participants that belong to the same study.
+#' or 0 (study doesn't need bias adjustment). The values need to be repeated for the participants that belong to the same study. Default is 1 which implies applying bias adjustment to all study-specific estimates if the study is at high risk of bias.
 #' @param prior An optional list to control the prior for various parameters in JAGS model. When effects are set as 'random', we can set the heterogeneity parameters for: tau.trt for the treatment effects,
 #' tau.reg0 for the effect of prognostic covariates, tau.regb and tau.regw for within- and between-study covariate effect, respectively.
 #' and tau.gamma for bias effect. The default of all heterogeneity parameters is 'dunif(0,2)'. Currently only the uniform distribution is supported.
@@ -140,7 +140,7 @@ crosnma.model <- function(prt.data,
                        #---------- bias adjustment ----------
                        method.bias = NULL,
                        bias=NULL, #optional, required for adjust1. It can be either: low, high,
-                       bias.add = NULL,
+                       bias.group = NULL,
                        unfav=NULL,
                        bias.type=NULL,#c('add','mult','both'),
                        bias.covariate=NULL,
@@ -190,7 +190,7 @@ crosnma.model <- function(prt.data,
                   design=design[1],
                   bias=bias[1],
                   x.bias=bias.covariate[1],
-                  bias.add=bias.add[1],
+                  bias.group=bias.group[1],
                   unfav=unfav[1])
 
     if(!is.null(covariate)){
@@ -218,7 +218,7 @@ crosnma.model <- function(prt.data,
                     design=design[2],
                     bias=bias[2],
                     x.bias=bias.covariate[2],
-                    bias.add=bias.add[2],
+                    bias.group=bias.group[2],
                     unfav=unfav[2])
       if(!is.null(covariate)){
         x12 <- covariate[[2]][1]
@@ -240,7 +240,7 @@ crosnma.model <- function(prt.data,
                     design=design[1],
                     bias=bias[1],
                     x.bias=bias.covariate[1],
-                    bias.add=bias.add[1],
+                    bias.group=bias.group[1],
                     unfav=unfav[1])
       if(!is.null(covariate)){
         x12 <- covariate[[1]][1]
@@ -499,6 +499,8 @@ crosnma.model <- function(prt.data,
 
     # create the matrix of trt index following the values of unfav column (adjust 1&2)
 if (method.bias%in%c("adjust1","adjust2")) {
+  if(is.null(bias.group)){data1$bias.group <- 1} # Default, make bias adjustment when bias.group is not provided
+
 # From the unfav column create new ref treatment per study
   dd0 <- data1%>%
     group_by(study.jags)%>%
@@ -521,7 +523,7 @@ if (method.bias%in%c("adjust1","adjust2")) {
       select(-study.jags)%>%
       as.matrix()
     # generate JAGS data object
-    jagstemp <- data1 %>% select(-c(study,trt,design,bias.add,unfav,bias_index,bias))
+    jagstemp <- data1 %>% select(-c(study,trt,design,bias.group,unfav,bias_index,bias))
     for (v in names(jagstemp)){
       jagsdata1[[v]] <- jagstemp %>% pull(v)
     }
@@ -707,6 +709,8 @@ if (method.bias%in%c("adjust1","adjust2")) {
                                            warn_missing = FALSE) %>% as.integer)
     # create the matrix of trt index following the values of unfav column (adjust 1&2)
     if (method.bias%in%c("adjust1","adjust2")) {
+      if(is.null(bias.group)){data2$bias.group <- 1} # Default, make bias adjustment when bias.group is no provided
+
       # From the unfav column create new ref treatment per study
       dd0 <- data2%>%
         group_by(study.jags)%>%
@@ -720,9 +724,11 @@ if (method.bias%in%c("adjust1","adjust2")) {
                    }
                    ,simplify = FALSE)
       dd2 <- do.call(rbind,dd1)
+
+
       # create a matrix with the treatment index
       jagstemp2 <- dd2 %>%arrange(study.jags) %>% group_by(study.jags) %>% dplyr::mutate(arm = row_number()) %>%
-        ungroup()%>% dplyr::select(-c(trt,design,bias,ref.trt.std,unfav,bias.add,bias_index))  %>% gather("variable", "value", -study,-study.jags, -arm) %>% spread(arm, value)
+        ungroup()%>% dplyr::select(-c(trt,design,bias,ref.trt.std,unfav,bias.group,bias_index))  %>% gather("variable", "value", -study,-study.jags, -arm) %>% spread(arm, value)
       jagsdata2 <- list()
       for (v in unique(jagstemp2$variable)){
         jagsdata2[[v]] <- as.matrix(jagstemp2 %>% filter(variable == v) %>% select(-study,-study.jags, -variable))
@@ -764,15 +770,15 @@ if (method.bias%in%c("adjust1","adjust2")) {
   jagsdata$xbias <- c(xbias.ipd,xbias.ad)
 
   # when method.bias is adjust1 or adjust 2: add studies index:
-  # 1. studies need bias adjustment and has inactive treatment (bias.add=1)
-  # 2. studies need bias adjustment but has only active treatment (bias.add=2)
+  # 1. studies need bias adjustment and has inactive treatment (bias.group=1)
+  # 2. studies need bias adjustment but has only active treatment (bias.group=2)
   # 3. studies don't need any bias adjustment
-  bmat <- rbind(ifelse(!is.null(data1),list(data1%>% group_by(study.jags)%>%select(bias.add)%>%unique()%>%select(bias.add)), list(NULL))[[1]],
-                ifelse(!is.null(data2),list(data2%>% group_by(study.jags)%>%select(bias.add)%>%unique()), list(NULL))[[1]]
+  bmat <- rbind(ifelse(!is.null(data1),list(data1%>% group_by(study.jags)%>%select(bias.group)%>%unique()%>%select(bias.group)), list(NULL))[[1]],
+                ifelse(!is.null(data2),list(data2%>% group_by(study.jags)%>%select(bias.group)%>%unique()), list(NULL))[[1]]
                 )
-  jagsdata$std.in <-bmat$study.jags[bmat$bias.add==1]
-  jagsdata$std.act.no <-bmat$study.jags[bmat$bias.add==0]
-  jagsdata$std.act.yes <-bmat$study.jags[bmat$bias.add==2]
+  jagsdata$std.in <-bmat$study.jags[bmat$bias.group==1]
+  jagsdata$std.act.no <-bmat$study.jags[bmat$bias.group==0]
+  jagsdata$std.act.yes <-bmat$study.jags[bmat$bias.group==2]
 
 
   #====================================

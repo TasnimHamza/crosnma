@@ -348,18 +348,9 @@ crosnma.code <- function(ipd = T,
                             "\n prec<- pow(tau,-2)")
   }else if(trt.effect=="common"){
     theta.effect.ipd <- "
-    theta[j,t.ipd[j,k]] <- md[j,t.ipd[j,k]]
-  # multi-arm correction
-      md[j,t.ipd[j,k]]<- mean[j,k] + sw[j,k]
-      w[j,k]<- (theta[j,t.ipd[j,k]]  - mean[j,k])
-      sw[j,k]<- sum(w[j,1:(k-1)])/(k-1)
-  "
+    theta[j,t.ipd[j,k]] <- md[j,t.ipd[j,k]]"
     theta.effect.ad <- "
-    theta[j+ns.ipd,t.ad[j,k]] <- md.ad[j,t.ad[j,k]]
-  # multi-arm correction
-      md.ad[j,t.ad[j,k]]<- mean.ad[j,k] + sw.ad[j,k]
-      w.ad[j,k]<- (theta[j+ns.ipd,t.ad[j,k]]  - mean.ad[j,k])
-      sw.ad[j,k]<- sum(w.ad[j,1:(k-1)])/(k-1)"
+    theta[j+ns.ipd,t.ad[j,k]] <- md.ad[j,t.ad[j,k]]"
     prior.tau.theta <- ""
 
   }else{
@@ -480,16 +471,8 @@ crosnma.code <- function(ipd = T,
                                   tau ~",prior.tau.trt,
                                   "\n prec<- pow(tau,-2)")
       }else if(trt.effect=="common"){
-        theta.effect.ipd <- "theta[j,t.ipd[j,k]] <- md[j,t.ipd[j,k]]+(pi[bias_index[j]]*gamma[j])
-        # multi-arm correction
-      md[j,t.ipd[j,k]]<- mean[j,k] + sw[j,k]
-      w[j,k]<- (theta[j,t.ipd[j,k]]  - mean[j,k])
-      sw[j,k]<- sum(w[j,1:(k-1)])/(k-1)"
-        theta.effect.ad <- "theta[j+ns.ipd,t.ad[j,k]] <- md.ad[j,t.ad[j,k]]+(pi[bias_index[j]]*gamma[j+ns.ipd])
-        # multi-arm correction
-      md.ad[j,t.ad[j,k]]<- mean.ad[j,k] + sw.ad[j,k]
-      w.ad[j,k]<- (theta[j+ns.ipd,t.ad[j,k]]  - mean.ad[j,k])
-      sw.ad[j,k]<- sum(w.ad[j,1:(k-1)])/(k-1)"
+        theta.effect.ipd <- "theta[j,t.ipd[j,k]] <- md[j,t.ipd[j,k]]+(pi[bias_index[j]]*gamma[j])"
+        theta.effect.ad <- "theta[j+ns.ipd,t.ad[j,k]] <- md.ad[j,t.ad[j,k]]+(pi[bias_index[j]]*gamma[j+ns.ipd])"
         prior.tau.theta <- " "
       }else{
         stop("Please indicate the model of treatment effect as either 'random' or 'common' ")
