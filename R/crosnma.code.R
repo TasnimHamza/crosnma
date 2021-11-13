@@ -348,9 +348,11 @@ crosnma.code <- function(ipd = T,
                             "\n prec<- pow(tau,-2)")
   }else if(trt.effect=="common"){
     theta.effect.ipd <- "
-    theta[j,t.ipd[j,k]] <- md[j,t.ipd[j,k]]"
+    theta[j,t.ipd[j,k]] <- md[j,t.ipd[j,k]]
+    md[j,t.ipd[j,k]]<- mean[j,k]"
     theta.effect.ad <- "
-    theta[j+ns.ipd,t.ad[j,k]] <- md.ad[j,t.ad[j,k]]"
+    theta[j+ns.ipd,t.ad[j,k]] <- md.ad[j,t.ad[j,k]]
+    md.ad[j,t.ad[j,k]]<- mean.ad[j,k]"
     prior.tau.theta <- ""
 
   }else{
@@ -471,8 +473,10 @@ crosnma.code <- function(ipd = T,
                                   tau ~",prior.tau.trt,
                                   "\n prec<- pow(tau,-2)")
       }else if(trt.effect=="common"){
-        theta.effect.ipd <- "theta[j,t.ipd[j,k]] <- md[j,t.ipd[j,k]]+(pi[bias_index[j]]*gamma[j])"
-        theta.effect.ad <- "theta[j+ns.ipd,t.ad[j,k]] <- md.ad[j,t.ad[j,k]]+(pi[bias_index[j]]*gamma[j+ns.ipd])"
+        theta.effect.ipd <- "theta[j,t.ipd[j,k]] <- md[j,t.ipd[j,k]]+(pi[bias_index[j]]*gamma[j])
+        md[j,t.ipd[j,k]]<- mean[j,k]"
+        theta.effect.ad <- "theta[j+ns.ipd,t.ad[j,k]] <- md.ad[j,t.ad[j,k]]+(pi[bias_index[j]]*gamma[j+ns.ipd])
+        md.ad[j,t.ad[j,k]]<- mean.ad[j,k]"
         prior.tau.theta <- " "
       }else{
         stop("Please indicate the model of treatment effect as either 'random' or 'common' ")
