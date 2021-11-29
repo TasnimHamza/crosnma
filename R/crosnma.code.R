@@ -42,10 +42,10 @@ crosnma.code <- function(ipd = T,
   prior.tau.regb <- ifelse(is.null(prior.tau.regb),'dunif(0,2)',prior.tau.regb)
   prior.tau.regw <- ifelse(is.null(prior.tau.regw),'dunif(0,2)',prior.tau.regw)
   prior.tau.gamma<- ifelse(is.null(prior.tau.gamma),'dunif(0,2)',prior.tau.gamma )
-  prior.pi.high.rct <- ifelse(is.null(prior.pi.high.rct),'dbeta(3,1)',prior.pi.high.rct )
-  prior.pi.low.rct <- ifelse(is.null(prior.pi.low.rct),'dbeta(1,20)',prior.pi.low.rct )
+  prior.pi.high.rct <- ifelse(is.null(prior.pi.high.rct),'dbeta(10,1)',prior.pi.high.rct )
+  prior.pi.low.rct <- ifelse(is.null(prior.pi.low.rct),'dbeta(1,10)',prior.pi.low.rct )
   prior.pi.high.nrs <- ifelse(is.null(prior.pi.high.nrs),'dbeta(30,1)',prior.pi.high.nrs)
-  prior.pi.low.nrs <- ifelse(is.null(prior.pi.low.nrs),'dbeta(1,2)',prior.pi.low.nrs)
+  prior.pi.low.nrs <- ifelse(is.null(prior.pi.low.nrs),'dbeta(1,30)',prior.pi.low.nrs)
 
   #-----------------------------------------#
   #------ meta regression ------#

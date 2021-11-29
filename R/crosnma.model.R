@@ -1,10 +1,4 @@
-#!!! check: the same number of covariates should be in IPD and AD
-#!!! check that the length of the arguments that indicate names is 2
-#!!! check when the prt.data or std.data, only one variable name need to be given
-#!!! CHANGE the default beta distribution for high RCT and low NRS to dbeta(4,6) and dbeta(6,4), update Vignette and arguments description below
-#!!! give study.key in the output
-#!!! create the t, r, n ... matrices after ordering treatments alphapitically per each study - IPD and AD
-#++ Add 2 checks, first that the values of unfav column are only 0 or 1 and another check that 0 is unique per study
+#!!! CHANGE the default beta distribution in Vignette
 # exclude studies with NA for any of bias variables
 # delete the message from study.jags once I run the adjust1 and adjust2 models
 #' Create JAGS model to synthesize cross-design evidence and cross-format data in NMA and NMR for dichotomous outcomes
@@ -52,7 +46,7 @@
 #' tau.reg0 for the effect of prognostic covariates, tau.regb and tau.regw for within- and between-study covariate effect, respectively.
 #' and tau.gamma for bias effect. The default of all heterogeneity parameters is 'dunif(0,2)'. Currently only the uniform distribution is supported.
 #' When the method.bias='adjust1' or 'adjust2', the user may provide priors to control the bias probability.
-#' For the bias probabilities, beta distributions are assumed with the following default values: RCT with low (pi.low.rct='dbeta(1,20)')/high (pi.high.rct='dbeta(3,1)') bias, NRS with low(pi.low.rct='dbeta(1,2)')/high (pi.high.rct='dbeta(30,1)') bias (pi.low.nrs, pi.high.nrs).
+#' For the bias probabilities, beta distributions are assumed with the following default values: RCT with low (pi.low.rct='dbeta(1,10)')/high (pi.high.rct='dbeta(10,1)') bias, NRS with low(pi.low.rct='dbeta(1,30)')/high (pi.high.rct='dbeta(30,1)') bias (pi.low.nrs, pi.high.nrs).
 #' @param run.nrs An optional list is needed when the NRS used as a prior (method.bias='prior').
 #' The list consists of the following: (\code{var.infl}) controls the common inflation of the varaince of NRS estimates (\eqn{w}) and its values range between 0 (NRS do not contribute at all and the prior is vague) and 1 (the NRS evidence is used at face value, default approach).
 #' The parameter (\code{mean.shift}) is the bias shift (\eqn{\zeta}) to be added/subtracted from the estimated mean treatment effects (on the log-scale) from NRS network (0 is the default). Either (\code{var.infl}) or (\code{mean.shift}) should be provided but not both.
@@ -175,13 +169,6 @@ crosnma.model <- function(prt.data,
   arm <- NULL
   value <- NULL
   variable <- NULL
-
-  # check length of arguments
-  # if(!is.null(prt.data)&!is.null(std.data)){if(length(trt)!=2|length(study)!=2|length(outcome)!=2|length(design)!=2) stop("The following arguments: 'trt', 'study', 'outcome' and 'design' need to be vector of length 2 where the first element is the name of the variable in prt.data and the second for the std.data")}
-  # if(!is.null(bias)){if(!is.null(prt.data)&!is.null(std.data)){ if(length(bias)!=2) stop("The 'bias' should be a vector of length 2 where the first element is the name of the variable in prt.data and the second for the std.data")}}
-  # if(!is.null(bias.covariate)){if(!is.null(prt.data)&!is.null(std.data)){ if(length(bias.covariate)!=2) stop("The 'bias' should be a vector of length 2 where the first element is the name of the variable in prt.data and the second for the std.data")}}
-  # if(!is.null(covariate)){if(!is.null(prt.data)&!is.null(std.data)){if(lengths(covariate)[1]!=lengths(covariate)[2])stop("The names of covariates should be provided for both std.data and prt.data")}}
-  # if(!is.null(std.data)){if(length(n)!=1) stop("The name of the variable indicating the sample size in the std.data is needed")}
 
   #============================================
   # prepare IPD and AD
@@ -352,7 +339,26 @@ crosnma.model <- function(prt.data,
   if(regw.effect=='random'&!is.null(prior$tau.regw)) warning(" The prior of the heterogeneity between within-study interaction parameters is ignored")
   if(regb.effect=='random'&!is.null(prior$tau.regb)) warning(" The prior of the heterogeneity between between-study interaction parameters is ignored")
   if(bias.effect=='random'&!is.null(prior$tau.gamma)) warning(" The prior of the heterogeneity between bias effect parameters is ignored")
-  # if(!"nrs" %in% data11$design &!"nrs" %in% data22$design) method.bias=NULL
+  if(!is.null(unfav)){if(!data11$unfav%in%c(0,1)) stop("The values of 'unfav' should be either 0 or 1")}
+  if(!is.null(unfav)){if(!data22$unfav%in%c(0,1)) stop("The values of 'unfav' should be either 0 or 1")}
+
+  # check unfav: unique value 0 per study (repeated for the same treatment)
+  if(!is.null(data11$unfav)){
+    chk.unfav1 <- data11%>%
+      group_by(study)%>%
+      group_map(~length(unique(subset(.x,unfav==0, select=c(trt))))!=1)%>%
+      unlist()
+    if(any(chk.unfav1)) stop("For 'unfav' variable in prt.data, each study could be provided by only a unique 0 for a specific treatment")
+  }
+  if(!is.null(data22$unfav)){
+    chk.unfav2 <- data22%>%
+      group_by(study)%>%
+      group_map(~length(unique(subset(.x,unfav==0, select=c(trt))))!=1)%>%
+      unlist()
+
+    if(any(chk.unfav2)) stop("For 'unfav' variable in std.data, each study could be provided by only a unique 0 for a specific treatment")
+  }
+
   # check unique bias per study
   if(!is.null(data11$bias)){
     chk.bias1 <- data11%>%
@@ -568,13 +574,22 @@ if (method.bias%in%c("adjust1","adjust2")) {
                ,simplify = FALSE)
   dd2 <- do.call(rbind,dd1)
 # create a matrix with the treatment index
-    jagsdata1$t.ipd <-  dd2 %>% group_by(study.jags,trt.jags)%>%
-      select(trt.jags)%>% unique()%>%
-      group_by(study.jags)%>%
-      dplyr::mutate(arm = row_number())%>%ungroup() %>%
-      spread(arm, trt.jags)%>%
-      select(-study.jags)%>%
-      as.matrix()
+  jagsdata1$t.ipd <- dd2 %>%
+    select(trt.jags,study.jags)%>% unique()%>%
+    group_by(study.jags)%>%
+    mutate(arm = row_number())%>%ungroup() %>%
+    spread(arm, trt.jags)%>%
+    select(-study.jags)%>%
+    as.matrix()
+
+    # this returns a message when I run crosnma.model:
+    # jagsdata1$t.ipd <-  dd2 %>% group_by(study.jags,trt.jags)%>%
+    #   select(trt.jags)%>% unique()%>%
+    #   group_by(study.jags)%>%
+    #   dplyr::mutate(arm = row_number())%>%ungroup() %>%
+    #   spread(arm, trt.jags)%>%
+    #   select(-study.jags)%>%
+    #   as.matrix()
     # generate JAGS data object
     jagstemp <- data1 %>% select(-c(study,trt,design,bias.group,unfav,bias_index,bias))
     for (v in names(jagstemp)){
