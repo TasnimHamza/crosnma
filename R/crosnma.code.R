@@ -390,8 +390,8 @@ crosnma.code <- function(ipd = T,
                                     ifelse(add.std.in,paste0("for (j in std.in) {gamma",i,"[j]~dnorm(g",i,",prec.gamma",i,")}\n"),""),
                                     ifelse(add.std.act.no,paste0("for (j in std.act.no) {gamma",i,"[j]~dnorm(0,prec.gamma",i,")}\n"),""),
                                     ifelse(add.std.act.yes,paste0("for (j in std.act.yes) {gamma",i,"[j]~dnorm(g.act",i,",prec.gamma",i,")}\n"),""),
-                                    ifelse(add.std.in,paste0("g",i,"~dnorm(0, 0.0001)\n"),""),
-                                    ifelse(add.std.act.yes,paste0("g.act",i,"~dnorm(0, 0.0001)\n"),""),
+                                    ifelse(add.std.in,paste0("g",i,"~dnorm(0, 0.01)\n"),""),
+                                    ifelse(add.std.act.yes,paste0("g.act",i,"~dnorm(0, 0.01)\n"),""),
                                     "prec.gamma",i," <- pow(tau.gamma",i,",-2)")
             gamma.effect <- paste0(gamma.effect,gamma.effect0)
           }
@@ -401,8 +401,8 @@ crosnma.code <- function(ipd = T,
                                     ifelse(add.std.in,paste0("for (j in std.in) {gamma",i,"[j]<-g",i,"}\n"),""),
                                     ifelse(add.std.act.no,paste0("for (j in std.act.no) {gamma",i,"[j]<-0}\n"),""),
                                     ifelse(add.std.act.yes,paste0("for (j in std.act.yes) {gamma",i,"[j]<-g.act",i,"}\n"),""),
-                                    ifelse(add.std.in,paste0("g",i,"~dnorm(0, 0.0001)\n"),""),
-                                    ifelse(add.std.act.yes,paste0("g.act",i,"~dnorm(0, 0.0001)\n"),"")
+                                    ifelse(add.std.in,paste0("g",i,"~dnorm(0, 0.01)\n"),""),
+                                    ifelse(add.std.act.yes,paste0("g.act",i,"~dnorm(0, 0.01)\n"),"")
             )
             gamma.effect <- paste0(gamma.effect,gamma.effect0)
           }
@@ -414,8 +414,8 @@ crosnma.code <- function(ipd = T,
                                   ifelse(add.std.in,"for (j in std.in) {gamma[j]~dnorm(g,prec.gamma)}\n",""),
                                   ifelse(add.std.act.no,"for (j in std.act.no) {gamma[j]~dnorm(0,prec.gamma)}\n",""),
                                   ifelse(add.std.act.yes,"for (j in std.act.yes) {gamma[j]~dnorm(g.act,prec.gamma)}\n",""),
-                                  ifelse(add.std.in,"g~dnorm(0, 0.0001)\n",""),
-                                  ifelse(add.std.act.yes,"g.act~dnorm(0, 0.0001)\n",""),
+                                  ifelse(add.std.in,"g~dnorm(0, 0.01)\n",""),
+                                  ifelse(add.std.act.yes,"g.act~dnorm(0, 0.01)\n",""),
                                   "tau.gamma~",prior.tau.gamma,
                                   "\n prec.gamma <- pow(tau.gamma,-2)"
                                   )
@@ -424,8 +424,8 @@ crosnma.code <- function(ipd = T,
                                   ifelse(add.std.in,"for (j in std.in) {gamma[j]<-g}\n",""),
                                   ifelse(add.std.act.no,"for (j in std.act.no) {gamma[j]<-0}\n",""),
                                   ifelse(add.std.act.yes,"for (j in std.act.yes) {gamma[j]<-g.act}\n",""),
-                                  ifelse(add.std.in,"g~dnorm(0, 0.0001)\n",""),
-                                  ifelse(add.std.act.yes,"g.act~dnorm(0, 0.0001)\n","")
+                                  ifelse(add.std.in,"g~dnorm(0, 0.01)\n",""),
+                                  ifelse(add.std.act.yes,"g.act~dnorm(0, 0.01)\n","")
                                  )
 
           warning("Bias effect is assumed common across studies")
@@ -488,8 +488,8 @@ crosnma.code <- function(ipd = T,
                                ifelse(add.std.in,"for (j in std.in) {gamma[j]~dnorm(g,prec.gamma)}\n",""),
                                ifelse(add.std.act.no,"for (j in std.act.no) {gamma[j]~dnorm(0,prec.gamma)}\n",""),
                                ifelse(add.std.act.yes,"for (j in std.act.yes) {gamma[j]~dnorm(g.act,prec.gamma)}\n",""),
-                               ifelse(add.std.in,"g~dnorm(0, 0.0001)\n",""),
-                               ifelse(add.std.act.yes,"g.act~dnorm(0, 0.0001)\n",""),
+                               ifelse(add.std.in,"g~dnorm(0, 0.01)\n",""),
+                               ifelse(add.std.act.yes,"g.act~dnorm(0, 0.01)\n",""),
                                "tau.gamma~",prior.tau.gamma,
                                "\n prec.gamma <- pow(tau.gamma,-2)"
                                )
@@ -498,8 +498,8 @@ crosnma.code <- function(ipd = T,
                                ifelse(add.std.in,"for (j in std.in) {gamma[j]<-g}\n",""),
                                ifelse(add.std.act.no,"for (j in std.act.no) {gamma[j]<-0}\n",""),
                                ifelse(add.std.act.yes,"for (j in std.act.yes) {gamma[j]<-g.act}\n",""),
-                               ifelse(add.std.in,"g~dnorm(0, 0.0001)\n",""),
-                               ifelse(add.std.act.yes,"g.act~dnorm(0, 0.0001)\n","")
+                               ifelse(add.std.in,"g~dnorm(0, 0.01)\n",""),
+                               ifelse(add.std.act.yes,"g.act~dnorm(0, 0.01)\n","")
                                )
         warning("Bias effect is assumed common across studies")
       }

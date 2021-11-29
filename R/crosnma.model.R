@@ -1,4 +1,3 @@
-#!!! Error when NRS is not provided, no need to specify the method.bias
 #!!! check: the same number of covariates should be in IPD and AD
 #!!! check that the length of the arguments that indicate names is 2
 #!!! check when the prt.data or std.data, only one variable name need to be given
@@ -15,16 +14,16 @@
 #' The data frame needs to have the following columns: treatment, study identification, outcome (event and non-event), design. Additional columns might be required for certain analyses.
 #' @param std.data An object of class data.frame containing the study-level dataset. Each row represents the information of study arm.
 #' The data frame needs to have the following columns: treatment, study identification, outcome (number of events), sample size and design. Additional columns might be required for certain analyses.
-#' @param trt A vector of length 2 with the names of the treatment variable (as character) in prt.data and std.data, respectively.
-#' @param study A vector of length 2 with the names of the study variable (as character) in prt.data and std.data, respectively.
-#' @param outcome A vector of length 2 with the names of the outcome variable (as character) in prt.data and std.data, respectively.
+#' @param trt A charachter of the name of the treatment variable in prt.data and std.data.
+#' @param study A charachter of the name of the study variable in prt.data and std.data.
+#' @param outcome A charachter of the name of the outcome variable in prt.data and std.data.
 #' @param n A character of the name of the number of participants variable in std.data.
-#' @param design A vector of length 2 with the names of the design variable (as character) in prt.data and std.data, respectively.
+#' @param design A charachter of the name of the design variable in prt.data and std.data.
 #' @param reference A character indicating the name of the reference treatment. When the reference is not specified, the first alphabetic treatment will be used as a reference in the analysis.
 #' @param trt.effect A character defining the model for the study-specific treatment effects. Options are 'random' (default) or 'common'.
-#' @param covariate An optional list with two vectors, the first vector indicating the name of the covariates in prt.data and the second is for the corresponding ones in std.data, to conduct a network meta-regression
-#' The covariates can be either numeric or dichotomous variables. The user can provide up to 3 covariates. The covariate needs to be provided for both prt.data and std.data, respectively.
-#' For example, we set `covariate=list(c(‘age’, ‘sex’), c(‘age’, ‘sex’))` to adjust for 2 covariates.
+#' @param covariate An optional vector indicating the name of the covariates in prt.data and std.data (to conduct a network meta-regression)
+#' The covariates can be either numeric or dichotomous variables. The user can provide up to 3 covariates.
+#' For example, we set `covariate=c(‘age’, ‘sex’)` to adjust for 2 covariates.
 #' The default option is `covariate=NULL` where no covariate adjustment is applied (network meta-analysis).
 #' @param reg0.effect An optional character (when \code{covariate} is not NULL) indicating the relationship across studies for the prognostic effects expressed by the regression coefficient, (\eqn{\beta_0}), in a study \eqn{j}.
 #' Options are 'independent' or 'random'. We recommend using 'independent' (default).
@@ -34,21 +33,21 @@
 #' Options are 'random' and 'common'. Default is 'random'.
 #' @param split.regcoef A logical value (when \code{covariate} is not NULL). If TRUE the within- and between-study coefficients will be splitted in the analysis of prt.data.
 #' The default is TRUE. When the split.regcoef = FALSE, only a single regression coefficient will be estimated to represent both the between-studies and within-studies covariate effects.
-#' @param method.bias An optional character for defining the method to combine randomised clinical trials (RCT) and non-randomised studies (NRS) (required when \code{design} has nrs in addition to rct).
+#' @param method.bias A character for defining the method to combine randomised clinical trials (RCT) and non-randomised studies (NRS) (when \code{design} has both designs nrs and rct).
 #' Options are 'naive' for naive synthesize, 'prior' for using NRS to inform priors for the relative treatment effects in RCTs.
-#' or 'adjust1' and 'adjust2' to allow a bias adjustment.
-#' @param bias An optional vector of length 2 (required when method.bias='adjust1' or 'adjust2') indicating the name of the variable (as character) that includes the risk of bias adjustment in prt.data and std.data, respectively.
-#' The entries of this variable should be a character with entries that need to be spelled as such 'low', 'high' or 'unclear'. These values need to be repeated for the participants that belong to the same study.
+#' or 'adjust1' and 'adjust2' to allow a bias adjustment. When only one design is available (either rct or nrs), this argument needs also to be specified to indicate whether unadjusted (naive) or bias-adjusted analysis (adjust1 or adjust2) should be applied.
+#' @param bias A charachter indicating the name of the variable (required when method.bias='adjust1' or 'adjust2') that includes the risk of bias adjustment in prt.data and std.data.
+#' The values of this variable should be a character with entries that need to be spelled as such 'low', 'high' or 'unclear'. These values need to be repeated for the participants that belong to the same study.
 #' @param bias.type An optional character defining of bias on the treatment effect (required when method.bias='adjust1').
 #' Three options are possible: 'add' to add the additive bias effect,'mult' for multiplicative bias effect and 'both' includes both an additive and a multiplicative terms.
-#' @param bias.covariate An optional vector of two characters (required when method.bias='adjust1' or 'adjust2'). It has the variable name of the variable that will be used in estimating the probability of bias.
+#' @param bias.covariate A charachter of the variable name that will be used in estimating the probability of bias (can be provided when method.bias='adjust1' or 'adjust2')
 #' @param bias.effect An optional character indicating the relationship for the bias coefficients across studies.
 #' Options are 'random' or 'common' (default). It is required when method.bias='adjust1' or 'adjust2'.
-#' @param unfav An optional vector of length 2 (should be provided when method.bias='adjust1' or 'adjust2') which defines the names of the variables (as character) in prt.data and std.data, respectively, that include an indicator of the unfavoured treatment in each study.
+#' @param unfav A charachter which defines the names of the variables  in prt.data and std.data that include an indicator of the unfavoured treatment in each study (should be provided when method.bias='adjust1' or 'adjust2')
 #' The entries of these variables should be either 0 (unfavoured treatment) or 1 (favourable treatment or treatments). Each study should include only one 0. The values need to be repeated for the participants that belong to the same study.
-#' @param bias.group An optional vector of length 2 (should be provided when method.bias='adjust1' or 'adjust2') which defines the names of the variables (as character) in prt.data and std.data, respectively, that indicates the bias effect in each study.
+#' @param bias.group An optional charachter which defines the names of the variables in prt.data and std.data that indicates the bias effect in each study (can be provided when method.bias='adjust1' or 'adjust2')
 #' The entries of these variables should be either 1 (study has inactive treatment and its estimate should be adjusted for bias effect), 2 (study has only active treatments and its estimate should be adjusted for bias effect (different from inactive bias effect)
-#' or 0 (study doesn't need bias adjustment). The values need to be repeated for the participants that belong to the same study. Default is 1 which implies applying bias adjustment to all study-specific estimates if the study is at high risk of bias.
+#' or 0 (study doesn't need bias adjustment). The values need to be repeated for the participants that belong to the same study. Default is 1 which means applying bias adjustment to all study-specific estimates if the study is at high risk of bias.
 #' @param prior An optional list to control the prior for various parameters in JAGS model. When effects are set as 'random', we can set the heterogeneity parameters for: tau.trt for the treatment effects,
 #' tau.reg0 for the effect of prognostic covariates, tau.regb and tau.regw for within- and between-study covariate effect, respectively.
 #' and tau.gamma for bias effect. The default of all heterogeneity parameters is 'dunif(0,2)'. Currently only the uniform distribution is supported.
@@ -63,6 +62,7 @@
 #' @return \code{jagsmodel}  A long character string containing JAGS code that will be run in \code{\link{jags}}.
 #' @return \code{data}  The data used in the JAGS code.
 #' @return \code{trt.key}  A table of the treatments and its mapped integer number (used in JAGS model).
+#' @return \code{study.key}  A table of the studies and its mapped integer number (used in JAGS model).
 #' @return \code{trt.effect} A character defining the model for the study-specific treatment effects.
 #' @return \code{method.bias}  A character for defining the method to combine randomised clinical trials (RCT) and non-randomised studies (NRS).
 #' @return \code{covariate}  A list of the the names of the covariates in prt.data and std.data used in network meta-regression.
@@ -84,11 +84,11 @@
 #'  # The data has 2 different formats: individual participant data (prt.data) and study-level data (std.data).
 #' mod <- crosnma.model(prt.data=prt.data,
 #'                   std.data=std.data,
-#'                   trt=c('trt','trt'),
-#'                   study=c('study','study'),
-#'                   outcome=c('outcome','outcome'),
+#'                   trt='trt',
+#'                   study='study',
+#'                   outcome=outcome',
 #'                   n='n',
-#'                   design=c('design','design'),
+#'                   design='design',
 #'                   reference='A',
 #'                   trt.effect='random',
 #'                   covariate = NULL,
@@ -170,34 +170,35 @@ crosnma.model <- function(prt.data,
   # Bind variables to function
   trt.ini <- NULL
   trt.jags <- NULL
+  std.id <- NULL
+  study.jags <- NULL
   arm <- NULL
   value <- NULL
   variable <- NULL
-  n.arms <- NULL
 
   # check length of arguments
-  if(!is.null(prt.data)&!is.null(std.data)){if(length(trt)!=2|length(study)!=2|length(outcome)!=2|length(design)!=2) stop("The following arguments: 'trt', 'study', 'outcome' and 'design' need to be vector of length 2 where the first element is the name of the variable in prt.data and the second for the std.data")}
-  if(!is.null(bias)){if(!is.null(prt.data)&!is.null(std.data)){ if(length(bias)!=2) stop("The 'bias' should be a vector of length 2 where the first element is the name of the variable in prt.data and the second for the std.data")}}
-  if(!is.null(bias.covariate)){if(!is.null(prt.data)&!is.null(std.data)){ if(length(bias.covariate)!=2) stop("The 'bias' should be a vector of length 2 where the first element is the name of the variable in prt.data and the second for the std.data")}}
-  if(!is.null(covariate)){if(!is.null(prt.data)&!is.null(std.data)){if(lengths(covariate)[1]!=lengths(covariate)[2])stop("The names of covariates should be provided for both std.data and prt.data")}}
-  if(!is.null(std.data)){if(length(n)!=1) stop("The name of the variable indicating the sample size in the std.data is needed")}
+  # if(!is.null(prt.data)&!is.null(std.data)){if(length(trt)!=2|length(study)!=2|length(outcome)!=2|length(design)!=2) stop("The following arguments: 'trt', 'study', 'outcome' and 'design' need to be vector of length 2 where the first element is the name of the variable in prt.data and the second for the std.data")}
+  # if(!is.null(bias)){if(!is.null(prt.data)&!is.null(std.data)){ if(length(bias)!=2) stop("The 'bias' should be a vector of length 2 where the first element is the name of the variable in prt.data and the second for the std.data")}}
+  # if(!is.null(bias.covariate)){if(!is.null(prt.data)&!is.null(std.data)){ if(length(bias.covariate)!=2) stop("The 'bias' should be a vector of length 2 where the first element is the name of the variable in prt.data and the second for the std.data")}}
+  # if(!is.null(covariate)){if(!is.null(prt.data)&!is.null(std.data)){if(lengths(covariate)[1]!=lengths(covariate)[2])stop("The names of covariates should be provided for both std.data and prt.data")}}
+  # if(!is.null(std.data)){if(length(n)!=1) stop("The name of the variable indicating the sample size in the std.data is needed")}
 
   #============================================
   # prepare IPD and AD
   if(!is.null(prt.data)){
-    varlist1 <- c(trt = trt[1],
-                  study = study[1],
-                  r = outcome[1],
-                  design=design[1],
-                  bias=bias[1],
-                  x.bias=bias.covariate[1],
-                  bias.group=bias.group[1],
-                  unfav=unfav[1])
+    varlist1 <- c(trt = trt,
+                  study = study,
+                  r = outcome,
+                  design=design,
+                  bias=bias,
+                  x.bias=bias.covariate,
+                  bias.group=bias.group,
+                  unfav=unfav)
 
     if(!is.null(covariate)){
-      x11 <- covariate[[1]][1]
-      x21<- ifelse(is.na(covariate[[1]][2]),list(NULL),covariate[[1]][2])[[1]]
-      x31<- ifelse(is.na(covariate[[1]][3]),list(NULL),covariate[[1]][3])[[1]]
+      x11 <- covariate[1]
+      x21<- ifelse(is.na(covariate[2]),list(NULL),covariate[2])[[1]]
+      x31<- ifelse(is.na(covariate[3]),list(NULL),covariate[3])[[1]]
     } else {
       x11 <- NULL
       x21 <- NULL
@@ -211,54 +212,105 @@ crosnma.model <- function(prt.data,
     data11 <- NULL
   }
   if(!is.null(std.data)){
-    if(!is.null(prt.data)){
-      varlist2 <- c(trt = trt[2],
-                    study = study[2],
-                    r = outcome[2],
-                    n = n,
-                    design=design[2],
-                    bias=bias[2],
-                    x.bias=bias.covariate[2],
-                    bias.group=bias.group[2],
-                    unfav=unfav[2])
-      if(!is.null(covariate)){
-        x12 <- covariate[[2]][1]
-        x22<- ifelse(is.na(covariate[[2]][2]),list(NULL),covariate[[2]][2])[[1]]
-        x32<- ifelse(is.na(covariate[[2]][3]),list(NULL),covariate[[2]][3])[[1]]
-      } else {
-        x12 <- NULL
-        x22 <- NULL
-        x32 <- NULL
-      }
-      covlist2 <- c(x1=x12,x2=x22,x3=x32)
-      data22 <-std.data[, c(varlist2,covlist2)]
-      names(data22) <- c(names(varlist2), names(covlist2))
-    }else{
-      varlist2 <- c(trt = trt[1],
-                    study = study[1],
-                    r = outcome[1],
-                    n = n,
-                    design=design[1],
-                    bias=bias[1],
-                    x.bias=bias.covariate[1],
-                    bias.group=bias.group[1],
-                    unfav=unfav[1])
-      if(!is.null(covariate)){
-        x12 <- covariate[[1]][1]
-        x22<- ifelse(is.na(covariate[[1]][2]),list(NULL),covariate[[1]][2])[[1]]
-        x32<- ifelse(is.na(covariate[[1]][3]),list(NULL),covariate[[1]][3])[[1]]
-      } else {
-        x12 <- NULL
-        x22 <- NULL
-        x32 <- NULL
-      }
-      covlist2 <- c(x1=x12,x2=x22,x3=x32)
-      data22 <-std.data[, c(varlist2,covlist2)]
-      names(data22) <- c(names(varlist2), names(covlist2))
+    varlist2 <- c(trt = trt,
+                  study = study,
+                  r = outcome,
+                  n = n,
+                  design=design,
+                  bias=bias,
+                  x.bias=bias.covariate,
+                  bias.group=bias.group,
+                  unfav=unfav)
+    if(!is.null(covariate)){
+      x12 <- covariate[1]
+      x22<- ifelse(is.na(covariate[2]),list(NULL),covariate[2])[[1]]
+      x32<- ifelse(is.na(covariate[3]),list(NULL),covariate[3])[[1]]
+    }else {
+      x12 <- NULL
+      x22 <- NULL
+      x32 <- NULL
     }
-  } else{
+    covlist2 <- c(x1=x12,x2=x22,x3=x32)
+    data22 <-std.data[, c(varlist2,covlist2)]
+    names(data22) <- c(names(varlist2), names(covlist2))
+  }else{
     data22 <- NULL
   }
+  # if(!is.null(prt.data)){
+  #   varlist1 <- c(trt = trt[1],
+  #                 study = study[1],
+  #                 r = outcome[1],
+  #                 design=design[1],
+  #                 bias=bias[1],
+  #                 x.bias=bias.covariate[1],
+  #                 bias.group=bias.group[1],
+  #                 unfav=unfav[1])
+  #
+  #   if(!is.null(covariate)){
+  #     x11 <- covariate[[1]][1]
+  #     x21<- ifelse(is.na(covariate[[1]][2]),list(NULL),covariate[[1]][2])[[1]]
+  #     x31<- ifelse(is.na(covariate[[1]][3]),list(NULL),covariate[[1]][3])[[1]]
+  #   } else {
+  #     x11 <- NULL
+  #     x21 <- NULL
+  #     x31 <- NULL
+  #   }
+  #   covlist1 <- c(x1=x11,x2=x21,x3=x31)
+  #
+  #   data11 <- prt.data[,c(varlist1,covlist1)]
+  #   names(data11) <- c(names(varlist1), names(covlist1))
+  # } else{
+  #   data11 <- NULL
+  # }
+  # if(!is.null(std.data)){
+  #   if(!is.null(prt.data)){
+  #     varlist2 <- c(trt = trt[2],
+  #                   study = study[2],
+  #                   r = outcome[2],
+  #                   n = n,
+  #                   design=design[2],
+  #                   bias=bias[2],
+  #                   x.bias=bias.covariate[2],
+  #                   bias.group=bias.group[2],
+  #                   unfav=unfav[2])
+  #     if(!is.null(covariate)){
+  #       x12 <- covariate[[2]][1]
+  #       x22<- ifelse(is.na(covariate[[2]][2]),list(NULL),covariate[[2]][2])[[1]]
+  #       x32<- ifelse(is.na(covariate[[2]][3]),list(NULL),covariate[[2]][3])[[1]]
+  #     } else {
+  #       x12 <- NULL
+  #       x22 <- NULL
+  #       x32 <- NULL
+  #     }
+  #     covlist2 <- c(x1=x12,x2=x22,x3=x32)
+  #     data22 <-std.data[, c(varlist2,covlist2)]
+  #     names(data22) <- c(names(varlist2), names(covlist2))
+  #   }else{
+  #     varlist2 <- c(trt = trt[1],
+  #                   study = study[1],
+  #                   r = outcome[1],
+  #                   n = n,
+  #                   design=design[1],
+  #                   bias=bias[1],
+  #                   x.bias=bias.covariate[1],
+  #                   bias.group=bias.group[1],
+  #                   unfav=unfav[1])
+  #     if(!is.null(covariate)){
+  #       x12 <- covariate[[1]][1]
+  #       x22<- ifelse(is.na(covariate[[1]][2]),list(NULL),covariate[[1]][2])[[1]]
+  #       x32<- ifelse(is.na(covariate[[1]][3]),list(NULL),covariate[[1]][3])[[1]]
+  #     } else {
+  #       x12 <- NULL
+  #       x22 <- NULL
+  #       x32 <- NULL
+  #     }
+  #     covlist2 <- c(x1=x12,x2=x22,x3=x32)
+  #     data22 <-std.data[, c(varlist2,covlist2)]
+  #     names(data22) <- c(names(varlist2), names(covlist2))
+  #   }
+  # } else{
+  #   data22 <- NULL
+  # }
 
   # checking ------------------------
   # 1. formatting
@@ -300,7 +352,7 @@ crosnma.model <- function(prt.data,
   if(regw.effect=='random'&!is.null(prior$tau.regw)) warning(" The prior of the heterogeneity between within-study interaction parameters is ignored")
   if(regb.effect=='random'&!is.null(prior$tau.regb)) warning(" The prior of the heterogeneity between between-study interaction parameters is ignored")
   if(bias.effect=='random'&!is.null(prior$tau.gamma)) warning(" The prior of the heterogeneity between bias effect parameters is ignored")
-
+  # if(!"nrs" %in% data11$design &!"nrs" %in% data22$design) method.bias=NULL
   # check unique bias per study
   if(!is.null(data11$bias)){
     chk.bias1 <- data11%>%
