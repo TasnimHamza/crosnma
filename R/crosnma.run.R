@@ -1,4 +1,3 @@
-# set init as BUGSnet have done
 #' Run JAGS to synthesize cross-design evidence and cross-format data in NMA and NMR for dichotomous outcomes
 #' @description Takes the JAGS model from an object produced by \code{crosnma.model} and runs it using \code{jags} package.
 #'
@@ -29,11 +28,11 @@
 #'  # The data has 2 different formats: individual participant data (prt.data) and study-level data (std.data).
 #' mod <- crosnma.model(prt.data=prt.data,
 #'                   std.data=std.data,
-#'                   trt=c('trt','trt'),
-#'                   study=c('study','study'),
-#'                   outcome=c('outcome','outcome'),
+#'                   trt='trt',
+#'                   study='study',
+#'                   outcome=outcome',
 #'                   n='n',
-#'                   design=c('design','design'),
+#'                   design='design',
 #'                   reference='A',
 #'                   trt.effect='random',
 #'                   covariate = NULL,
@@ -164,3 +163,5 @@ crosnma.run <- function(model,
                     class = "crosnma")
   return(crosrun)
 }
+
+

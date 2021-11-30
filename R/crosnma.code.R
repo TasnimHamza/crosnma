@@ -1,5 +1,3 @@
-#+++ add deviance
-#!!! construct a DEFAULT prior, a simple way, d~dnorm (0, (10*max.delta)^-2)
 crosnma.code <- function(ipd = T,
                          ad = T,
                          trt.effect='random',

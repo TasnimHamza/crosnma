@@ -125,7 +125,7 @@ $$
 R_j \sim Bernoulli(\pi_j)
 $$
 
-The bias probabilities $\pi_j$ are study-specific and can be estimated in two different ways. They are either given informative beta priors (${Beta(a,b)}$) that are set according to the risk of bias. The default beta priors are as follows: high bias RCT `pi.high.rct='dbeta(3,1)'`, low bias RCT `pi.low.rct='dbeta(1,20)'`, high bias NRS `pi.high.nrs='dbeta(30,1)'` and low bias NRS `pi.low.nrs='dbeta(1,2)'`. The ratio ${a/b}$ controls the skewness of the beta distribution.  The closer to 1 the ratio a/b, the more the mean of probability of bias gets closer to 1 and the study acquires 'major' bias adjustment. Alternatively,  we can use the study characteristics $z_j$ to predict $\pi_j$ through a logistic transformation (internally coded).
+The bias probabilities $\pi_j$ are study-specific and can be estimated in two different ways. They are either given informative beta priors (${Beta(a,b)}$) that are set according to the risk of bias. The default beta priors are as follows: high bias RCT `pi.high.rct='dbeta(10,1)'`, low bias RCT `pi.low.rct='dbeta(1,10)'`, high bias NRS `pi.high.nrs='dbeta(30,1)'` and low bias NRS `pi.low.nrs='dbeta(1,30)'`. The ratio ${a/b}$ controls the skewness of the beta distribution.  The closer to 1 the ratio a/b, the more the mean of probability of bias gets closer to 1 and the study acquires 'major' bias adjustment. Alternatively,  we can use the study characteristics $z_j$ to predict $\pi_j$ through a logistic transformation (internally coded).
 
 ## Bias-adjusted model 2
 

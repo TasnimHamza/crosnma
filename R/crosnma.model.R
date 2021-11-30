@@ -1,5 +1,3 @@
-#!!! CHANGE the default beta distribution in Vignette
-# exclude studies with NA for any of bias variables
 # delete the message from study.jags once I run the adjust1 and adjust2 models
 #' Create JAGS model to synthesize cross-design evidence and cross-format data in NMA and NMR for dichotomous outcomes
 #' @description This function creates a JAGS model and the needed data. The JAGS code is created from the internal function \code{crosnma.code}.
@@ -37,7 +35,7 @@
 #' @param bias.covariate A charachter of the variable name that will be used in estimating the probability of bias (can be provided when method.bias='adjust1' or 'adjust2')
 #' @param bias.effect An optional character indicating the relationship for the bias coefficients across studies.
 #' Options are 'random' or 'common' (default). It is required when method.bias='adjust1' or 'adjust2'.
-#' @param unfav A charachter which defines the names of the variables  in prt.data and std.data that include an indicator of the unfavoured treatment in each study (should be provided when method.bias='adjust1' or 'adjust2')
+#' @param unfav A charachter which defines the names of the variables in prt.data and std.data that include an indicator of the unfavoured treatment in each study (should be provided when method.bias='adjust1' or 'adjust2')
 #' The entries of these variables should be either 0 (unfavoured treatment) or 1 (favourable treatment or treatments). Each study should include only one 0. The values need to be repeated for the participants that belong to the same study.
 #' @param bias.group An optional charachter which defines the names of the variables in prt.data and std.data that indicates the bias effect in each study (can be provided when method.bias='adjust1' or 'adjust2')
 #' The entries of these variables should be either 1 (study has inactive treatment and its estimate should be adjusted for bias effect), 2 (study has only active treatments and its estimate should be adjusted for bias effect (different from inactive bias effect)
@@ -377,10 +375,10 @@ crosnma.model <- function(prt.data,
     if(any(chk.bias2)) stop("The 'bias' should be a vector of length 2 where the first element is the name of the variable in prt.data and the second for the std.data")
   }
   # discard NA's
-  excl1 <- is.na(data11$r)
-  excl2 <- is.na(data22$r) | is.na(data22$n)
-  if (sum(excl1)>0) warning('Participants with missing data in the outcome are discarded from the network meta-analysis')
-  if (sum(excl1)>0|sum(excl2)>0) warning('Arms with missing data in sample size or number of participants are discarded from the network meta-analysis')
+  excl1 <- is.na(data11$r) | if(!is.null(data11$bias)){is.na(data11$bias)}else{FALSE} | if(!is.null(data11$unfav)){is.na(data11$unfav)}else{FALSE} | if(!is.null(data11$bias.group2)){is.na(data11$bias.group2)}else{FALSE}
+  excl2 <- is.na(data22$r) | is.na(data22$n) | if(!is.null(data22$bias)){is.na(data22$bias)}else{FALSE} | if(!is.null(data22$unfav)){is.na(data22$unfav)}else{FALSE} | if(!is.null(data22$bias.group2)){is.na(data22$bias.group2)}else{FALSE}
+  if (sum(excl1)>0) warning('Participants with missing data in these variables: outcome, bias, unfav or bias.group are discarded from the analysis')
+  if (sum(excl1)>0|sum(excl2)>0) warning('Arms with missing data in these variables: outcome, n, bias, unfav or bias.group are discarded from the analysis')
   data11 <- data11[!excl1,]
   data22 <- data22[!excl2,]
 
