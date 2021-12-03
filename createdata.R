@@ -112,7 +112,6 @@ usethis::use_data(prt.data,std.data)
 
 # create all Vignette related files
 usethis::use_vignette("gnma")
-
 devtools::document()
 
 
